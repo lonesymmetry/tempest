@@ -15,6 +15,7 @@ public class Database {
         String write = name+"|"+status+"|"+desc+"\n";
 
         //System.out.println(write);
+
         byte data[] = write.getBytes(); //String -> Bytes
         Path p = Paths.get("./database.txt");
 
@@ -24,6 +25,28 @@ public class Database {
         catch (IOException x) {
             System.err.println(x);
         }
+    }
+
+    public int itemCount(){
+        int itemCount=0;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("database.txt"));
+            StringBuilder sb = new StringBuilder();
+            String line = reader.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = reader.readLine();
+                itemCount++;
+            }
+            String everything = sb.toString();
+            reader.close();
+        }
+        catch (IOException x){
+            System.err.println(x);
+        }
+        return itemCount;
     }
 
     public void test(){
@@ -42,5 +65,6 @@ public class Database {
         Item z= new Item("TestItem","This is a test");
         Database a= new Database();
         a.writeItem(z);
+        System.out.println(a.itemCount());
     }
 }
