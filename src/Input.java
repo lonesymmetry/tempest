@@ -2,6 +2,7 @@
  *
  */
 public interface Input {
-	void run();
+	void open();
 	void close();
+	Item createNewItem();
 }
