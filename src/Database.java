@@ -1,11 +1,13 @@
 import static java.nio.file.StandardOpenOption.*;
 import java.nio.file.*;
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  *
  */
 public class Database {
+    ArrayList<Item> items= new ArrayList<Item>(); //TODO create method to fill the arraylist
 
     public void writeItem(Item toWrite){
         String name = toWrite.getDisplayName();
@@ -13,8 +15,6 @@ public class Database {
         Item.Status status = toWrite.getStatus();
 
         String write = name+"|"+status+"|"+desc+"\n";
-
-        //System.out.println(write);
 
         byte data[] = write.getBytes(); //String -> Bytes
         Path p = Paths.get("./database.txt");
