@@ -2,6 +2,6 @@ Engine:
     -Design database for storage
     -EVERYTHING ELSE
 
-UI:
+DesktopUI:
     -Create UI document
     -Design Testing Layout
