@@ -9,6 +9,7 @@ public class Database {
     public void writeItem(Item toWrite){
         String name = toWrite.getDisplayName();
         String desc = toWrite.getDescription();
+        Item.Status status = toWrite.getStatus();
 
     }
 
