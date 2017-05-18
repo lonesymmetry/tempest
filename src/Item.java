@@ -7,14 +7,9 @@ public class Item {
 	public enum Status{
 		UNFINISHED,FINISHED;
 
-		public static boolean parseable(String s) throws Exception{
-			if(s.equals("UNFINISHED")){
-				return true;
-			}
-			if(s.equals("FINISHED")){
-				return true;
-			}
-			return false;
+		public static boolean parseable(String s){
+			Status a = Status.parse(s);
+			return a != null;
 		}
 
 		public static Status parse(String s){
@@ -24,8 +19,7 @@ public class Item {
 			if(s.equals("FINISHED")){
 				return FINISHED;
 			}
-			Util.nyi(Util.getFileName(),Util.getLineNumber());
-			return UNFINISHED;//should never reach this line
+			return null;
 		}
 	}
 	private static final char[] DISALLOWED_CHARACTERS = {'|','\n'};
