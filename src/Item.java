@@ -6,6 +6,17 @@ import Util.Util;
 public class Item {
 	public enum Status{
 		UNFINISHED,FINISHED;
+
+		public static boolean parseable(String s) throws Exception{
+			if(s.equals("UNFINISHED")){
+				return true;
+			}
+			if(s.equals("FINISHED")){
+				return true;
+			}
+			return false;
+		}
+
 		public static Status parse(String s){
 			if(s.equals("UNFINISHED")){
 				return UNFINISHED;
