@@ -7,7 +7,7 @@ public class Item {
 	public enum Status{
 		UNFINISHED,FINISHED;
 
-		public static boolean parseable(String s) throws Exception{
+		public static boolean parseable(String s){
 			if(s.equals("UNFINISHED")){
 				return true;
 			}
