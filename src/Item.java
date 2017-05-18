@@ -4,7 +4,19 @@ import Util.Util;
  *
  */
 public class Item {
-	public enum Status{UNFINISHED,FINISHED}
+	public enum Status{
+		UNFINISHED,FINISHED;
+		public static Status parse(String s){
+			if(s.equals("UNFINISHED")){
+				return UNFINISHED;
+			}
+			if(s.equals("FINISHED")){
+				return FINISHED;
+			}
+			Util.nyi(Util.getFileName(),Util.getLineNumber());
+			return UNFINISHED;//should never reach this line
+		}
+	}
 	private static final char[] DISALLOWED_CHARACTERS = {'|','\n'};
 	private Status status;
 	private String displayName;
