@@ -4,8 +4,9 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- *
+ *Class which deals with writing and reading from the database.
  */
+
 public class Database {
     final String fileName = "database.txt";
     private ArrayList<Item> items= new ArrayList<Item>(); //TODO create method to fill the arraylist
@@ -68,28 +69,6 @@ public class Database {
         return new Item(name,desc,status);
     }
 
-    public int itemCount(){
-        int itemCount=0;
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
-            StringBuilder sb = new StringBuilder();
-            String line = reader.readLine();
-
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = reader.readLine();
-                itemCount++;
-            }
-            String everything = sb.toString();
-            reader.close();
-        }
-        catch (IOException x){
-            System.err.println(x);
-        }
-        return itemCount;
-    }
-
     public ArrayList<Item> fillList(){
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
@@ -125,8 +104,10 @@ public class Database {
         Item z= new Item("TestItem","This is a test");
         Database a= new Database();
         a.writeItem(z);
-        System.out.println(a.itemCount());
         a.fillList();
         System.out.println(a.getItems());
+        Analytics test=new Analytics();
+        test.numFinished(a);
+        test.numUnfinished(a);
     }
 }
