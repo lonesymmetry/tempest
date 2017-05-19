@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -57,8 +56,8 @@ public class Analytics {
         return tally;
     }
 
-    public int itemCount(ArrayList<Item> a){
-        return a.size();
+    public int itemCount(Database a){
+        return a.getItems().size();
     }
 
 }
