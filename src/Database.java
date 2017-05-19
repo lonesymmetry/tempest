@@ -6,10 +6,10 @@ import java.util.ArrayList;
 /**
  *Class which deals with writing and reading from the database.
  */
-
+//TODO create a date aspect of the database as well, look into using Java 8 Date()
 public class Database {
     final String fileName = "database.txt";
-    private ArrayList<Item> items= new ArrayList<Item>(); //TODO create method to fill the arraylist
+    private ArrayList<Item> items= new ArrayList<Item>();
 
     public ArrayList<Item> getItems(){
         return items;

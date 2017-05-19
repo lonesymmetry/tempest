@@ -1,7 +1,12 @@
 Engine:
-    -Design database for storage
-    -EVERYTHING ELSE
-
+    Database:
+        -Add date functionality
+        -Add sorting parsers (ie sort by type, date, etc.)
+    -Get input from UI (make this adaptable)
 DesktopUI:
     -Create UI document
-    -Design Testing Layout
+    -Design UI layout
+
+Android UI:
+    -Shift code base to Android
+    -Migrate UI to Android
