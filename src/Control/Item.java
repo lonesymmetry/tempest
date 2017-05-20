@@ -1,4 +1,6 @@
-import Util.Util;
+package control;
+
+import util.Util;
 
 /**
  *
@@ -77,7 +79,7 @@ public class Item {
 
 	@Override
 	public String toString(){
-		return "Item(displayName:" + this.displayName + " status:" + this.status + " description:" + this.description + ")";
+		return "control.Item(displayName:" + this.displayName + " status:" + this.status + " description:" + this.description + ")";
 	}
 
 	public Item(){

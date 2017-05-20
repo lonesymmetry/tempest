@@ -1,4 +1,4 @@
-package Util;
+package util;
 import javax.swing.*;
 import java.awt.*;
 
@@ -30,4 +30,5 @@ public class Graphics {
 		frame.pack();
 		return frame;
 	}
+
 }
