@@ -7,6 +7,8 @@ import java.util.Vector;
 
 /**
  * A series of useful methods I've defined to use in other projects
+ *
+ * @author Logan Traffas
  */
 public class Util{
 	/**

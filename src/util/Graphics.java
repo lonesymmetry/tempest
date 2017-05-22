@@ -4,6 +4,8 @@ import java.awt.*;
 
 /**
  * Some useful graphical operations
+ * @
+ * @author Logan Traffas
  */
 public class Graphics {
 	public static int TASKBAR_HEIGHT = 40;//px the height of the taskbar in windows

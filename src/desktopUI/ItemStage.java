@@ -10,7 +10,9 @@ import util.Graphics;
 import java.awt.Dimension;
 
 /**
+ * The expanded display view of a To-Do Item that contains all its useful information
  *
+ * @author Logan Traffas
  */
 public class ItemStage extends Stage{
 	private static final int EXPERIMENTAL_HORIZONTAL_INSETS = 0;//from testing with Windows 10
