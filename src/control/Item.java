@@ -3,7 +3,9 @@ package control;
 import util.Util;
 
 /**
+ * Stores Item class
  *
+ * @author Logan Traffas, Adrian Hardt
  */
 public class Item {
 	public enum Status{
@@ -24,10 +26,34 @@ public class Item {
 			return null;
 		}
 	}
+
+	public enum Priority{
+		HIGH,MEDIUM,LOW;
+
+		public static boolean parseable(String s){
+			Priority a = Priority.parse(s);
+			return a != null;
+		}
+
+		public static Priority parse(String s){
+			if(s.equals("HIGH")){
+				return HIGH;
+			}
+			if(s.equals("MEDIUM")){
+				return MEDIUM;
+			}
+			if(s.equals("LOW")){
+				return LOW;
+			}
+			return null;
+		}
+	}
+
 	private static final char[] DISALLOWED_CHARACTERS = {'|','\n'};
 	private Status status;
 	private String displayName;
 	private String description;
+	private Priority priority;
 
 	/**
 	 * Checks a string for disallowed characters
@@ -65,6 +91,10 @@ public class Item {
 		this.status = status;
 	}
 
+	public void setPriority(Priority priority){
+		this.priority=priority;
+	}
+
 	public String getDisplayName(){
 		return this.displayName;
 	}
@@ -77,22 +107,31 @@ public class Item {
 		return this.status;
 	}
 
+	public Priority getPriority(){
+		return this.priority;
+	}
+
 	@Override
 	public String toString(){
 		return "control.Item(displayName:" + this.displayName + " status:" + this.status + " description:" + this.description + ")";
 	}
 
 	public Item(){
-		this("","",Status.UNFINISHED);
+		this("","",Status.UNFINISHED,Priority.LOW);
 	}
 
 	public Item(String displayName,String description){
-		this(displayName,description,Status.UNFINISHED);
+		this(displayName,description,Status.UNFINISHED,Priority.LOW);
 	}
 
-	public Item(String displayName, String description, Status status){
+	public Item(String displayName,String description,Priority priority){
+		this(displayName,description,Status.UNFINISHED,priority);
+	}
+
+	public Item(String displayName, String description, Status status, Priority priority){
 		this.displayName = displayName;
 		this.description = description;
 		this.status = status;
+		this.priority = priority;
 	}
 }

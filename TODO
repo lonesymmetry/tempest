@@ -1,8 +1,11 @@
+@Authors Adrian Hardt, Logan Traffas
+
 Engine:
     control.Database:
         -Add date functionality
         -Add sorting parsers (ie sort by type, date, etc.)
     -Get input from UI (make this adaptable)
+
 desktopUI:
     -Create UI document
     -Design UI layout

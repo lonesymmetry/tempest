@@ -27,8 +27,9 @@ public class Database {
         String name = toWrite.getDisplayName();
         String desc = toWrite.getDescription();
         Item.Status status = toWrite.getStatus();
+        Item.Priority priority = toWrite.getPriority();
 
-        String write = name+"|"+status+"|"+desc+"\n";
+        String write = name+"|"+status+"|"+priority+"|"+desc+"\n";
 
         byte data[] = write.getBytes(); //String -> Bytes
         Path p = Paths.get("./"+fileName);
@@ -69,8 +70,22 @@ public class Database {
             }
         }
 
-        String desc = input.substring(bar2+1,length);
-        return new Item(name,desc,status);
+        int bar3=0;
+        for(int i=bar2+1;i<length;i++) {
+            if (input.substring(i, i + 1).equals("|")) {//A
+                bar3 = i;
+                break;
+            }
+        }
+        Item.Priority priority= Item.Priority.LOW;
+        {
+            String temp = input.substring(bar2+1, bar3);
+            if (Item.Priority.parseable(temp)) {//B
+                priority = Item.Priority.parse(temp);
+            }
+        }
+        String desc = input.substring(bar3+1,length);
+        return new Item(name,desc,status,priority);
     }
 
     public ArrayList<Item> fillList(){
