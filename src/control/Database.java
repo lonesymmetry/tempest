@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 /**
  *Class which deals with writing and reading from the database.
+ *
+ * @author Adrian Hardt
  */
 //TODO create a date aspect of the database as well, look into using Java 8 Date()
 public class Database {

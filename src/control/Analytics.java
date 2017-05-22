@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Provides information and modified lists based on the database. Will be used for sorting/filtering later.
+ *
+ * @author Adrian Hardt
  */
 public class Analytics {
     public ArrayList<Item> getUnfinished(Database a){
