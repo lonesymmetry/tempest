@@ -1,6 +1,6 @@
 package control;
 
-import desktopUI.MainDesktopApplication;
+import desktopUI.DesktopApplication;
 import javafx.application.Application;
 
 /**
@@ -10,7 +10,7 @@ public class Main {
 	private Database database;
 
 	public void runApp(String[] args){
-		Application.launch(MainDesktopApplication.class,args);
+		Application.launch(DesktopApplication.class,args);
 	}
 
 	public static void main(String[] args){
