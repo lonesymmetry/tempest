@@ -5,9 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
-import util.Graphics;
-
-import java.awt.Dimension;
 
 /**
  * The expanded display view of a To-Do Item that contains all its useful information

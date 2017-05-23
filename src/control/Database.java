@@ -11,9 +11,10 @@ import java.util.ArrayList;
  * @author Adrian Hardt
  */
 //TODO create a date aspect of the database as well, look into using Java 8 Date()
+//TODO add a way to wipe the database file
 public class Database {
-    final String fileName = "database.txt";
-    private ArrayList<Item> items= new ArrayList<Item>();
+    private static final String FILE_NAME = "database.txt";
+    private ArrayList<Item> items;
 
     public ArrayList<Item> getItems(){
         return items;
@@ -32,7 +33,7 @@ public class Database {
         String write = name+"|"+status+"|"+priority+"|"+desc+"\n";
 
         byte data[] = write.getBytes(); //String -> Bytes
-        Path p = Paths.get("./"+fileName);
+        Path p = Paths.get("./"+FILE_NAME);
 
         try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(p, CREATE, APPEND))) {
             out.write(data, 0, data.length);
@@ -90,7 +91,7 @@ public class Database {
 
     public ArrayList<Item> fillList(){
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));
             StringBuilder sb = new StringBuilder();
             String line = reader.readLine();
 
@@ -109,7 +110,7 @@ public class Database {
     public void test(){
         String s = "Hello World! ";
         byte data[] = s.getBytes(); //String -> Bytes
-        Path p = Paths.get("./"+fileName);
+        Path p = Paths.get("./"+FILE_NAME);
 
         try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(p, CREATE, APPEND))) {
             out.write(data, 0, data.length);
@@ -117,6 +118,21 @@ public class Database {
         catch (IOException x) {
             System.err.println(x);
         }
+    }
+
+    public static void testWrite(){
+    	final int LENGTH = 15;
+		Database a = new Database();
+    	for(int i = 0; i < LENGTH; i++){
+			Item z = new Item("TestItem", "This is a test");
+			a.writeItem(z);
+		}
+		a.fillList();
+		System.out.println(a.getItems());
+	}
+
+    public Database(){
+        this.items = new ArrayList<>();
     }
 
     public static void main(String[] args) {
