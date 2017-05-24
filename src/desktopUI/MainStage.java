@@ -1,6 +1,12 @@
 package desktopUI;
 
 import control.Database;
+import control.Item;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -9,9 +15,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.awt.*;
+import javafx.scene.control.Button;
+import util.Maybe;
 
 /**
  *
@@ -21,13 +28,55 @@ import java.awt.*;
 public class MainStage extends Stage{
 	private static final String STYLESHEET_SOURCE = "/res/MainStageStylesheet.css";
 	private static final boolean RESIZABLE = false;
-	private final HBox rootPane;
-	private final VBox listPane;
-	private final VBox infoPane;
-	private final VBox addItemPane;
+	private Database database;
+	private HBox rootPane;
+	private VBox listPane;
+	private VBox infoPane;
+	private VBox addItemPane;
+
+	private util.Maybe<Item> activeItemDisplay;//TODO: make own class?
+	private BooleanProperty updateItemDisplay;
+
+	public void updateActiveItem(){
+
+	}
+
+	public void constructInfoPane(final double INFO_PANE_WIDTH){
+		this.infoPane = new VBox();
+		this.infoPane.setMaxWidth(INFO_PANE_WIDTH);
+		this.infoPane.setPrefWidth(this.infoPane.getMaxWidth());
+		this.infoPane.getStyleClass().add("infoPane");
+		this.infoPane.setPadding(StageConstants.PADDING_INSETS);
+		{
+			StackPane itemDisplay = new StackPane();
+			itemDisplay.setPadding(StageConstants.PADDING_INSETS);
+			itemDisplay.getStyleClass().add("itemDisplay");
+
+			final int BACKGROUND_HEIGHT = 500;
+			Rectangle background = new Rectangle(INFO_PANE_WIDTH - (4 * StageConstants.PADDING),BACKGROUND_HEIGHT);
+			background.getStyleClass().add("itemDisplayBackground");
+
+			final Text itemDisplayInfo = new Text();
+			itemDisplayInfo.setText("ONE");
+			if(this.activeItemDisplay.isValid()){
+				itemDisplayInfo.setText("TWO" + this.activeItemDisplay.get().getDescription());
+				System.out.println("Set text");
+			} else {
+				itemDisplayInfo.setText("");
+				System.out.println("Cleared text");
+			}
+			//itemDisplayInfo.setText("THREE");
+			itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
+
+			itemDisplay.getChildren().addAll(background,itemDisplayInfo);
+
+			this.infoPane.getChildren().addAll(itemDisplay);
+		}
+	}
 
 	public MainStage(final Database database){
-		setResizable(RESIZABLE);
+		this.database = new Database();
+		this.setResizable(RESIZABLE);
 
 		{//initialize layout
 			this.rootPane = new HBox();
@@ -35,7 +84,18 @@ public class MainStage extends Stage{
 			this.rootPane.setMaxSize(StageConstants.DEFAULT_SIZE.width,StageConstants.DEFAULT_SIZE.height);
 			this.rootPane.getStyleClass().add("rootPane");
 		}
-		{//initialize listPane
+		{
+			this.activeItemDisplay = new Maybe<>();
+			this.updateItemDisplay = new SimpleBooleanProperty();
+			this.updateItemDisplay.addListener(new ChangeListener<Boolean>() {
+				@Override
+				public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+					constructInfoPane(100.0);
+				}
+			});
+
+		}
+		{//initialize listPane //TODO: Make a method?
 			final double WIDTH_PERCENT = .33;
 			final double LIST_PANE_WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 
@@ -47,7 +107,7 @@ public class MainStage extends Stage{
 			{//the display for the list of items
 				HBox itemListMenu = new HBox();
 				{//set the content of the item list menu
-					final double ITEM_LIST_MENU_HEIGHT = 50;//TODO: make same height as Rectangles that contain the Item displayNames?
+					final double ITEM_LIST_MENU_HEIGHT = 50;//TODO: make same height as Buttons that contain the Item displayNames?
 					itemListMenu.setMinSize(LIST_PANE_WIDTH, ITEM_LIST_MENU_HEIGHT);
 					itemListMenu.setMaxSize(LIST_PANE_WIDTH, ITEM_LIST_MENU_HEIGHT);
 					itemListMenu.setPrefSize(LIST_PANE_WIDTH, ITEM_LIST_MENU_HEIGHT);
@@ -78,19 +138,30 @@ public class MainStage extends Stage{
 						itemList.setPrefViewportWidth(LIST_PANE_WIDTH);
 						{
 							VBox items = new VBox(StageConstants.PADDING);
-							final int HEIGHT = 75;
+							final int BUTTON_HEIGHT = 75;
+							util.Pair<Integer> BUTTON_SIZE = new util.Pair<>(
+									(int)(itemList.getPrefViewportWidth() - (4 * StageConstants.PADDING + util.Graphics.SCROLL_BAR_WIDTH)),
+									BUTTON_HEIGHT
+							);
 							for(int i = 0; i < database.getItems().size(); i++){
-								StackPane itemName = new StackPane();
+								StackPane itemName = new StackPane();//TODO: remove if unneeded
 
-								Rectangle background = new Rectangle(itemList.getPrefViewportWidth() - (4 * StageConstants.PADDING + util.Graphics.SCROLL_BAR_WIDTH), HEIGHT);//note: width subtracts three padding widths because there is the padding around the rectangle and the padding around the entire ScrollPane
-								background.getStyleClass().add("itemName");
+								Button button = new Button(database.getItems().get(i).getDisplayName());
+								button.setMinSize(BUTTON_SIZE.getFirst(),BUTTON_SIZE.getSecond());
+								button.setMaxSize(BUTTON_SIZE.getFirst(),BUTTON_SIZE.getSecond());
+								button.setPrefSize(BUTTON_SIZE.getFirst(),BUTTON_SIZE.getSecond());
+								button.getStyleClass().add("itemName");
+								final int ITEM_ACCESSOR = i;
+								button.setOnAction(
+										(ActionEvent event) ->
+										{
+											this.activeItemDisplay.set(database.getItems().get(ITEM_ACCESSOR));//TODO: get this working
+											this.updateItemDisplay.setValue(!this.updateItemDisplay.getValue());
+										}
+								);
 
-								Label name = new Label(database.getItems().get(i).getDisplayName());
-								name.getStyleClass().add("itemName");
-
-								itemName.getChildren().addAll(background, name);
+								itemName.getChildren().addAll(button);
 								items.getChildren().add(itemName);
-
 							}
 							itemList.setContent(items);
 						}
@@ -106,11 +177,37 @@ public class MainStage extends Stage{
 		}
 		{//TODO
 			final double WIDTH_PERCENT = .67;
+			final double INFO_PANE_WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 			{
+				constructInfoPane(INFO_PANE_WIDTH);
+				/*
 				this.infoPane = new VBox();
-				this.infoPane.setMaxWidth(StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT);
+				this.infoPane.setMaxWidth(INFO_PANE_WIDTH);
 				this.infoPane.setPrefWidth(this.infoPane.getMaxWidth());
 				this.infoPane.getStyleClass().add("infoPane");
+				this.infoPane.setPadding(StageConstants.PADDING_INSETS);
+				{
+					StackPane itemDisplay = new StackPane();
+					itemDisplay.setPadding(StageConstants.PADDING_INSETS);
+					itemDisplay.getStyleClass().add("itemDisplay");
+
+					final int BACKGROUND_HEIGHT = 500;
+					Rectangle background = new Rectangle(INFO_PANE_WIDTH - (4 * StageConstants.PADDING),BACKGROUND_HEIGHT);
+					background.getStyleClass().add("itemDisplayBackground");
+
+					Text itemDisplayInfo = new Text();
+					if(this.activeItemDisplay.isValid()){
+						itemDisplayInfo.setText(this.activeItemDisplay.get().getDescription());
+					} else {
+						itemDisplayInfo.setText("");
+					}
+					itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
+
+					itemDisplay.getChildren().addAll(background,itemDisplayInfo);
+
+					this.infoPane.getChildren().addAll(itemDisplay);
+				}
+				*/
 			}
 			{
 				this.addItemPane = new VBox();

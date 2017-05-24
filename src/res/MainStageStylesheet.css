@@ -2,23 +2,31 @@
     -fx-background-color: #222222;
 }
 
-/*.listPane, */ .itemListMenu, .itemListBorder, .infoPane, .addItemPane, .itemList > .viewport{/*viewport refers to the ScrollPane which has its own background*/
+/*.listPane,*/ .itemListMenu, .itemListBorder, .infoPane, .addItemPane, .itemList > .viewport{/*viewport refers to the ScrollPane which has its own background*/
     -fx-background-color: #424242;
 }
 
-.itemList{
+.infoPane, .addItemPane, .itemList, .listPane, .itemDisplay{
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.listPane{
-    -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
+.itemDisplayBackground{
+    -fx-fill: #999999;
 }
 
-.infoPane, .addItemPane{
-    -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
+.itemDisplayInfo{
+    -fx-font-size: 11pt;
 }
 
 .itemName{
     -fx-font-size: 15pt;
-    -fx-fill: #999999;
+     -fx-background-color: #999999;
+}
+
+.itemName:hover{
+    -fx-background-color: #BBBBBB;
+}
+
+.itemName:pressed{
+    -fx-background-color: #EEEEEE;
 }
