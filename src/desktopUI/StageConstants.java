@@ -1,8 +1,8 @@
 package desktopUI;
 
 import util.Graphics;
-
 import java.awt.Dimension;
+import javafx.geometry.Insets;
 
 /**
  * Stores constants used across the desktop application
@@ -17,4 +17,5 @@ public abstract class StageConstants{
 			768 - EXPERIMENTAL_VERTICAL_INSETS - Graphics.TASKBAR_HEIGHT
 	);
 	public static final int PADDING = 5;//px ?
+	public static final Insets PADDING_INSETS = new Insets(PADDING, PADDING, PADDING, PADDING);
 }

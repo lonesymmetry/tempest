@@ -2,26 +2,23 @@
     -fx-background-color: #222222;
 }
 
-.listPane, .infoPane, .addItemPane, .itemList > .viewport{/*viewport refers to the ScrollPane which has its own background*/
+/*.listPane, */ .itemListMenu, .itemListBorder, .infoPane, .addItemPane, .itemList > .viewport{/*viewport refers to the ScrollPane which has its own background*/
     -fx-background-color: #424242;
 }
 
-.itemListMenu, itemList, itemList > viewport{
+.rootPane, .itemList{
+    -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
+}
+
+.listPane{
+    -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
+}
+
+.infoPane, .addItemPane{
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
 .itemName{
     -fx-font-size: 15pt;
-}
-
-.listPane{
-    -fx-background-insets: 5px 3px 5px 5px;/*top right bottom left*/
-}
-
-.infoPane, .addItemPane{
-    -fx-background-insets: 5px 5px 5px 3px;/*top right bottom left*/
-}
-
-.itemName{
     -fx-fill: #999999;
 }

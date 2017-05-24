@@ -9,6 +9,7 @@ import java.awt.*;
  */
 public class Graphics {
 	public static int TASKBAR_HEIGHT = 40;//px the height of the taskbar in windows
+	public static int SCROLL_BAR_WIDTH = 10;//px the width of Javafx's ScrollPane scrollbar
 
 	/**
 	 * Generates the dimensions that the content pane for a JFrame should be to fill the screen
