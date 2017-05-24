@@ -124,11 +124,9 @@ public class Database {
     	final int LENGTH = 15;
 		Database a = new Database();
     	for(int i = 0; i < LENGTH; i++){
-			Item z = new Item("TestItem", "This is a test");
+			Item z = new Item("TestItem#" + i, "This is a test #" + i);
 			a.writeItem(z);
 		}
-		a.fillList();
-		System.out.println(a.getItems());
 	}
 
     public Database(){

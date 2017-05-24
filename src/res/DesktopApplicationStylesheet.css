@@ -15,7 +15,8 @@
 }
 
 .itemDisplayInfo{
-    -fx-font-size: 11pt;
+    -fx-font-size: 12pt;
+    -fx-font-color: #FF0000;
 }
 
 .itemName{
