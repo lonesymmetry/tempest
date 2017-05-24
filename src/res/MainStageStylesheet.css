@@ -6,7 +6,7 @@
     -fx-background-color: #424242;
 }
 
-.rootPane, .itemList{
+.itemList{
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 

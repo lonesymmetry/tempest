@@ -31,7 +31,7 @@ public class MainStage extends Stage{
 
 		{//initialize layout
 			this.rootPane = new HBox();
-			this.rootPane.setPadding(StageConstants.PADDING_INSETS);
+			//this.rootPane.setPadding(StageConstants.PADDING_INSETS);//unnecessary
 			this.rootPane.setMaxSize(StageConstants.DEFAULT_SIZE.width,StageConstants.DEFAULT_SIZE.height);
 			this.rootPane.getStyleClass().add("rootPane");
 		}
