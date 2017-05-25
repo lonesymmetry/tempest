@@ -4,7 +4,7 @@ import java.awt.*;
 
 /**
  * Some useful graphical operations
- * @
+ *
  * @author Logan Traffas
  */
 public class Graphics {

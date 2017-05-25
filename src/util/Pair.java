@@ -2,6 +2,8 @@ package util;
 
 /**
  * Contains a pair of a type
+ *
+ * @author Logan Traffas
  */
 public class Pair<T>{
 	private T first, second;

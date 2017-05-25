@@ -2,6 +2,8 @@ package util;
 
 /**
  * Represents a single point
+ *
+ * @author Logan Traffas
  */
 public class Point<T>{
 	private T x, y;

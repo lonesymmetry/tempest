@@ -2,6 +2,8 @@ package util;
 
 /**
  * Stores a value and keeps track of whether it has been set or not
+ *
+ * @author Logan Traffas
  */
 public class Maybe<T>{
 	private T a;

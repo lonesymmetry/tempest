@@ -1,14 +1,15 @@
 @Authors Adrian Hardt, Logan Traffas
 
 Engine:
-    control.Database:
+    -Database:
         -Add date functionality
         -Add sorting parsers (ie sort by type, date, etc.)
     -Get input from UI (make this adaptable)
 
-desktopUI:
+Desktop UI:
     -Create UI document
-    -Design UI layout
+    -Add ability to create new Items
+    -Add menus to improve usability
 
 Android UI:
     -Shift code base to Android

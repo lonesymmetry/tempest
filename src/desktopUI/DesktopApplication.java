@@ -32,6 +32,10 @@ public class DesktopApplication extends Application{
 	private VBox infoPane;
 	private VBox addItemPane;
 
+	/**
+	 * Constructs the infoPane which is the detailed display for a selected Item
+	 * @param activeItem
+	 */
 	private void constructInfoPane(util.Maybe<Item> activeItem){
 		final double WIDTH_PERCENT = .665;//extra 0.05% to make room for padding on the right side
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
@@ -68,6 +72,9 @@ public class DesktopApplication extends Application{
 		}
 	}
 
+	/**
+	 * Constructs the listPane which is the list of Items which the user can select to view more details
+	 */
 	private void constructListPane(){
 		final double WIDTH_PERCENT = .33;
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
@@ -139,6 +146,9 @@ public class DesktopApplication extends Application{
 		}
 	}
 
+	/**
+	 * Constructs a pane which provides for the ability of users to add new Items to the Database
+	 */
 	private void constructAddItemPane(){//TODO
 		final double WIDTH_PERCENT = .665;//extra 0.05% to make room for padding on the right side
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
@@ -148,6 +158,9 @@ public class DesktopApplication extends Application{
 		this.addItemPane.getStyleClass().add("addItemPane");
 	}
 
+	/**
+	 * Constructs the primary pane of the application which contains the listPane and either the infoPane or the addItemPane
+	 */
 	private void constructRootPane(){
 		this.rootPane.setMaxSize(StageConstants.DEFAULT_SIZE.width,StageConstants.DEFAULT_SIZE.height);
 		this.rootPane.getStyleClass().add("rootPane");
@@ -157,6 +170,10 @@ public class DesktopApplication extends Application{
 		this.rootPane.getChildren().addAll(this.listPane,this.infoPane);//ordered from left to right
 	}
 
+	/**
+	 * The main entry point for the JavaFX application which runs all of the graphics
+	 * @param primaryStage the primary stage for the application where the application scene is set
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		initialize();
@@ -171,6 +188,9 @@ public class DesktopApplication extends Application{
 		this.mainStage.show();
 	}
 
+	/**
+	 * Acts as the constructor for this class
+	 */
 	private void initialize(){
 		{
 			//TODO: for testing only
@@ -185,6 +205,10 @@ public class DesktopApplication extends Application{
 		this.addItemPane = new VBox();
 	}
 
+	/**
+	 * Used to launch the application with arguments
+	 * @param args the arguments to launch the application which
+	 */
 	public static void main(String[] args){
 		launch(args);
 	}
