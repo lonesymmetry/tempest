@@ -2,7 +2,7 @@
     -fx-background-color: #222222;
 }
 
-/*.listPane,*/ .itemListMenu, .itemListBorder, .infoPane, .addItemPane, .itemList > .viewport{/*viewport refers to the ScrollPane which has its own background*/
+/*.listPane,*/ .itemFields, .itemListMenu, .itemListBorder, .infoPane, .addItemPane, .itemList > .viewport{/*viewport refers to the ScrollPane which has its own background*/
     -fx-background-color: #424242;
 }
 
@@ -10,11 +10,11 @@
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.listPane, .infoPane, .itemDisplayInfoBorder{
+.listPane, .addItemPane, .infoPane, .addItemFieldsBorder, .itemDisplayInfoBorder{
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.itemDisplayBackground, .itemDisplayInfoBorder{
+.addItemFieldsBackground, .itemDisplayBackground, .addItemFieldsBorder, .itemDisplayInfoBorder{
     -fx-fill: #999999;
 }
 
@@ -23,7 +23,7 @@
     -fx-font-color: #FF0000;
 }
 
-.itemName{
+.addNewButton, .itemName{
     -fx-font-size: 15pt;
     -fx-background-color: #999999;
 }

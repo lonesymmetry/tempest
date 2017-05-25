@@ -6,9 +6,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -16,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import util.Util;
 
 /**
  * Runs the desktop application that displays the Items and provides for their management
@@ -25,7 +24,10 @@ import javafx.stage.Stage;
 public class DesktopApplication extends Application{
 	private Stage mainStage;
 	private static final String STYLESHEET_SOURCE = "/res/DesktopApplicationStylesheet.css";
+	private static final int SECTION_HEIGHT = 75;
 	private static final boolean RESIZABLE = false;
+	public enum RightDisplay{ITEM_INFO,ADD_NEW_ITEM}
+	private RightDisplay rightDisplay;
 	private Database database;
 	private HBox rootPane;
 	private VBox listPane;
@@ -37,38 +39,77 @@ public class DesktopApplication extends Application{
 	 * @param activeItem
 	 */
 	private void constructInfoPane(util.Maybe<Item> activeItem){
+		this.infoPane.getChildren().clear();
+		this.addItemPane.getChildren().clear();
 		final double WIDTH_PERCENT = .665;//extra 0.05% to make room for padding on the right side
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
-		this.infoPane.getChildren().clear();
 		this.infoPane.setMaxWidth(WIDTH);
 		this.infoPane.setPrefWidth(this.infoPane.getMaxWidth());
 		this.infoPane.getStyleClass().add("infoPane");
 		{
 			StackPane itemDisplay = new StackPane();
-			itemDisplay.setPadding(StageConstants.PADDING_INSETS);
-			itemDisplay.getStyleClass().add("itemDisplay");
+			{
+				itemDisplay.setPadding(StageConstants.PADDING_INSETS);
+				itemDisplay.getStyleClass().add("itemDisplay");
 
-			final int BACKGROUND_HEIGHT = 500;
-			final int BACKGROUND_WIDTH = (int)(WIDTH - (4 * StageConstants.PADDING));
-			Rectangle background = new Rectangle(BACKGROUND_WIDTH,BACKGROUND_HEIGHT);
-			background.getStyleClass().add("itemDisplayBackground");
+				final int BACKGROUND_HEIGHT = 500;
+				final int BACKGROUND_WIDTH = (int) (WIDTH - (2 * StageConstants.PADDING));
+				Rectangle background = new Rectangle(BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+				background.getStyleClass().add("itemDisplayBackground");
 
-			StackPane itemDisplayInfoBorder = new StackPane();//used to align text in the upper left-hand corner with some padding
-			itemDisplayInfoBorder.getStyleClass().add("itemDisplayInfoBorder");
-			Text itemDisplayInfo = new Text();
-			if(activeItem.isValid()){
-				itemDisplayInfo.setText(activeItem.get().getDescription());
-			} else {
-				itemDisplayInfo.setText("");
+				StackPane itemDisplayInfoBorder = new StackPane();//used to align text in the upper left-hand corner with some padding
+				{//TODO
+					itemDisplayInfoBorder.getStyleClass().add("itemDisplayInfoBorder");
+					Text itemDisplayInfo = new Text();
+					if (activeItem.isValid()) {
+						itemDisplayInfo.setText(activeItem.get().getDescription());
+					} else {
+						itemDisplayInfo.setText("");
+					}
+					itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
+
+					itemDisplayInfoBorder.getChildren().addAll(itemDisplayInfo);
+					StackPane.setAlignment(itemDisplayInfo, Pos.TOP_LEFT);
+				}
+				itemDisplay.getChildren().addAll(background, itemDisplayInfoBorder);
 			}
-			itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
+			HBox editItemMenu = new HBox();
+			{
+				{//set the content of the item list menu
+					editItemMenu.setMinSize(WIDTH, SECTION_HEIGHT);
+					editItemMenu.setMaxSize(WIDTH, SECTION_HEIGHT);
+					editItemMenu.setPrefSize(WIDTH, SECTION_HEIGHT);
+					editItemMenu.getStyleClass().add("itemListMenu");
 
-			itemDisplayInfoBorder.getChildren().addAll(itemDisplayInfo);
-			StackPane.setAlignment(itemDisplayInfo,Pos.TOP_LEFT);
+					ToggleButton toggleFinished = new ToggleButton("Toggle Finished");
+					{
+						toggleFinished.getStyleClass().add("toggleFinishedButton");
+						toggleFinished.setOnAction(
+								(ActionEvent event) ->
+										Util.nyi(Util.getFileName(), Util.getLineNumber())
+						);
+					}
+					Button editItem = new Button("Edit");
+					{
+						editItem.getStyleClass().add("editItemButton");
+						editItem.setOnAction(
+								(ActionEvent event) ->
+										Util.nyi(Util.getFileName(), Util.getLineNumber())
+						);
+					}
+					Button deleteItem = new Button("Delete");
+					{
 
-			itemDisplay.getChildren().addAll(background,itemDisplayInfoBorder);
-
-			this.infoPane.getChildren().addAll(itemDisplay);
+						deleteItem.getStyleClass().add("deleteItemButton");
+						deleteItem.setOnAction(
+								(ActionEvent event) ->
+										Util.nyi(Util.getFileName(), Util.getLineNumber())
+						);
+					}
+					editItemMenu.getChildren().addAll(toggleFinished,editItem,deleteItem);
+				}
+			}
+			this.infoPane.getChildren().addAll(itemDisplay,editItemMenu);
 		}
 	}
 
@@ -76,6 +117,7 @@ public class DesktopApplication extends Application{
 	 * Constructs the listPane which is the list of Items which the user can select to view more details
 	 */
 	private void constructListPane(){
+		this.listPane.getChildren().clear();
 		final double WIDTH_PERCENT = .33;
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 
@@ -85,14 +127,23 @@ public class DesktopApplication extends Application{
 		{//the display for the list of items
 			HBox itemListMenu = new HBox();
 			{//set the content of the item list menu
-				final double ITEM_LIST_MENU_HEIGHT = 50;//TODO: make same height as Buttons that contain the Item displayNames?
-				itemListMenu.setMinSize(WIDTH, ITEM_LIST_MENU_HEIGHT);
-				itemListMenu.setMaxSize(WIDTH, ITEM_LIST_MENU_HEIGHT);
-				itemListMenu.setPrefSize(WIDTH, ITEM_LIST_MENU_HEIGHT);
+				itemListMenu.setMinSize(WIDTH, SECTION_HEIGHT);
+				itemListMenu.setMaxSize(WIDTH, SECTION_HEIGHT);
+				itemListMenu.setPrefSize(WIDTH, SECTION_HEIGHT);
 				itemListMenu.getStyleClass().add("itemListMenu");
 
-				Label temp = new Label("Menu");//TODO
-				itemListMenu.getChildren().addAll(temp);
+				Button addNew = new Button();
+				addNew.getStyleClass().add("addNewButton");
+				addNew.setOnAction(
+						(ActionEvent event) ->
+						{
+							this.rightDisplay = RightDisplay.ADD_NEW_ITEM;
+							constructRootPane();
+							System.out.println("Pressed");
+						}
+				);
+
+				itemListMenu.getChildren().addAll(addNew);
 			}
 			AnchorPane itemListBorder = new AnchorPane();
 			{
@@ -116,10 +167,9 @@ public class DesktopApplication extends Application{
 					itemList.setPrefViewportWidth(WIDTH);
 					{
 						VBox items = new VBox(StageConstants.PADDING);
-						final int BUTTON_HEIGHT = 75;
 						util.Pair<Integer> BUTTON_SIZE = new util.Pair<>(
 								(int)(itemList.getPrefViewportWidth() - (4 * StageConstants.PADDING + util.Graphics.SCROLL_BAR_WIDTH)),
-								BUTTON_HEIGHT
+								SECTION_HEIGHT
 						);
 						for(Item item : database.getItems()){
 							Button button = new Button(item.getDisplayName());
@@ -129,7 +179,11 @@ public class DesktopApplication extends Application{
 							button.getStyleClass().add("itemName");
 							button.setOnAction(
 									(ActionEvent event) ->
-											constructInfoPane(new util.Maybe<>(item))
+									{
+										this.rightDisplay = RightDisplay.ITEM_INFO;
+										constructRootPane();
+										constructInfoPane(new util.Maybe<>(item));
+									}
 							);
 							items.getChildren().add(button);
 						}
@@ -150,24 +204,96 @@ public class DesktopApplication extends Application{
 	 * Constructs a pane which provides for the ability of users to add new Items to the Database
 	 */
 	private void constructAddItemPane(){//TODO
+		this.addItemPane.getChildren().clear();
+		this.infoPane.getChildren().clear();
 		final double WIDTH_PERCENT = .665;//extra 0.05% to make room for padding on the right side
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 
 		this.addItemPane.setMaxWidth(WIDTH);
 		this.addItemPane.setPrefWidth(this.addItemPane.getMaxWidth());
 		this.addItemPane.getStyleClass().add("addItemPane");
+		StackPane addItemFieldsBorder = new StackPane();
+		{
+			addItemFieldsBorder.setPadding(StageConstants.PADDING_INSETS);
+			addItemFieldsBorder.getStyleClass().add("addItemFieldsBorder");
+
+			final int BACKGROUND_WIDTH = (int)(WIDTH - 2 * StageConstants.PADDING), BACKGROUND_HEIGHT = 500;
+			Rectangle background = new Rectangle(BACKGROUND_WIDTH,BACKGROUND_HEIGHT);
+			background.getStyleClass().add("addItemFieldsBackground");
+
+			VBox addItemFields = new VBox();
+			{
+				final int TEXTFIELD_WIDTH = (int)(WIDTH - 4 * StageConstants.PADDING);
+				addItemFields.getStyleClass().add("itemFields");
+
+				TextField setName = new TextField();
+				{
+					setName.getStyleClass().add("addName");
+					setName.setPromptText("Name...");
+					setName.setPrefColumnCount(Item.MAX_DISPLAY_NAME_LENGTH);
+					setName.setMinWidth(TEXTFIELD_WIDTH);
+					setName.setMaxWidth(TEXTFIELD_WIDTH);
+					setName.setPrefWidth(TEXTFIELD_WIDTH);
+				}
+				ComboBox setPriority = new ComboBox();
+				{
+					setPriority.getStyleClass().add("setPriority");
+					setPriority.setPromptText("Priority...");
+				}
+				TextField setDescription = new TextField();
+				{
+					final int SET_DESCRIPTION_HEIGHT = 100;
+					setDescription.getStyleClass().add("setDescription");
+					setDescription.setPromptText("Description...");
+					setDescription.setMinSize(TEXTFIELD_WIDTH,SET_DESCRIPTION_HEIGHT);
+					setDescription.setMaxSize(TEXTFIELD_WIDTH,SET_DESCRIPTION_HEIGHT);
+					setDescription.setPrefSize(TEXTFIELD_WIDTH,SET_DESCRIPTION_HEIGHT);
+				}
+				addItemFields.getChildren().addAll(setName, setPriority, setDescription);
+			}
+			addItemFieldsBorder.getChildren().addAll(background,addItemFields);
+		}
+		HBox addItemMenu = new HBox();
+		{
+			addItemMenu.getStyleClass().add("addItemMenu");
+			{
+
+			}
+			{
+
+			}
+			{
+
+			}
+		}
+		this.addItemPane.getChildren().addAll(addItemFieldsBorder,addItemMenu);
 	}
 
 	/**
 	 * Constructs the primary pane of the application which contains the listPane and either the infoPane or the addItemPane
 	 */
 	private void constructRootPane(){
+		this.rootPane.getChildren().clear();
 		this.rootPane.setMaxSize(StageConstants.DEFAULT_SIZE.width,StageConstants.DEFAULT_SIZE.height);
 		this.rootPane.getStyleClass().add("rootPane");
+
 		constructListPane();
-		constructInfoPane(new util.Maybe<>());
-		constructAddItemPane();
-		this.rootPane.getChildren().addAll(this.listPane,this.infoPane);//ordered from left to right
+		this.rootPane.getChildren().add(this.listPane);
+
+		switch(this.rightDisplay) {
+			case ITEM_INFO:
+				constructInfoPane(new util.Maybe<>());
+				this.rootPane.getChildren().add(this.infoPane);
+				break;
+			case ADD_NEW_ITEM:
+				constructAddItemPane();
+				this.rootPane.getChildren().add(this.addItemPane);
+				break;
+			default:
+				util.Util.nyi(util.Util.getFileName(),util.Util.getLineNumber());
+		}
+
+
 	}
 
 	/**
@@ -198,6 +324,7 @@ public class DesktopApplication extends Application{
 		}
 		this.mainStage = new Stage();
 		this.database = new Database();
+		this.rightDisplay = RightDisplay.ITEM_INFO;
 		this.database.fillList();
 		this.rootPane = new HBox();
 		this.listPane = new VBox(StageConstants.PADDING);

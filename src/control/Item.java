@@ -52,7 +52,7 @@ public class Item {
 	}
 
 	private static final char[] DISALLOWED_CHARACTERS = {'|','\n'};
-	private static final int maxLength = 16;
+	public static final int MAX_DISPLAY_NAME_LENGTH = 16;
 	private Status status;
 	private String displayName;
 	private String description;
@@ -76,7 +76,7 @@ public class Item {
 	}
 
 	public String shortenName(){
-		if(displayName.length()>maxLength)return displayName.substring(0,maxLength+1);
+		if(displayName.length()>MAX_DISPLAY_NAME_LENGTH)return displayName.substring(0,MAX_DISPLAY_NAME_LENGTH+1);
 		return displayName;
 	}
 
