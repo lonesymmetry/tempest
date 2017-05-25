@@ -7,7 +7,7 @@ import javafx.application.Application;
  *
  */
 public class Main {
-	public void runApp(String[] args){
+	private void runApp(String[] args){
 		Application.launch(DesktopApplication.class,args);
 	}
 

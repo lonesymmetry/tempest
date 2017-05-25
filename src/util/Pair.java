@@ -4,7 +4,7 @@ package util;
  * Contains a pair of a type
  */
 public class Pair<T>{
-	T first, second;
+	private T first, second;
 
 	public T getFirst(){
 		return first;

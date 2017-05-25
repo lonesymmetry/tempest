@@ -4,7 +4,7 @@ package util;
  * Represents a single point
  */
 public class Point<T>{
-	T x, y;
+	private T x, y;
 
 	public T getX(){
 		return x;
@@ -20,9 +20,6 @@ public class Point<T>{
 
 	public void setY(T y){
 		this.y = y;
-	}
-
-	public Point(){
 	}
 
 	public Point(T x, T y){

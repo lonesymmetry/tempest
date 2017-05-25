@@ -32,7 +32,7 @@ public class DesktopApplication extends Application{
 	private VBox infoPane;
 	private VBox addItemPane;
 
-	public void constructInfoPane(util.Maybe<Item> activeItem){
+	private void constructInfoPane(util.Maybe<Item> activeItem){
 		final double WIDTH_PERCENT = .665;//extra 0.05% to make room for padding on the right side
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 		this.infoPane.getChildren().clear();
@@ -60,7 +60,7 @@ public class DesktopApplication extends Application{
 			itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
 
 			itemDisplayInfoBorder.getChildren().addAll(itemDisplayInfo);
-			itemDisplayInfoBorder.setAlignment(itemDisplayInfo,Pos.TOP_LEFT);
+			StackPane.setAlignment(itemDisplayInfo,Pos.TOP_LEFT);
 
 			itemDisplay.getChildren().addAll(background,itemDisplayInfoBorder);
 
@@ -129,10 +129,10 @@ public class DesktopApplication extends Application{
 						itemList.setContent(items);
 					}
 					itemListBorder.getChildren().add(itemList);
-					itemListBorder.setBottomAnchor(itemList, (double)StageConstants.PADDING);
-					itemListBorder.setTopAnchor(itemList, (double)StageConstants.PADDING);
-					itemListBorder.setRightAnchor(itemList, (double)StageConstants.PADDING);
-					itemListBorder.setLeftAnchor(itemList, (double)StageConstants.PADDING);
+					AnchorPane.setBottomAnchor(itemList,(double)StageConstants.PADDING);
+					AnchorPane.setTopAnchor(itemList,(double)StageConstants.PADDING);
+					AnchorPane.setRightAnchor(itemList,(double)StageConstants.PADDING);
+					AnchorPane.setLeftAnchor(itemList,(double)StageConstants.PADDING);
 				}
 			}
 			this.listPane.getChildren().addAll(itemListMenu, itemListBorder);//order matters
