@@ -4,6 +4,7 @@ import control.Database;
 import control.Item;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,22 +33,24 @@ public class DesktopApplication extends Application{
 	private VBox addItemPane;
 
 	public void constructInfoPane(util.Maybe<Item> activeItem){
-		final double WIDTH_PERCENT = .67;
+		final double WIDTH_PERCENT = .665;//extra 0.05% to make room for padding on the right side
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 		this.infoPane.getChildren().clear();
 		this.infoPane.setMaxWidth(WIDTH);
 		this.infoPane.setPrefWidth(this.infoPane.getMaxWidth());
 		this.infoPane.getStyleClass().add("infoPane");
-		this.infoPane.setPadding(StageConstants.PADDING_INSETS);
 		{
 			StackPane itemDisplay = new StackPane();
 			itemDisplay.setPadding(StageConstants.PADDING_INSETS);
 			itemDisplay.getStyleClass().add("itemDisplay");
 
 			final int BACKGROUND_HEIGHT = 500;
-			Rectangle background = new Rectangle(WIDTH - (4 * StageConstants.PADDING),BACKGROUND_HEIGHT);
+			final int BACKGROUND_WIDTH = (int)(WIDTH - (4 * StageConstants.PADDING));
+			Rectangle background = new Rectangle(BACKGROUND_WIDTH,BACKGROUND_HEIGHT);
 			background.getStyleClass().add("itemDisplayBackground");
 
+			StackPane itemDisplayInfoBorder = new StackPane();//used to align text in the upper left-hand corner with some padding
+			itemDisplayInfoBorder.getStyleClass().add("itemDisplayInfoBorder");
 			Text itemDisplayInfo = new Text();
 			if(activeItem.isValid()){
 				itemDisplayInfo.setText(activeItem.get().getDescription());
@@ -56,7 +59,10 @@ public class DesktopApplication extends Application{
 			}
 			itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
 
-			itemDisplay.getChildren().addAll(background,itemDisplayInfo);
+			itemDisplayInfoBorder.getChildren().addAll(itemDisplayInfo);
+			itemDisplayInfoBorder.setAlignment(itemDisplayInfo,Pos.TOP_LEFT);
+
+			itemDisplay.getChildren().addAll(background,itemDisplayInfoBorder);
 
 			this.infoPane.getChildren().addAll(itemDisplay);
 		}
@@ -66,7 +72,6 @@ public class DesktopApplication extends Application{
 		final double WIDTH_PERCENT = .33;
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 
-		this.listPane.setPadding(StageConstants.PADDING_INSETS);
 		this.listPane.setMaxWidth(WIDTH);
 		this.listPane.setPrefWidth(this.listPane.getMaxWidth());
 		this.listPane.getStyleClass().add("listPane");
@@ -110,8 +115,6 @@ public class DesktopApplication extends Application{
 								BUTTON_HEIGHT
 						);
 						for(Item item : database.getItems()){
-							StackPane itemName = new StackPane();//TODO: remove if unneeded
-
 							Button button = new Button(item.getDisplayName());
 							button.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 							button.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -121,9 +124,7 @@ public class DesktopApplication extends Application{
 									(ActionEvent event) ->
 											constructInfoPane(new util.Maybe<>(item))
 							);
-
-							itemName.getChildren().addAll(button);
-							items.getChildren().add(itemName);
+							items.getChildren().add(button);
 						}
 						itemList.setContent(items);
 					}
@@ -138,8 +139,8 @@ public class DesktopApplication extends Application{
 		}
 	}
 
-	private void constructAddItemPane(){
-		final double WIDTH_PERCENT = .67;
+	private void constructAddItemPane(){//TODO
+		final double WIDTH_PERCENT = .665;//extra 0.05% to make room for padding on the right side
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 
 		this.addItemPane.setMaxWidth(WIDTH);
@@ -173,7 +174,7 @@ public class DesktopApplication extends Application{
 	private void initialize(){
 		{
 			//TODO: for testing only
-			Database.testWrite();
+			//Database.testWrite();
 		}
 		this.mainStage = new Stage();
 		this.database = new Database();

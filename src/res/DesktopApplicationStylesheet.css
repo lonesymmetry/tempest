@@ -6,11 +6,15 @@
     -fx-background-color: #424242;
 }
 
-.infoPane, .addItemPane, .itemList, .listPane, .itemDisplay{
+.infoPane, .addItemPane, .itemList, .itemDisplay{
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.itemDisplayBackground{
+.listPane, .infoPane, .itemDisplayInfoBorder{
+    -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
+}
+
+.itemDisplayBackground, .itemDisplayInfoBorder{
     -fx-fill: #999999;
 }
 
@@ -21,7 +25,7 @@
 
 .itemName{
     -fx-font-size: 15pt;
-     -fx-background-color: #999999;
+    -fx-background-color: #999999;
 }
 
 .itemName:hover{
