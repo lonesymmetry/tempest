@@ -2,6 +2,8 @@ package control;
 
 import util.Util;
 
+import java.util.Date;
+
 /**
  * Stores Item class
  *
@@ -54,6 +56,7 @@ public class Item {
 	private String displayName;
 	private String description;
 	private Priority priority;
+	private Date date;
 
 	/**
 	 * Checks a string for disallowed characters
@@ -95,6 +98,10 @@ public class Item {
 		this.priority=priority;
 	}
 
+	public void setDate(Date date){
+		this.date = date;
+	}
+
 	public String getDisplayName(){
 		return this.displayName;
 	}
@@ -111,27 +118,32 @@ public class Item {
 		return this.priority;
 	}
 
+	public Date getDate(){
+		return date;
+	}
+
 	@Override
 	public String toString(){
-		return "control.Item(displayName:" + this.displayName + " status:" + this.status + " description:" + this.description + ")";
+		return "control.Item(displayName:" + this.displayName + " status:" + this.status + " priority:"+this.priority+" date:"+ this.date+ " description:" + this.description + ")";
 	}
 
 	public Item(){
-		this("","",Status.UNFINISHED,Priority.LOW);
+		this("","",Status.UNFINISHED,Priority.LOW,new Date());
 	}
 
 	public Item(String displayName,String description){
-		this(displayName,description,Status.UNFINISHED,Priority.LOW);
+		this(displayName,description,Status.UNFINISHED,Priority.LOW,new Date());
 	}
 
 	public Item(String displayName,String description,Priority priority){
-		this(displayName,description,Status.UNFINISHED,priority);
+		this(displayName,description,Status.UNFINISHED,priority,new Date());
 	}
 
-	public Item(String displayName, String description, Status status, Priority priority){
+	public Item(String displayName, String description, Status status, Priority priority, Date date){
 		this.displayName = displayName;
 		this.description = description;
 		this.status = status;
 		this.priority = priority;
+		this.date = date;
 	}
 }
