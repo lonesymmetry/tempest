@@ -170,9 +170,10 @@ public class Database {
         Database a= new Database();
         a.writeItem(z);
         a.fillList();
-        System.out.println(a.getItems());
         Analytics test=new Analytics();
         test.numFinished(a);
         test.numUnfinished(a);
+
+        System.out.println(a);
     }
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * @author Adrian Hardt
  */
 public class Analytics {
-    public ArrayList<Item> getUnfinished(Database a){
+    public ArrayList<Item> sortUnfinished(Database a){
         ArrayList<Item> out = new ArrayList<Item>();
         ArrayList<Item> orig = a.getItems();
         int tally=0;
@@ -34,7 +34,7 @@ public class Analytics {
         return tally;
     }
 
-    public ArrayList<Item> getFinished(Database a){
+    public ArrayList<Item> sortFinished(Database a){
         ArrayList<Item> out = new ArrayList<Item>();
         ArrayList<Item> orig = a.getItems();
         int tally=0;
@@ -58,6 +58,19 @@ public class Analytics {
         }
         System.out.println("Found "+tally+" FINISHED items.");
         return tally;
+    }
+
+    public ArrayList<Item> sortDate(Database a){
+        ArrayList<Item> out = new ArrayList<Item>();
+        ArrayList<Item> orig = a.getItems();
+        out.add(0,orig.get(0));
+        for(int i=0;i<orig.size();i++){
+            if(orig.get(i).getDate().before(out.get(0).getDate())){
+                out.add(0,orig.get(i));
+            }
+        }
+
+        return out;
     }
 
     public int itemCount(Database a){
