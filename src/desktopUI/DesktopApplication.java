@@ -67,31 +67,99 @@ public class DesktopApplication extends Application{
 	private VBox addItemPane;
 	private static final String ADD_ITEM_PANE_ID = "addItemPane";
 
-	private void replaceNode(String removeID,Node newNode){
-		//TODO
+	/**
+	 * Replaces a node with a given ID
+	 * @param ID the ID of the node to replace
+	 * @param newNode the new node
+	 * @return true if it was successful
+	 */
+	private boolean replaceNode(String ID,Node newNode){
+		if(this.rootPane.getChildren().size() == 0){
+			this.rootPane.getChildren().add(newNode);
+			return true;
+		}
+		for(int i = 0; i < this.rootPane.getChildren().size(); i++){
+			Node child = this.rootPane.getChildren().get(i);
+			if(child.getId().equals(ID)){
+				this.rootPane.getChildren().remove(i);
+				this.rootPane.getChildren().add(i,newNode);
+				return true;
+			}
+		}
+		return false;
 	}
 
-
-	private void removeNode(String removeID){
-		removeID = "#" + removeID;
-		Node toRemove = this.rootPane.lookup(removeID);
+	/**
+	 * Removes a node with a given ID
+	 * @param ID the ID of the node to remove
+	 */
+	private void removeNode(String ID){
+		ID = "#" + ID;
+		Node toRemove = this.rootPane.lookup(ID);
 		if(toRemove != null) {
 			this.rootPane.getChildren().remove(toRemove);
 		}
 	}
 
 	/**
+	 * Builds the left side of the display
+	 */
+	private void updateLeftPane(){
+		updateListPane();
+		replaceNode(LIST_PANE_ID,this.listPane);
+	}
+
+	private RightDisplay getActiveRightDisplay(){
+		for(int i = 0; i < this.rootPane.getChildren().size(); i++){
+			Node child = this.rootPane.getChildren().get(i);
+			if(child.getId().equals(INFO_PANE_ID)){
+				return RightDisplay.ITEM_INFO;
+			}
+			if(child.getId().equals(ADD_ITEM_PANE_ID)){
+				return RightDisplay.ADD_NEW_ITEM;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Builds the right side of the display, handling the fact that multiple different displays may appear there
 	 */
 	private void updateRightPane(){
-		removeNode(INFO_PANE_ID);//TODO: replace with replaceNode
-		removeNode(ADD_ITEM_PANE_ID);
+		updateInfoPane();
+		updateAddItemPane();
 		switch(this.rightDisplay) {
 			case ITEM_INFO:
-				this.rootPane.getChildren().add(this.infoPane);
+				if(getActiveRightDisplay() == null){
+					this.rootPane.getChildren().add(this.infoPane);
+				} else{
+					switch(getActiveRightDisplay()){
+						case ITEM_INFO:
+							replaceNode(INFO_PANE_ID, this.infoPane);
+							break;
+						case ADD_NEW_ITEM:
+							replaceNode(ADD_ITEM_PANE_ID, this.infoPane);
+							break;
+						default:
+							Util.nyi(util.Util.getFileName(), util.Util.getLineNumber());
+					}
+				}
 				break;
 			case ADD_NEW_ITEM:
-				this.rootPane.getChildren().add(this.addItemPane);
+				if(getActiveRightDisplay() == null){
+					this.rootPane.getChildren().add(this.addItemPane);
+				} else{
+					switch(getActiveRightDisplay()){
+						case ITEM_INFO:
+							replaceNode(INFO_PANE_ID, this.addItemPane);
+							break;
+						case ADD_NEW_ITEM:
+							replaceNode(ADD_ITEM_PANE_ID, this.addItemPane);
+							break;
+						default:
+							Util.nyi(util.Util.getFileName(), util.Util.getLineNumber());
+					}
+				}
 				break;
 			default:
 				Util.nyi(util.Util.getFileName(),util.Util.getLineNumber());
@@ -182,7 +250,7 @@ public class DesktopApplication extends Application{
 								if(this.activeItem.isValid()){
 									this.activeItem.get().setStatus(Item.Status.not(this.activeItem.get().getStatus()));
 								}
-								Util.nyi(Util.getFileName(), Util.getLineNumber());//TODO
+								Util.nyi(Util.getFileName(), Util.getLineNumber());//TODO: must wait for ability to edit Items
 							}
 					);
 				}
@@ -195,7 +263,7 @@ public class DesktopApplication extends Application{
 					editItem.getStyleClass().add("editItemButton");
 					editItem.setOnAction(
 							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO
+									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO must wait for ability to edit items
 					);
 				}
 				Button deleteItem = new Button("Delete");
@@ -207,7 +275,7 @@ public class DesktopApplication extends Application{
 					deleteItem.getStyleClass().add("deleteItemButton");
 					deleteItem.setOnAction(
 							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO
+									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO: must wait for ability to edit Items
 					);
 				}
 				editItemMenu.getChildren().addAll(toggleFinished,editItem,deleteItem);
@@ -251,8 +319,10 @@ public class DesktopApplication extends Application{
 					addNew.setOnAction(
 							(ActionEvent event) ->
 							{
-								this.rightDisplay = RightDisplay.ADD_NEW_ITEM;
-								updateRightPane();
+								if(getActiveRightDisplay() != RightDisplay.ADD_NEW_ITEM){
+									this.rightDisplay = RightDisplay.ADD_NEW_ITEM;
+									updateRightPane();
+								}
 							}
 					);
 				}
@@ -266,7 +336,7 @@ public class DesktopApplication extends Application{
 
 					sortBy.setOnAction(
 							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO
+									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO: wait for ability to sort
 					);
 				}
 				Button filter = new Button("Filter By");//TODO: change out with ComboBox
@@ -279,7 +349,7 @@ public class DesktopApplication extends Application{
 
 					filter.setOnAction(
 							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO
+									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO: wait for ability to filter
 					);
 				}
 				itemListMenu.getChildren().addAll(addNew,sortBy,filter);
@@ -311,21 +381,20 @@ public class DesktopApplication extends Application{
 								SECTION_HEIGHT
 						);
 						for(Item item : database.getItems()){
-							Button button = new Button(item.getDisplayName());
-							button.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-							button.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-							button.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-							button.getStyleClass().add("itemName");
-							button.setOnAction(
+							Button itemName = new Button(item.getDisplayName());
+							itemName.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+							itemName.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+							itemName.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+							itemName.getStyleClass().add("itemName");
+							itemName.setOnAction(
 									(ActionEvent event) ->
 									{
 										this.rightDisplay = RightDisplay.ITEM_INFO;
 										this.activeItem.set(item);
-										updateInfoPane();
 										updateRightPane();
 									}
 							);
-							items.getChildren().add(button);
+							items.getChildren().add(itemName);
 						}
 						itemList.setContent(items);
 					}
@@ -420,22 +489,22 @@ public class DesktopApplication extends Application{
 			final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 					BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
 			addItemMenu.getStyleClass().add("addItemMenu");
-			Button addItemButton = new Button("Add Item");
+			Button saveNewItemButton = new Button("Save");
 			{
 				final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
-				addItemButton.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-				addItemButton.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-				addItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-				addItemButton.getStyleClass().add("addItemButton");
-				addItemButton.setOnAction(
+				saveNewItemButton.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				saveNewItemButton.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				saveNewItemButton.getStyleClass().add("saveNewItemButton");
+				saveNewItemButton.setOnAction(
 						(ActionEvent event) ->
 						{
 							String itemName = setName.getText(), itemDescription = setDescription.getText();
 							Item.Priority itemPriority = prioritySelector.getValue();
 							if(!itemName.equals("")){
 								this.database.writeItem(new Item(itemName, itemDescription, itemPriority));
-								updateListPane();//TODO: replace with updateLeftPane when it exists
-								updateAddItemPane();
+								updateLeftPane();
+								this.rightDisplay = RightDisplay.ITEM_INFO;
 								updateRightPane();
 							}
 						}
@@ -452,12 +521,11 @@ public class DesktopApplication extends Application{
 						(ActionEvent event) ->
 						{
 							this.rightDisplay = RightDisplay.ITEM_INFO;
-							updateAddItemPane();
 							updateRightPane();
 						}
 				);
 			}
-			addItemMenu.getChildren().addAll(addItemButton,cancelItemAddition);
+			addItemMenu.getChildren().addAll(saveNewItemButton,cancelItemAddition);
 		}
 		this.addItemPane.getChildren().addAll(addItemFieldsBorder,addItemMenu);
 	}
@@ -470,9 +538,7 @@ public class DesktopApplication extends Application{
 		this.rootPane.setMaxSize(DEFAULT_SIZE.width, DEFAULT_SIZE.height);
 		this.rootPane.getStyleClass().add("rootPane");
 
-		removeNode(LIST_PANE_ID);//TODO: make own method like updateRightPane
-		this.rootPane.getChildren().add(this.listPane);
-
+		updateLeftPane();
 		updateRightPane();
 	}
 

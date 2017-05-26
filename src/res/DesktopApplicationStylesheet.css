@@ -29,15 +29,15 @@
     -fx-alignment: center-left;
 }
 
-.addNewButton, .sortBy, .filter, .addItemButton, .editItemButton, .cancelItemAddition, .deleteItemButton, .itemName{
+.addNewButton, .sortBy, .filter, .saveNewItemButton, .editItemButton, .cancelItemAddition, .deleteItemButton, .itemName{
     -fx-font-size: 15pt;
     -fx-background-color: #999999;
 }
 
-.addNewButton:hover, .sortBy:hover, .filter:hover, .itemName:hover, .editItemButton:hover, .addItemButton:hover, .deleteItemButton:hover, .cancelItemAddition:hover{
+.addNewButton:hover, .sortBy:hover, .filter:hover, .itemName:hover, .editItemButton:hover, .saveNewItemButton:hover, .deleteItemButton:hover, .cancelItemAddition:hover{
     -fx-background-color: #BBBBBB;
 }
 
-.addNewButton:pressed, .sortBy:pressed, .filter:pressed, .itemName:pressed, .editItemButton:pressed, .deleteItemButton:pressed, .addItemButton:pressed, .cancelItemAddition:pressed{
+.addNewButton:pressed, .sortBy:pressed, .filter:pressed, .itemName:pressed, .editItemButton:pressed, .deleteItemButton:pressed, .saveNewItemButton:pressed, .cancelItemAddition:pressed{
     -fx-background-color: #EEEEEE;
 }
