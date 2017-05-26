@@ -68,20 +68,37 @@ public class DesktopApplication extends Application{
 				Rectangle background = new Rectangle(BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 				background.getStyleClass().add("itemDisplayBackground");
 
-				StackPane itemDisplayInfoBorder = new StackPane();//used to align text in the upper left-hand corner with some padding
+				VBox itemDisplayInfoBorder = new VBox(StageConstants.PADDING);//used to align text in the upper left-hand corner with some padding
 				{
 					itemDisplayInfoBorder.getStyleClass().add("itemDisplayInfoBorder");
-
-					Text itemDisplayInfo = new Text();
-					{
-						itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
-						if(this.activeItem.isValid()){
-							itemDisplayInfo.setText(this.activeItem.get().getDescription());
-						} else{
-							itemDisplayInfo.setText("");
+					if(this.activeItem.isValid()){
+						final double WRAPPING_WIDTH = WIDTH - 4 * StageConstants.PADDING;
+						Text itemDisplayName = new Text();
+						{
+							itemDisplayName.getStyleClass().add("itemDisplayName");
+							itemDisplayName.setText(this.activeItem.get().getDisplayName());
+							itemDisplayName.setWrappingWidth(WRAPPING_WIDTH);
 						}
+						Text itemDisplayPriority = new Text();
+						{
+							itemDisplayPriority.getStyleClass().add("itemDisplayPriority");
+							itemDisplayPriority.setText("Priority: " + this.activeItem.get().getPriority().toString());
+							itemDisplayPriority.setWrappingWidth(WRAPPING_WIDTH);
+						}
+						Text itemDisplayDescription= new Text();
+						{
+							itemDisplayDescription.getStyleClass().add("itemDisplayDescription");
+							itemDisplayDescription.setText(this.activeItem.get().getDescription());
+							itemDisplayDescription.setWrappingWidth(WRAPPING_WIDTH);
+						}
+						Text itemDisplayDate = new Text();
+						{
+							itemDisplayDate.getStyleClass().add("itemDisplayDate");
+							itemDisplayDate.setText("Created " + this.activeItem.get().getDate().toString());
+							itemDisplayDate.setWrappingWidth(WRAPPING_WIDTH);
+						}
+						itemDisplayInfoBorder.getChildren().addAll(itemDisplayName,itemDisplayPriority,itemDisplayDescription,itemDisplayDate);
 					}
-					itemDisplayInfoBorder.getChildren().addAll(itemDisplayInfo);
 				}
 				itemDisplay.getChildren().addAll(background,itemDisplayInfoBorder);
 			}
@@ -95,7 +112,7 @@ public class DesktopApplication extends Application{
 				final int NUMBER_OF_BUTTONS = 3;
 				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * StageConstants.PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 						BUTTON_HEIGHT = SECTION_HEIGHT - 2 * StageConstants.PADDING;
-				ToggleButton toggleFinished = new ToggleButton("Toggle Finished");
+				ToggleButton toggleFinished = new ToggleButton(this.activeItem.isValid() ? this.activeItem.get().getStatus().toString() : "Toggle Finished");
 				{
 					final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 					toggleFinished.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -104,7 +121,12 @@ public class DesktopApplication extends Application{
 					toggleFinished.getStyleClass().add("toggleFinishedButton");
 					toggleFinished.setOnAction(
 							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO
+							{
+								if(this.activeItem.isValid()){
+									this.activeItem.get().setStatus(Item.Status.not(this.activeItem.get().getStatus()));
+								}
+								Util.nyi(Util.getFileName(), Util.getLineNumber());//TODO
+							}
 					);
 				}
 				Button editItem = new Button("Edit");
@@ -187,7 +209,7 @@ public class DesktopApplication extends Application{
 
 					sortBy.setOnAction(
 							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(),Util.getLineNumber())
+									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO
 					);
 				}
 				Button filter = new Button("Filter By");//TODO: change out with ComboBox
@@ -293,7 +315,7 @@ public class DesktopApplication extends Application{
 				{
 					setName.getStyleClass().add("setName");
 					setName.setPromptText("Add item name");
-					setName.setPrefColumnCount(Item.MAX_DISPLAY_NAME_LENGTH);
+					//setName.setPrefColumnCount(Item.MAX_DISPLAY_NAME_LENGTH);
 					setName.setMinWidth(TEXT_INPUT_WIDTH);
 					setName.setMaxWidth(TEXT_INPUT_WIDTH);
 					setName.setPrefWidth(TEXT_INPUT_WIDTH);
@@ -344,8 +366,12 @@ public class DesktopApplication extends Application{
 				addItemButton.setOnAction(
 						(ActionEvent event) ->
 						{
-							this.database.writeItem(new Item(setName.getText(), setDescription.getText(), prioritySelector.getValue()));
-							this.constructRootPane();
+							String itemName = setName.getText(), itemDescription = setDescription.getText();
+							Item.Priority itemPriority = prioritySelector.getValue();
+							if(!itemName.equals("")){
+								this.database.writeItem(new Item(itemName, itemDescription, itemPriority));
+								this.constructRootPane();
+							}
 						}
 				);
 			}

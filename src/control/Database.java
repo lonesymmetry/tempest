@@ -15,7 +15,8 @@ import java.util.Date;
  */
 
 //TODO create a date aspect of the database as well, look into using Java 8 Date()
-//TODO add a way to wipe the database file
+//TODO add a way to wipe the database file and delete specific Items
+//TODO add a way to edit Item's and re-write them to the file
 public class Database {
     private static final String FILE_NAME = "database.txt";
     private ArrayList<Item> items;

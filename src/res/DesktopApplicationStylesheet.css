@@ -21,7 +21,7 @@
     -fx-alignment: top-left;
 }
 
-.itemDisplayInfo, .priorityLabel, .prioritySelector, .setDescription, .setName{
+.itemDisplayDescription, .itemDisplayPriority, .itemDisplayDate, .itemDisplayName, .priorityLabel, .prioritySelector, .setDescription, .setName{
     -fx-font-size: 12pt;
 }
 

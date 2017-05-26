@@ -13,6 +13,18 @@ public class Item {
 	public enum Status{
 		UNFINISHED,FINISHED;
 
+		public static Status not(Status a){
+			switch(a){
+				case FINISHED:
+					return UNFINISHED;
+				case UNFINISHED:
+					return FINISHED;
+				default:
+					Util.nyi(Util.getFileName(),Util.getLineNumber());
+			}
+			return null;//will never reach this line
+		}
+
 		public static boolean parseable(String s){
 			Status a = Status.parse(s);
 			return a != null;
@@ -52,7 +64,7 @@ public class Item {
 	}
 
 	private static final char[] DISALLOWED_CHARACTERS = {'|','\n'};
-	public static final int MAX_DISPLAY_NAME_LENGTH = 16;
+	//public static final int MAX_DISPLAY_NAME_LENGTH = 50;
 	private Status status;
 	private String displayName;
 	private String description;
@@ -75,10 +87,12 @@ public class Item {
 		return true;
 	}
 
+	/*
 	public String shortenName(){
 		if(displayName.length()>MAX_DISPLAY_NAME_LENGTH)return displayName.substring(0,MAX_DISPLAY_NAME_LENGTH+1);
 		return displayName;
 	}
+	*/
 
 	public void setDisplayName(String displayName){
 		boolean safe = checkIfAllowed(displayName);
