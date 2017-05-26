@@ -109,6 +109,10 @@ public class DesktopApplication extends Application{
 		replaceNode(LIST_PANE_ID,this.listPane);
 	}
 
+	/**
+	 * Searches for the currently active right display
+	 * @return the active right display, null if no known right displays are in use
+	 */
 	private RightDisplay getActiveRightDisplay(){
 		for(int i = 0; i < this.rootPane.getChildren().size(); i++){
 			Node child = this.rootPane.getChildren().get(i);
@@ -171,13 +175,6 @@ public class DesktopApplication extends Application{
 	 */
 	private void updateInfoPane(){
 		this.infoPane.getChildren().clear();
-		{
-			Node toRemove = this.rootPane.lookup(ADD_ITEM_PANE_ID);
-			if(toRemove != null) {
-				this.rootPane.getChildren().remove(toRemove);
-			}
-		}
-		//this.addItemPane.getChildren().clear();
 		final double WIDTH_PERCENT = .66;
 		final double WIDTH = DEFAULT_SIZE.width * WIDTH_PERCENT;
 		this.infoPane.setMaxWidth(WIDTH);
@@ -366,8 +363,11 @@ public class DesktopApplication extends Application{
 
 					final boolean PANNABLE = false;
 					itemList.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+					itemList.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 					itemList.setPannable(PANNABLE);
 					itemList.getStyleClass().add("itemList");
+					final int ITEM_LIST_VIEWPORT_HEIGHT = 1000;//this is just set to something really big, it's cropped down
+					itemList.setPrefViewportHeight(ITEM_LIST_VIEWPORT_HEIGHT);
 
 					itemList.setHmax(WIDTH);
 					itemList.setMinWidth(WIDTH);
@@ -414,13 +414,6 @@ public class DesktopApplication extends Application{
 	 */
 	private void updateAddItemPane(){
 		this.addItemPane.getChildren().clear();
-		{
-			Node toRemove = this.rootPane.lookup(INFO_PANE_ID);
-			if(toRemove != null) {
-				this.rootPane.getChildren().remove(toRemove);
-			}
-		}
-		//this.infoPane.getChildren().clear();
 		final double WIDTH_PERCENT = .66;
 		final double WIDTH = DEFAULT_SIZE.width * WIDTH_PERCENT;
 
@@ -577,7 +570,7 @@ public class DesktopApplication extends Application{
 		this.database.fillList();
 
 		this.rightDisplay = RightDisplay.ITEM_INFO;
-		this.activeItem = new Maybe<>();
+		this.activeItem = (this.database.getItems().size() > 0) ? new Maybe<>(this.database.getItems().get(0)) : new Maybe<>();
 
 		this.rootPane = new HBox();
 		this.rootPane.setId(ROOT_PANE_ID);
