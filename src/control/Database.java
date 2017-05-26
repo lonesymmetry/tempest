@@ -115,9 +115,9 @@ public class Database {
     }
 
     public ArrayList<Item> fillList(){
+    	items.clear();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));
-            StringBuilder sb = new StringBuilder();
             String line = reader.readLine();
 
             while (line != null){

@@ -1,6 +1,5 @@
 package util;
 
-import javafx.geometry.Insets;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.TreeSet;
@@ -12,11 +11,6 @@ import java.util.Vector;
  * @author Logan Traffas
  */
 public class Util{
-
-	public static Insets multiplyInsets(Insets insets, double factor){
-		return new Insets((int)(insets.getTop() * factor), (int)(insets.getRight() * factor), (int)(insets.getBottom() * factor), (int)(insets.getLeft() * factor));
-	}
-
 	/**
 	 * Takes an array and returns a string which represents it
 	 * @param array the array to print

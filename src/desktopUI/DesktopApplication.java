@@ -39,9 +39,13 @@ public class DesktopApplication extends Application{
 	private RightDisplay rightDisplay;
 	private Database database;
 	private HBox rootPane;
+	private static final String ROOT_PANE_ID = "rootPane";
 	private VBox listPane;
+	private static final String LIST_PANE_ID = "listPane";
 	private VBox infoPane;
+	private static final String INFO_PANE_ID = "infoPane";
 	private VBox addItemPane;
+	private static final String ADD_ITEM_PANE_ID = "addItemPane";
 
 	/**
 	 * Constructs the infoPane which is the detailed display for a selected Item
@@ -138,6 +142,7 @@ public class DesktopApplication extends Application{
 	 */
 	private void constructListPane(){
 		this.listPane.getChildren().clear();
+		this.database.fillList();
 		final double WIDTH_PERCENT = .33;
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 
@@ -269,6 +274,11 @@ public class DesktopApplication extends Application{
 		this.addItemPane.getStyleClass().add("addItemPane");
 
 		StackPane addItemFieldsBorder = new StackPane();
+
+		//these three inputs are listed in this scope so that the "Add Item" button can access their values to write to the database
+		TextField setName = new TextField();
+		ComboBox<Item.Priority> prioritySelector = new ComboBox<>();
+		TextArea setDescription = new TextArea();
 		{
 			addItemFieldsBorder.getStyleClass().add("addItemFieldsBorder");
 
@@ -280,8 +290,6 @@ public class DesktopApplication extends Application{
 			{
 				final int TEXT_INPUT_WIDTH = (int)(WIDTH - 4 * StageConstants.PADDING);
 				addItemFields.getStyleClass().add("addItemFields");
-
-				TextField setName = new TextField();
 				{
 					setName.getStyleClass().add("setName");
 					setName.setPromptText("Add item name");
@@ -298,7 +306,6 @@ public class DesktopApplication extends Application{
 					{
 						priorityLabel.getStyleClass().add("priorityLabel");
 					}
-					ComboBox prioritySelector = new ComboBox();
 					{
 						prioritySelector.getStyleClass().add("prioritySelector");
 						prioritySelector.setPromptText("Priority...");
@@ -309,7 +316,6 @@ public class DesktopApplication extends Application{
 					}
 					setPriority.getChildren().addAll(priorityLabel,prioritySelector);
 				}
-				TextArea setDescription = new TextArea();
 				{
 					final int SET_DESCRIPTION_HEIGHT = 510;//from testing on 5/25/2017
 					setDescription.getStyleClass().add("setDescription");
@@ -337,7 +343,10 @@ public class DesktopApplication extends Application{
 				addItemButton.getStyleClass().add("addItemButton");
 				addItemButton.setOnAction(
 						(ActionEvent event) ->
-							Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO
+						{
+							this.database.writeItem(new Item(setName.getText(), setDescription.getText(), prioritySelector.getValue()));
+							this.constructRootPane();
+						}
 				);
 			}
 			Button cancelItemAddition = new Button("Cancel");
@@ -349,7 +358,10 @@ public class DesktopApplication extends Application{
 				cancelItemAddition.getStyleClass().add("cancelItemAddition");
 				cancelItemAddition.setOnAction(
 						(ActionEvent event) ->
-								Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO
+						{
+							this.rightDisplay = RightDisplay.ITEM_INFO;
+							constructRootPane();
+						}
 				);
 			}
 			addItemMenu.getChildren().addAll(addItemButton,cancelItemAddition);
@@ -409,14 +421,24 @@ public class DesktopApplication extends Application{
 			//Database.testWrite();
 		}
 		this.mainStage = new Stage();
+
 		this.database = new Database();
-		this.rightDisplay = RightDisplay.ITEM_INFO;
 		this.database.fillList();
-		this.rootPane = new HBox();
-		this.listPane = new VBox(StageConstants.PADDING);
-		this.infoPane = new VBox();
-		this.addItemPane = new VBox();
+
+		this.rightDisplay = RightDisplay.ITEM_INFO;
 		this.activeItem = new Maybe<>();
+
+		this.rootPane = new HBox();
+		this.rootPane.setId(ROOT_PANE_ID);
+
+		this.listPane = new VBox(StageConstants.PADDING);
+		this.listPane.setId(LIST_PANE_ID);
+
+		this.infoPane = new VBox();
+		this.infoPane.setId(INFO_PANE_ID);
+
+		this.addItemPane = new VBox();
+		this.addItemPane.setId(ADD_ITEM_PANE_ID);
 	}
 
 	/**

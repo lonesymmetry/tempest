@@ -10,6 +10,7 @@ Desktop UI:
     -Create UI document
     -Add ability to create new Items
     -Add menus to improve usability
+    -Change it so we don't have to re-construct the entire root pane every time we change something
 
 Android UI:
     -Shift code base to Android
