@@ -23,7 +23,6 @@
 
 .itemDisplayInfo, .priorityLabel, .prioritySelector, .setDescription, .setName{
     -fx-font-size: 12pt;
-    -fx-font-color: #FF0000;/*Does this do anything?*/
 }
 
 .setPriority{

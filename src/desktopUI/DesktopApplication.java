@@ -22,6 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import util.Pair;
 import util.Util;
+import util.Maybe;
 
 /**
  * Runs the desktop application that displays the Items and provides for their management
@@ -34,6 +35,7 @@ public class DesktopApplication extends Application{
 	private static final int SECTION_HEIGHT = 75;
 	private static final boolean RESIZABLE = false;
 	public enum RightDisplay{ITEM_INFO,ADD_NEW_ITEM}
+	private Maybe<Item> activeItem;
 	private RightDisplay rightDisplay;
 	private Database database;
 	private HBox rootPane;
@@ -43,9 +45,8 @@ public class DesktopApplication extends Application{
 
 	/**
 	 * Constructs the infoPane which is the detailed display for a selected Item
-	 * @param activeItem
 	 */
-	private void constructInfoPane(util.Maybe<Item> activeItem){
+	private void constructInfoPane(){
 		this.infoPane.getChildren().clear();
 		this.addItemPane.getChildren().clear();
 		final double WIDTH_PERCENT = .66;
@@ -66,17 +67,19 @@ public class DesktopApplication extends Application{
 				StackPane itemDisplayInfoBorder = new StackPane();//used to align text in the upper left-hand corner with some padding
 				{
 					itemDisplayInfoBorder.getStyleClass().add("itemDisplayInfoBorder");
-					Text itemDisplayInfo = new Text();
-					if (activeItem.isValid()) {
-						itemDisplayInfo.setText(activeItem.get().getDescription());
-					} else {
-						itemDisplayInfo.setText("");
-					}
-					itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
 
+					Text itemDisplayInfo = new Text();
+					{
+						itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
+						if(this.activeItem.isValid()){
+							itemDisplayInfo.setText(this.activeItem.get().getDescription());
+						} else{
+							itemDisplayInfo.setText("");
+						}
+					}
 					itemDisplayInfoBorder.getChildren().addAll(itemDisplayInfo);
 				}
-				itemDisplay.getChildren().addAll(itemDisplayInfoBorder,background);
+				itemDisplay.getChildren().addAll(background,itemDisplayInfoBorder);
 			}
 			HBox editItemMenu = new HBox(StageConstants.PADDING);
 			{//set the content of the item list menu
@@ -233,8 +236,8 @@ public class DesktopApplication extends Application{
 									(ActionEvent event) ->
 									{
 										this.rightDisplay = RightDisplay.ITEM_INFO;
+										this.activeItem.set(item);
 										constructRootPane();
-										constructInfoPane(new util.Maybe<>(item));
 									}
 							);
 							items.getChildren().add(button);
@@ -367,7 +370,7 @@ public class DesktopApplication extends Application{
 
 		switch(this.rightDisplay) {
 			case ITEM_INFO:
-				constructInfoPane(new util.Maybe<>());
+				constructInfoPane();
 				this.rootPane.getChildren().add(this.infoPane);
 				break;
 			case ADD_NEW_ITEM:
@@ -413,6 +416,7 @@ public class DesktopApplication extends Application{
 		this.listPane = new VBox(StageConstants.PADDING);
 		this.infoPane = new VBox();
 		this.addItemPane = new VBox();
+		this.activeItem = new Maybe<>();
 	}
 
 	/**
