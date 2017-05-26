@@ -3,10 +3,16 @@ package desktopUI;
 import control.Database;
 import control.Item;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -14,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import util.Pair;
 import util.Util;
 
 /**
@@ -41,7 +48,7 @@ public class DesktopApplication extends Application{
 	private void constructInfoPane(util.Maybe<Item> activeItem){
 		this.infoPane.getChildren().clear();
 		this.addItemPane.getChildren().clear();
-		final double WIDTH_PERCENT = .665;//extra 0.05% to make room for padding on the right side
+		final double WIDTH_PERCENT = .66;
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 		this.infoPane.setMaxWidth(WIDTH);
 		this.infoPane.setPrefWidth(this.infoPane.getMaxWidth());
@@ -49,16 +56,15 @@ public class DesktopApplication extends Application{
 		{
 			StackPane itemDisplay = new StackPane();
 			{
-				itemDisplay.setPadding(StageConstants.PADDING_INSETS);
 				itemDisplay.getStyleClass().add("itemDisplay");
 
-				final int BACKGROUND_HEIGHT = 500;
+				final int BACKGROUND_HEIGHT = 605;//from testing on 5/25/17
 				final int BACKGROUND_WIDTH = (int) (WIDTH - (2 * StageConstants.PADDING));
 				Rectangle background = new Rectangle(BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 				background.getStyleClass().add("itemDisplayBackground");
 
 				StackPane itemDisplayInfoBorder = new StackPane();//used to align text in the upper left-hand corner with some padding
-				{//TODO
+				{
 					itemDisplayInfoBorder.getStyleClass().add("itemDisplayInfoBorder");
 					Text itemDisplayInfo = new Text();
 					if (activeItem.isValid()) {
@@ -69,45 +75,56 @@ public class DesktopApplication extends Application{
 					itemDisplayInfo.getStyleClass().add("itemDisplayInfo");
 
 					itemDisplayInfoBorder.getChildren().addAll(itemDisplayInfo);
-					StackPane.setAlignment(itemDisplayInfo, Pos.TOP_LEFT);
 				}
-				itemDisplay.getChildren().addAll(background, itemDisplayInfoBorder);
+				itemDisplay.getChildren().addAll(itemDisplayInfoBorder,background);
 			}
-			HBox editItemMenu = new HBox();
-			{
-				{//set the content of the item list menu
-					editItemMenu.setMinSize(WIDTH, SECTION_HEIGHT);
-					editItemMenu.setMaxSize(WIDTH, SECTION_HEIGHT);
-					editItemMenu.setPrefSize(WIDTH, SECTION_HEIGHT);
-					editItemMenu.getStyleClass().add("itemListMenu");
+			HBox editItemMenu = new HBox(StageConstants.PADDING);
+			{//set the content of the item list menu
+				editItemMenu.setMinSize(WIDTH, SECTION_HEIGHT);
+				editItemMenu.setMaxSize(WIDTH, SECTION_HEIGHT);
+				editItemMenu.setPrefSize(WIDTH, SECTION_HEIGHT);
+				editItemMenu.getStyleClass().add("itemListMenu");
 
-					ToggleButton toggleFinished = new ToggleButton("Toggle Finished");
-					{
-						toggleFinished.getStyleClass().add("toggleFinishedButton");
-						toggleFinished.setOnAction(
-								(ActionEvent event) ->
-										Util.nyi(Util.getFileName(), Util.getLineNumber())
-						);
-					}
-					Button editItem = new Button("Edit");
-					{
-						editItem.getStyleClass().add("editItemButton");
-						editItem.setOnAction(
-								(ActionEvent event) ->
-										Util.nyi(Util.getFileName(), Util.getLineNumber())
-						);
-					}
-					Button deleteItem = new Button("Delete");
-					{
-
-						deleteItem.getStyleClass().add("deleteItemButton");
-						deleteItem.setOnAction(
-								(ActionEvent event) ->
-										Util.nyi(Util.getFileName(), Util.getLineNumber())
-						);
-					}
-					editItemMenu.getChildren().addAll(toggleFinished,editItem,deleteItem);
+				final int NUMBER_OF_BUTTONS = 3;
+				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * StageConstants.PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
+						BUTTON_HEIGHT = SECTION_HEIGHT - 2 * StageConstants.PADDING;
+				ToggleButton toggleFinished = new ToggleButton("Toggle Finished");
+				{
+					final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+					toggleFinished.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					toggleFinished.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					toggleFinished.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					toggleFinished.getStyleClass().add("toggleFinishedButton");
+					toggleFinished.setOnAction(
+							(ActionEvent event) ->
+									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO
+					);
 				}
+				Button editItem = new Button("Edit");
+				{
+					final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+					editItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					editItem.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					editItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					editItem.getStyleClass().add("editItemButton");
+					editItem.setOnAction(
+							(ActionEvent event) ->
+									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO
+					);
+				}
+				Button deleteItem = new Button("Delete");
+				{
+					final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+					deleteItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					deleteItem.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					deleteItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					deleteItem.getStyleClass().add("deleteItemButton");
+					deleteItem.setOnAction(
+							(ActionEvent event) ->
+									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO
+					);
+				}
+				editItemMenu.getChildren().addAll(toggleFinished,editItem,deleteItem);
 			}
 			this.infoPane.getChildren().addAll(itemDisplay,editItemMenu);
 		}
@@ -125,25 +142,60 @@ public class DesktopApplication extends Application{
 		this.listPane.setPrefWidth(this.listPane.getMaxWidth());
 		this.listPane.getStyleClass().add("listPane");
 		{//the display for the list of items
-			HBox itemListMenu = new HBox();
+			HBox itemListMenu = new HBox(StageConstants.PADDING);
 			{//set the content of the item list menu
 				itemListMenu.setMinSize(WIDTH, SECTION_HEIGHT);
 				itemListMenu.setMaxSize(WIDTH, SECTION_HEIGHT);
 				itemListMenu.setPrefSize(WIDTH, SECTION_HEIGHT);
 				itemListMenu.getStyleClass().add("itemListMenu");
 
-				Button addNew = new Button();
-				addNew.getStyleClass().add("addNewButton");
-				addNew.setOnAction(
-						(ActionEvent event) ->
-						{
-							this.rightDisplay = RightDisplay.ADD_NEW_ITEM;
-							constructRootPane();
-							System.out.println("Pressed");
-						}
-				);
+				final int NUMBER_OF_BUTTONS = 3;
+				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * StageConstants.PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
+					BUTTON_HEIGHT = SECTION_HEIGHT - 2 * StageConstants.PADDING;
+				final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+				Button addNew = new Button("Add New");
+				{
+					addNew.getStyleClass().add("addNewButton");
 
-				itemListMenu.getChildren().addAll(addNew);
+					addNew.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					addNew.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					addNew.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+
+					addNew.setOnAction(
+							(ActionEvent event) ->
+							{
+								this.rightDisplay = RightDisplay.ADD_NEW_ITEM;
+								constructRootPane();
+							}
+					);
+				}
+				Button sortBy = new Button("Sort By");//TODO: change out with ComboBox
+				{
+					sortBy.getStyleClass().add("sortBy");
+
+					sortBy.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					sortBy.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					sortBy.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+
+					sortBy.setOnAction(
+							(ActionEvent event) ->
+									Util.nyi(Util.getFileName(),Util.getLineNumber())
+					);
+				}
+				Button filter = new Button("Filter By");//TODO: change out with ComboBox
+				{
+					filter.getStyleClass().add("filter");
+
+					filter.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					filter.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					filter.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+
+					filter.setOnAction(
+							(ActionEvent event) ->
+									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO
+					);
+				}
+				itemListMenu.getChildren().addAll(addNew,sortBy,filter);
 			}
 			AnchorPane itemListBorder = new AnchorPane();
 			{
@@ -203,68 +255,101 @@ public class DesktopApplication extends Application{
 	/**
 	 * Constructs a pane which provides for the ability of users to add new Items to the Database
 	 */
-	private void constructAddItemPane(){//TODO
+	private void constructAddItemPane(){
 		this.addItemPane.getChildren().clear();
 		this.infoPane.getChildren().clear();
-		final double WIDTH_PERCENT = .665;//extra 0.05% to make room for padding on the right side
+		final double WIDTH_PERCENT = .66;
 		final double WIDTH = StageConstants.DEFAULT_SIZE.width * WIDTH_PERCENT;
 
 		this.addItemPane.setMaxWidth(WIDTH);
 		this.addItemPane.setPrefWidth(this.addItemPane.getMaxWidth());
 		this.addItemPane.getStyleClass().add("addItemPane");
+
 		StackPane addItemFieldsBorder = new StackPane();
 		{
-			addItemFieldsBorder.setPadding(StageConstants.PADDING_INSETS);
 			addItemFieldsBorder.getStyleClass().add("addItemFieldsBorder");
 
-			final int BACKGROUND_WIDTH = (int)(WIDTH - 2 * StageConstants.PADDING), BACKGROUND_HEIGHT = 500;
+			final int BACKGROUND_WIDTH = (int)(WIDTH - 2 * StageConstants.PADDING), BACKGROUND_HEIGHT = 605;
 			Rectangle background = new Rectangle(BACKGROUND_WIDTH,BACKGROUND_HEIGHT);
 			background.getStyleClass().add("addItemFieldsBackground");
 
-			VBox addItemFields = new VBox();
+			VBox addItemFields = new VBox(StageConstants.PADDING);
 			{
-				final int TEXTFIELD_WIDTH = (int)(WIDTH - 4 * StageConstants.PADDING);
-				addItemFields.getStyleClass().add("itemFields");
+				final int TEXT_INPUT_WIDTH = (int)(WIDTH - 4 * StageConstants.PADDING);
+				addItemFields.getStyleClass().add("addItemFields");
 
 				TextField setName = new TextField();
 				{
-					setName.getStyleClass().add("addName");
-					setName.setPromptText("Name...");
+					setName.getStyleClass().add("setName");
+					setName.setPromptText("Add item name");
 					setName.setPrefColumnCount(Item.MAX_DISPLAY_NAME_LENGTH);
-					setName.setMinWidth(TEXTFIELD_WIDTH);
-					setName.setMaxWidth(TEXTFIELD_WIDTH);
-					setName.setPrefWidth(TEXTFIELD_WIDTH);
+					setName.setMinWidth(TEXT_INPUT_WIDTH);
+					setName.setMaxWidth(TEXT_INPUT_WIDTH);
+					setName.setPrefWidth(TEXT_INPUT_WIDTH);
 				}
-				ComboBox setPriority = new ComboBox();
+				HBox setPriority = new HBox(StageConstants.PADDING);
 				{
 					setPriority.getStyleClass().add("setPriority");
-					setPriority.setPromptText("Priority...");
+
+					Label priorityLabel = new Label("Priority:");
+					{
+						priorityLabel.getStyleClass().add("priorityLabel");
+					}
+					ComboBox prioritySelector = new ComboBox();
+					{
+						prioritySelector.getStyleClass().add("prioritySelector");
+						prioritySelector.setPromptText("Priority...");
+						prioritySelector.setValue(Item.Priority.LOW);
+						prioritySelector.setItems(FXCollections.observableArrayList(
+								Item.Priority.LOW, Item.Priority.MEDIUM, Item.Priority.HIGH
+						));
+					}
+					setPriority.getChildren().addAll(priorityLabel,prioritySelector);
 				}
-				TextField setDescription = new TextField();
+				TextArea setDescription = new TextArea();
 				{
-					final int SET_DESCRIPTION_HEIGHT = 100;
+					final int SET_DESCRIPTION_HEIGHT = 510;//from testing on 5/25/2017
 					setDescription.getStyleClass().add("setDescription");
-					setDescription.setPromptText("Description...");
-					setDescription.setMinSize(TEXTFIELD_WIDTH,SET_DESCRIPTION_HEIGHT);
-					setDescription.setMaxSize(TEXTFIELD_WIDTH,SET_DESCRIPTION_HEIGHT);
-					setDescription.setPrefSize(TEXTFIELD_WIDTH,SET_DESCRIPTION_HEIGHT);
+					setDescription.setPromptText("Add item description");
+					setDescription.setMinSize(TEXT_INPUT_WIDTH,SET_DESCRIPTION_HEIGHT);
+					setDescription.setMaxSize(TEXT_INPUT_WIDTH,SET_DESCRIPTION_HEIGHT);
+					setDescription.setPrefSize(TEXT_INPUT_WIDTH,SET_DESCRIPTION_HEIGHT);
 				}
 				addItemFields.getChildren().addAll(setName, setPriority, setDescription);
 			}
 			addItemFieldsBorder.getChildren().addAll(background,addItemFields);
 		}
-		HBox addItemMenu = new HBox();
+		HBox addItemMenu = new HBox(StageConstants.PADDING);
 		{
+			final int NUMBER_OF_BUTTONS = 2;
+			final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * StageConstants.PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
+					BUTTON_HEIGHT = SECTION_HEIGHT - 2 * StageConstants.PADDING;
 			addItemMenu.getStyleClass().add("addItemMenu");
+			Button addItemButton = new Button("Add Item");
 			{
-
+				final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+				addItemButton.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				addItemButton.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				addItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				addItemButton.getStyleClass().add("addItemButton");
+				addItemButton.setOnAction(
+						(ActionEvent event) ->
+							Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO
+				);
 			}
+			Button cancelItemAddition = new Button("Cancel");
 			{
-
+				final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+				cancelItemAddition.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				cancelItemAddition.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				cancelItemAddition.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				cancelItemAddition.getStyleClass().add("cancelItemAddition");
+				cancelItemAddition.setOnAction(
+						(ActionEvent event) ->
+								Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO
+				);
 			}
-			{
-
-			}
+			addItemMenu.getChildren().addAll(addItemButton,cancelItemAddition);
 		}
 		this.addItemPane.getChildren().addAll(addItemFieldsBorder,addItemMenu);
 	}
@@ -290,10 +375,8 @@ public class DesktopApplication extends Application{
 				this.rootPane.getChildren().add(this.addItemPane);
 				break;
 			default:
-				util.Util.nyi(util.Util.getFileName(),util.Util.getLineNumber());
+				Util.nyi(util.Util.getFileName(),util.Util.getLineNumber());
 		}
-
-
 	}
 
 	/**

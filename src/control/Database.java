@@ -53,7 +53,7 @@ public class Database {
     }
 
     public Date parseDate(String in) throws ParseException{
-        System.out.println("A");
+        //System.out.println("A");
         return formatter.parse(in);
     }
 

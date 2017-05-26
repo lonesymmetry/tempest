@@ -2,7 +2,7 @@
     -fx-background-color: #222222;
 }
 
-/*.listPane,*/ .itemFields, .itemListMenu, .itemListBorder, .infoPane, .addItemPane, .itemList > .viewport{/*viewport refers to the ScrollPane which has its own background*/
+/*.listPane,*/ /*.addItemFields,*/ .itemListMenu, .itemListBorder, .infoPane, .addItemPane, .itemList > .viewport{/*viewport refers to the ScrollPane which has its own background*/
     -fx-background-color: #424242;
 }
 
@@ -10,28 +10,35 @@
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.listPane, .addItemPane, .infoPane, .addItemFieldsBorder, .itemDisplayInfoBorder{
+.listPane, .addItemPane, .itemDisplay, .addItemMenu, .addItemFields, .itemListMenu, .infoPane, .addItemFieldsBorder, .itemDisplayInfoBorder{
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
 .addItemFieldsBackground, .itemDisplayBackground, .addItemFieldsBorder, .itemDisplayInfoBorder{
     -fx-fill: #999999;
 }
-
-.itemDisplayInfo{
-    -fx-font-size: 12pt;
-    -fx-font-color: #FF0000;
+.itemDisplayInfoBorder, .addItemFieldsBorder{
+    -fx-alignment: top-left;
 }
 
-.addNewButton, .itemName{
+.itemDisplayInfo, .priorityLabel, .prioritySelector, .setDescription, .setName{
+    -fx-font-size: 12pt;
+    -fx-font-color: #FF0000;/*Does this do anything?*/
+}
+
+.setPriority{
+    -fx-alignment: center-left;
+}
+
+.addNewButton, .sortBy, .filter, .addItemButton, .editItemButton, .cancelItemAddition, .deleteItemButton, .itemName{
     -fx-font-size: 15pt;
     -fx-background-color: #999999;
 }
 
-.itemName:hover{
+.addNewButton:hover, .sortBy:hover, .filter:hover, .itemName:hover, .editItemButton:hover, .addItemButton:hover, .deleteItemButton:hover, .cancelItemAddition:hover{
     -fx-background-color: #BBBBBB;
 }
 
-.itemName:pressed{
+.addNewButton:pressed, .sortBy:pressed, .filter:pressed, .itemName:pressed, .editItemButton:pressed, .deleteItemButton:pressed, .addItemButton:pressed, .cancelItemAddition:pressed{
     -fx-background-color: #EEEEEE;
 }
