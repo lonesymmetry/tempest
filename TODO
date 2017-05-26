@@ -4,13 +4,12 @@ Engine:
     -Database:
         -Add date functionality
         -Add sorting parsers (ie sort by type, date, etc.)
-    -Get input from UI (make this adaptable)
+    -Be able to edit items, not just add new ones
 
 Desktop UI:
     -Create UI document
-    -Add ability to create new Items
-    -Add menus to improve usability
-    -Change it so we don't have to re-construct the entire root pane every time we change something
+    -Make edit functions on the info pane functional
+    -Don't display an empty line for the description if there isn't one
 
 Android UI:
     -Shift code base to Android
