@@ -1,5 +1,6 @@
 package main.java.desktopUI;
 
+import main.java.control.Analytics;
 import main.java.control.Database;
 import main.java.control.Item;
 import javafx.application.Application;
@@ -327,17 +328,20 @@ public class DesktopApplication extends Application{
 							}
 					);
 				}
-				Button sortBy = new Button("Sort By");//TODO: change out with ComboBox
+				ComboBox<Analytics.SortMode> sortBy = new ComboBox<>();//TODO: change out with ComboBox
 				{
+					sortBy.setPromptText("Sort By");
+					sortBy.setItems(FXCollections.observableArrayList(Analytics.SortMode.values()));
 					sortBy.getStyleClass().add("sortBy");
+					//TO
 
 					sortBy.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					sortBy.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					sortBy.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 
 					sortBy.setOnAction(
-							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO: wait for ability to sort
+							(ActionEvent event) -> System.out.print("")
+									//Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO: wait for ability to sort
 					);
 				}
 				Button filter = new Button("Filter By");//TODO: change out with ComboBox

@@ -28,6 +28,15 @@
 .setPriority{
     -fx-alignment: center-left;
 }
+/*
+.sortBy .arrow-button {
+    -fx-padding: 0 0 0 -7;
+}
+
+.sortBy .arrow, .sortBy .arrow-button{
+    -fx-background-color: transparent;
+}
+*/
 
 .addNewButton, .sortBy, .filter, .saveNewItemButton, .editItemButton, .cancelItemAddition, .deleteItemButton, .itemName{
     -fx-font-size: 15pt;
