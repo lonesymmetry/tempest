@@ -1,4 +1,4 @@
-package util;
+package main.java.util;
 
 /**
  * Represents a single point

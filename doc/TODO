@@ -1,0 +1,15 @@
+@Authors Adrian Hardt, Logan Traffas
+
+Engine:
+    - Database:
+        - Add date functionality
+        - Add sorting parsers (ie sort by type, date, etc.)
+    - Be able to edit items, not just add new ones
+
+Desktop UI:
+    - Create UI document
+    - Make edit functions on the info pane functional
+
+Android UI:
+    - Shift code base to Android
+    - Migrate UI to Android

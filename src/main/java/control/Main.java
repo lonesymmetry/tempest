@@ -1,6 +1,6 @@
-package control;
+package main.java.control;
 
-import desktopUI.DesktopApplication;
+import main.java.desktopUI.DesktopApplication;
 import javafx.application.Application;
 
 /**

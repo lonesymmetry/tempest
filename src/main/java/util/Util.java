@@ -1,4 +1,4 @@
-package util;
+package main.java.util;
 
 import java.util.Iterator;
 import java.util.Random;

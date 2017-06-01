@@ -1,6 +1,6 @@
-package control;
+package main.java.control;
 
-import util.Util;
+import main.java.util.Util;
 
 import java.util.Date;
 
@@ -144,7 +144,7 @@ public class Item {
 
 	@Override
 	public String toString(){
-		return "control.Item(displayName:" + this.displayName + " status:" + this.status + " priority:"+this.priority+" date:"+ this.date+ " description:" + this.description + ")";
+		return "main.java.control.Item(displayName:" + this.displayName + " status:" + this.status + " priority:"+this.priority+" date:"+ this.date+ " description:" + this.description + ")";
 	}
 
 	public Item(){

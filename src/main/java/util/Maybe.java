@@ -1,4 +1,4 @@
-package util;
+package main.java.util;
 
 /**
  * Stores a value and keeps track of whether it has been set or not

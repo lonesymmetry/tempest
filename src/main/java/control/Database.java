@@ -1,4 +1,4 @@
-package control;
+package main.java.control;
 
 import static java.nio.file.StandardOpenOption.*;
 import java.nio.file.*;
@@ -18,7 +18,7 @@ import java.util.Date;
 //TODO add a way to wipe the database file and delete specific Items
 //TODO add a way to edit Item's and re-write them to the file
 public class Database {
-    private static final String FILE_NAME = "database.txt";
+    private static final String FILE_NAME = "./src/main/data/database.txt";//path from root (.)
     private ArrayList<Item> items;
     private SimpleDateFormat formatter = new SimpleDateFormat("E MM dd y hh:mm:ss a");
 
@@ -43,7 +43,7 @@ public class Database {
         String write = name+"|"+status+"|"+priority+"|"+dateString+"|"+desc+"\n";
 
         byte data[] = write.getBytes(); //String -> Bytes
-        Path p = Paths.get("./"+FILE_NAME);
+        Path p = Paths.get(FILE_NAME);
 
         try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(p, CREATE, APPEND))) {
             out.write(data, 0, data.length);

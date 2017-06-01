@@ -1,7 +1,7 @@
-package desktopUI;
+package main.java.desktopUI;
 
-import control.Database;
-import control.Item;
+import main.java.control.Database;
+import main.java.control.Item;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -21,9 +21,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import util.Pair;
-import util.Maybe;
-import util.Util;
+import main.java.util.Pair;
+import main.java.util.Maybe;
+import main.java.util.Util;
 
 import java.awt.Dimension;
 
@@ -38,12 +38,12 @@ public class DesktopApplication extends Application{
 	private static final int EXPERIMENTAL_VERTICAL_INSETS = 31;//from testing with Windows 10
 	private static final Dimension DEFAULT_SIZE = new Dimension(
 			1366 - EXPERIMENTAL_HORIZONTAL_INSETS,
-			768 - EXPERIMENTAL_VERTICAL_INSETS - util.Graphics.TASKBAR_HEIGHT
+			768 - EXPERIMENTAL_VERTICAL_INSETS - main.java.util.Graphics.TASKBAR_HEIGHT
 	);
 	private static final int PADDING = 5;//px ?
 
 	//style/usability constants
-	private static final String STYLESHEET_SOURCE = "/res/DesktopApplicationStylesheet.css";
+	private static final String STYLESHEET_SOURCE = "/main/res/DesktopApplicationStylesheet.css";
 	private static final int SECTION_HEIGHT = 75;
 	private static final boolean RESIZABLE = false;
 
@@ -145,7 +145,7 @@ public class DesktopApplication extends Application{
 							replaceNode(ADD_ITEM_PANE_ID, this.infoPane);
 							break;
 						default:
-							Util.nyi(util.Util.getFileName(), util.Util.getLineNumber());
+							Util.nyi(main.java.util.Util.getFileName(), main.java.util.Util.getLineNumber());
 					}
 				}
 				break;
@@ -161,12 +161,12 @@ public class DesktopApplication extends Application{
 							replaceNode(ADD_ITEM_PANE_ID, this.addItemPane);
 							break;
 						default:
-							Util.nyi(util.Util.getFileName(), util.Util.getLineNumber());
+							Util.nyi(main.java.util.Util.getFileName(), main.java.util.Util.getLineNumber());
 					}
 				}
 				break;
 			default:
-				Util.nyi(util.Util.getFileName(),util.Util.getLineNumber());
+				Util.nyi(main.java.util.Util.getFileName(), main.java.util.Util.getLineNumber());
 		}
 	}
 
@@ -219,7 +219,11 @@ public class DesktopApplication extends Application{
 							itemDisplayDate.setText("Created " + this.activeItem.get().getDate().toString());
 							itemDisplayDate.setWrappingWidth(WRAPPING_WIDTH);
 						}
-						itemDisplayInfoBorder.getChildren().addAll(itemDisplayName,itemDisplayPriority,itemDisplayDescription,itemDisplayDate);
+						itemDisplayInfoBorder.getChildren().addAll(itemDisplayName,itemDisplayPriority);
+						if(!this.activeItem.get().getDescription().equals("")){
+							itemDisplayInfoBorder.getChildren().addAll(itemDisplayDescription);
+						}
+						itemDisplayInfoBorder.getChildren().addAll(itemDisplayDate);
 					}
 				}
 				itemDisplay.getChildren().addAll(background,itemDisplayInfoBorder);
@@ -366,18 +370,17 @@ public class DesktopApplication extends Application{
 					itemList.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 					itemList.setPannable(PANNABLE);
 					itemList.getStyleClass().add("itemList");
-					final int ITEM_LIST_VIEWPORT_HEIGHT = 1000;//this is just set to something really big, it's cropped down
+					final int ITEM_LIST_VIEWPORT_HEIGHT = 1000;//this is just set to something really big, it's cropped down //TODO: figure out why Scrollpane is so large when there are no items
 					itemList.setPrefViewportHeight(ITEM_LIST_VIEWPORT_HEIGHT);
 
-					itemList.setHmax(WIDTH);
 					itemList.setMinWidth(WIDTH);
 					itemList.setMaxWidth(WIDTH);
 					itemList.setPrefWidth(WIDTH);
 					itemList.setPrefViewportWidth(WIDTH);
 					{
 						VBox items = new VBox(PADDING);
-						util.Pair<Integer> BUTTON_SIZE = new util.Pair<>(
-								(int)(itemList.getPrefViewportWidth() - (4 * PADDING + util.Graphics.SCROLL_BAR_WIDTH)),
+						main.java.util.Pair<Integer> BUTTON_SIZE = new main.java.util.Pair<>(
+								(int)(itemList.getPrefViewportWidth() - (4 * PADDING + main.java.util.Graphics.SCROLL_BAR_WIDTH)),
 								SECTION_HEIGHT
 						);
 						for(Item item : database.getItems()){

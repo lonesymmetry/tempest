@@ -1,4 +1,4 @@
-package util;
+package main.java.util;
 
 /**
  * Contains a pair of a type
