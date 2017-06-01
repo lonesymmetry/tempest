@@ -11,7 +11,7 @@ import java.util.Comparator;
  */
 
 public class Analytics {
-    public ArrayList<Item> sortUnfinished(Database a){
+    public ArrayList<Item> filterUnfinished(Database a){
         ArrayList<Item> out = new ArrayList<Item>();
         ArrayList<Item> orig = a.getItems();
         int tally=0;
@@ -37,7 +37,7 @@ public class Analytics {
         return tally;
     }
 
-    public ArrayList<Item> sortFinished(Database a){
+    public ArrayList<Item> filterFinished(Database a){
         ArrayList<Item> out = new ArrayList<Item>();
         ArrayList<Item> orig = a.getItems();
         int tally=0;
