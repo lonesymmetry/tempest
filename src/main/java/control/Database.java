@@ -15,8 +15,7 @@ import java.util.Date;
  */
 
 //TODO create a date aspect of the database as well, look into using Java 8 Date()
-//TODO add a way to wipe the database file and delete specific Items
-//TODO add a way to edit Item's and re-write them to the file
+//TODO add a way to wipe the database file
 public class Database {
     private static final String FILE_NAME = "./src/main/data/database.txt";//path from root (.)
     private ArrayList<Item> items;
@@ -116,9 +115,9 @@ public class Database {
     }
 
     public ArrayList<Item> fillList(){
-    	items.clear();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));
+            StringBuilder sb = new StringBuilder();
             String line = reader.readLine();
 
             while (line != null){
@@ -175,6 +174,11 @@ public class Database {
         test.numFinished(a);
         test.numUnfinished(a);
 
-        System.out.println(a);
+
+        for(int i=0;i<test.sortDate(a).size();i++){
+            System.out.println(test.sortDate(a).get(i));
+            System.out.println(i);
+        }
+
     }
 }
