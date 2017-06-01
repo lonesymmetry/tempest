@@ -175,8 +175,8 @@ public class Database {
         test.numUnfinished(a);
 
 
-        for(int i=0;i<test.sortDate(a).size();i++){
-            System.out.println(test.sortDate(a).get(i));
+        for(int i=0;i<test.filterHIGH(a).size();i++){
+            System.out.println(test.filterHIGH(a).get(i));
             System.out.println(i);
         }
 
