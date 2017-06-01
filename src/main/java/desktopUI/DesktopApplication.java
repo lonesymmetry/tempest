@@ -333,7 +333,7 @@ public class DesktopApplication extends Application{
 					sortBy.setPromptText("Sort By");
 					sortBy.setItems(FXCollections.observableArrayList(Analytics.SortMode.values()));
 					sortBy.getStyleClass().add("sortBy");
-					//TO
+					//TODO: firuring out text cropping
 
 					sortBy.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					sortBy.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
