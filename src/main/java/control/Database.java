@@ -1,6 +1,5 @@
 package main.java.control;
 
-import main.java.util.Pair;
 
 import static java.nio.file.StandardOpenOption.*;
 import java.nio.file.*;
@@ -19,7 +18,25 @@ import java.util.Date;
 public class Database {
     private static final String FILE_NAME = "./src/main/data/database.txt";//path from root (.)
     private ArrayList<Item> items;
-    private SimpleDateFormat formatter = new SimpleDateFormat("E MM dd y hh:mm:ss a");
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("E MM dd y hh:mm:ss a");
+
+    public static class PositionedItem{
+		private Item item;
+    	private int index;
+
+    	public Item getItem(){
+    		return this.item;
+		}
+
+		public int getIndex(){
+    		return this.index;
+		}
+
+    	public PositionedItem(Database database,int index){
+    		this.item = database.getItem(index);
+    		this.index = index;
+		}
+	}
 
 	/**
 	 * Getter for Items list
@@ -33,8 +50,8 @@ public class Database {
     	return this.items.get(i);
     }
 
-	public Pair<Item,Integer> getItemWithIndex(int i){
-		return new Pair<>(getItem(i),i);
+	public PositionedItem getPositionedItem(int i){
+		return new PositionedItem(this,i);
 	}
 
     public void setItems(ArrayList<Item> items){
@@ -46,6 +63,11 @@ public class Database {
             writeItem(items.get(i));
         }
     }
+
+    @Override
+	public String toString(){
+    	return "Database(" + this.items.toString() + ")";
+	}
 
     public void clearDoc(){
         try{
@@ -196,8 +218,8 @@ public class Database {
         writeList();
     }
 
-    public void editItem(Pair<Item,Integer> item){
-		editItem(item.getSecond(),item.getFirst());
+    public void editItem(PositionedItem item){
+		editItem(item.getIndex(),item.getItem());
     }
 
     public void deleteItem(int index){
@@ -207,7 +229,11 @@ public class Database {
     }
 
     public Database(){
-        this.items = new ArrayList<>();
+        this(new ArrayList<>());
+    }
+
+    public Database(ArrayList<Item> items){
+        this.items = items;
     }
 
     public static void main(String[] args) {

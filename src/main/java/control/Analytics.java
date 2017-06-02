@@ -1,5 +1,7 @@
 package main.java.control;
 
+import main.java.util.Util;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,10 +13,56 @@ import java.util.Comparator;
  */
 
 public class Analytics {
-	public enum SortMode{NONE,PRIORITY,DATE}
-    public enum FilterMode{NONE,HIGH_PRIORITY,MEDIUM_PRIORITY,LOW_PRIORITY,FINISHED,UNFINISHED}
+	public enum SortMode{
+		NONE,NAME,PRIORITY,DATE;
 
-    public ArrayList<Item> sort(SortMode mode,Database in){
+		@Override
+		public String toString(){
+			switch (this){
+				case NAME:
+					return "Name";
+				case DATE:
+					return "Date";
+				case NONE:
+					return "None";
+				case PRIORITY:
+					return "Priority";
+				default:
+					Util.nyi(Util.getFileName(),Util.getLineNumber());
+					return null;//this line will never be reached
+			}
+		}
+	}
+    public enum FilterMode{
+		NONE,HIGH_PRIORITY,MEDIUM_PRIORITY,LOW_PRIORITY,FINISHED,UNFINISHED;
+
+		@Override
+		public String toString(){
+			switch (this){
+				case NONE:
+					return "None";
+				case HIGH_PRIORITY:
+					return "High Priority";
+				case MEDIUM_PRIORITY:
+					return "Medium None";
+				case LOW_PRIORITY:
+					return "Low Priority";
+				case UNFINISHED:
+					return "Unfinished";
+				case FINISHED:
+					return "Finished";
+				default:
+					Util.nyi(Util.getFileName(),Util.getLineNumber());
+					return null;//this line will never be reached
+			}
+		}
+	}
+
+    public static ArrayList<Item> sort(SortMode mode,ArrayList<Item> in){//TODO: return an array of PositionedItems not Items
+       return sort(mode,new Database(in));
+    }
+
+    public static ArrayList<Item> sort(SortMode mode,Database in){//TODO: return an array of PositionedItems not Items
 	    if(mode==SortMode.NONE)return in.getItems();
 	    else if(mode==SortMode.PRIORITY){
 	        return sortPriority(in);
@@ -22,10 +70,15 @@ public class Analytics {
         else if(mode==SortMode.DATE){
 	        return sortDate(in);
         }
-	    else return in.getItems();
-    }
+		Util.nyi(Util.getFileName(),Util.getLineNumber());
+        return null;//this line will never be reached
+	}
 
-    public ArrayList<Item> filter(FilterMode mode,Database in){
+	public static ArrayList<Item> filter(FilterMode mode,ArrayList<Item> in){//TODO: return an array of PositionedItems not Items
+		return filter(mode,new Database(in));
+	}
+
+    public static ArrayList<Item> filter(FilterMode mode,Database in){//TODO: return an array of PositionedItems not Items
         if(mode==FilterMode.NONE)return in.getItems();
         else if(mode==FilterMode.HIGH_PRIORITY){
             return filterHIGH(in);
@@ -42,10 +95,11 @@ public class Analytics {
         else if(mode==FilterMode.UNFINISHED){
             return filterUnfinished(in);
         }
-        else return in.getItems();
+		Util.nyi(Util.getFileName(),Util.getLineNumber());
+		return null;//this line will never be reached
     }
 
-    public ArrayList<Item> filterUnfinished(Database a){
+    public static ArrayList<Item> filterUnfinished(Database a){
         ArrayList<Item> out = new ArrayList<Item>();
         ArrayList<Item> orig = a.getItems();
         int tally=0;
@@ -71,7 +125,7 @@ public class Analytics {
         return tally;
     }
 
-    public ArrayList<Item> filterFinished(Database a){
+    public static ArrayList<Item> filterFinished(Database a){
         ArrayList<Item> out = new ArrayList<Item>();
         ArrayList<Item> orig = a.getItems();
         int tally=0;
@@ -97,13 +151,13 @@ public class Analytics {
         return tally;
     }
 
-    public ArrayList<Item> sortDate(Database a){
+    public static ArrayList<Item> sortDate(Database a){
         ArrayList<Item> orig = a.getItems();
         Collections.sort(orig, Comparator.comparing(Item::getDate));
         return orig;
     }
 
-    public ArrayList<Item> sortPriority(Database a){
+    public static ArrayList<Item> sortPriority(Database a){
         ArrayList<Item> orig = a.getItems();
         ArrayList<Item> out = new ArrayList<Item>();
         ArrayList<Item> pA = new ArrayList<Item>();
@@ -131,12 +185,10 @@ public class Analytics {
         for(int i=0;i<pC.size();i++){
             out.add(pC.get(i));
         }
-
         return out;
-
     }
 
-    public ArrayList<Item> filterHIGH(Database a){
+    public static ArrayList<Item> filterHIGH(Database a){
         ArrayList<Item> orig = a.getItems();
         ArrayList<Item> out = new ArrayList<Item>();
 
@@ -148,7 +200,7 @@ public class Analytics {
         return out;
     }
 
-    public ArrayList<Item> filterMEDIUM(Database a){
+    public static ArrayList<Item> filterMEDIUM(Database a){
         ArrayList<Item> orig = a.getItems();
         ArrayList<Item> out = new ArrayList<Item>();
 
@@ -160,7 +212,7 @@ public class Analytics {
         return out;
     }
 
-    public ArrayList<Item> filterLOW(Database a){
+    public static ArrayList<Item> filterLOW(Database a){
         ArrayList<Item> orig = a.getItems();
         ArrayList<Item> out = new ArrayList<Item>();
 

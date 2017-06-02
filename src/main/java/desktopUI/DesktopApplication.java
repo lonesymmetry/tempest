@@ -54,7 +54,7 @@ public class DesktopApplication extends Application{
 
 	private Stage mainStage;
 
-	private Maybe<Pair<Item,Integer>> activeItem;//first stores the Item, second stores its index in database
+	private Maybe<Database.PositionedItem> activeItem;//first stores the Item, second stores its index in database
 	private Database database;
 
 	private HBox rootPane;
@@ -202,29 +202,29 @@ public class DesktopApplication extends Application{
 						Text itemDisplayName = new Text();
 						{
 							itemDisplayName.getStyleClass().add("itemDisplayName");
-							itemDisplayName.setText(this.activeItem.get().getFirst().getDisplayName());
+							itemDisplayName.setText(this.activeItem.get().getItem().getDisplayName());
 							itemDisplayName.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayPriority = new Text();
 						{
 							itemDisplayPriority.getStyleClass().add("itemDisplayPriority");
-							itemDisplayPriority.setText("Priority: " + this.activeItem.get().getFirst().getPriority().toString());
+							itemDisplayPriority.setText("Priority: " + this.activeItem.get().getItem().getPriority().toString());
 							itemDisplayPriority.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayDescription= new Text();
 						{
 							itemDisplayDescription.getStyleClass().add("itemDisplayDescription");
-							itemDisplayDescription.setText(this.activeItem.get().getFirst().getDescription());
+							itemDisplayDescription.setText(this.activeItem.get().getItem().getDescription());
 							itemDisplayDescription.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayDate = new Text();
 						{
 							itemDisplayDate.getStyleClass().add("itemDisplayDate");
-							itemDisplayDate.setText("Created " + this.activeItem.get().getFirst().getDate().toString());
+							itemDisplayDate.setText("Created " + this.activeItem.get().getItem().getDate().toString());
 							itemDisplayDate.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						itemDisplayInfoBorder.getChildren().addAll(itemDisplayName,itemDisplayPriority);
-						if(!this.activeItem.get().getFirst().getDescription().equals("")){
+						if(!this.activeItem.get().getItem().getDescription().equals("")){
 							itemDisplayInfoBorder.getChildren().addAll(itemDisplayDescription);
 						}
 						itemDisplayInfoBorder.getChildren().addAll(itemDisplayDate);
@@ -242,7 +242,7 @@ public class DesktopApplication extends Application{
 				final int NUMBER_OF_BUTTONS = 3;
 				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 						BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
-				Button toggleFinished = new Button(this.activeItem.isValid() ? this.activeItem.get().getFirst().getStatus().toString() : "Toggle Finished");
+				Button toggleFinished = new Button(this.activeItem.isValid() ? this.activeItem.get().getItem().getStatus().toString() : "Toggle Finished");
 				{
 					final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 					toggleFinished.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -253,9 +253,9 @@ public class DesktopApplication extends Application{
 							(ActionEvent event) ->
 							{
 								if(this.activeItem.isValid()){
-									this.activeItem.get().getFirst().toggleStatus();
+									this.activeItem.get().getItem().toggleStatus();
 									this.database.editItem(this.activeItem.get());
-									this.activeItem.set(this.database.getItemWithIndex(this.activeItem.get().getSecond()));
+									this.activeItem.set(this.database.getPositionedItem(this.activeItem.get().getIndex()));
 									updateRightPane();
 								}
 							}
@@ -283,7 +283,7 @@ public class DesktopApplication extends Application{
 					deleteItem.setOnAction(
 							(ActionEvent event) ->
 							{
-									this.database.deleteItem(this.activeItem.get().getSecond());
+									this.database.deleteItem(this.activeItem.get().getIndex());
 									updateRootPane();
 							}
 					);
@@ -350,6 +350,10 @@ public class DesktopApplication extends Application{
 					sortBy.setOnAction(
 							(ActionEvent event) ->
 							{
+								if(this.sortMode != sortBy.getValue()){
+									//this.activeItem = new Maybe<>();
+									//updateRightPane();//TODO: do we want to do this?
+								}
 								this.sortMode = sortBy.getValue();
 								updateLeftPane();
 							}
@@ -369,6 +373,10 @@ public class DesktopApplication extends Application{
 					filterBy.setOnAction(
 							(ActionEvent event) ->
 							{
+								if(this.filterMode != filterBy.getValue()){
+									//this.activeItem = new Maybe<>();
+									//updateRightPane();
+								}
 								this.filterMode = filterBy.getValue();
 								updateLeftPane();
 							}
@@ -395,22 +403,8 @@ public class DesktopApplication extends Application{
 					//itemList.setFixedCellSize(SECTION_HEIGHT);//used to set cell height
 
 					ArrayList<String> itemNames = new ArrayList<>();
-					ArrayList<Item> itemsToDisplay = new ArrayList<>();
-					switch (this.sortMode){
-						case NONE:
-							itemsToDisplay = this.database.getItems();
-							break;
-						default:
-							Util.nyi(Util.getFileName(),Util.getLineNumber());
-					}
 
-					switch (this.filterMode){
-						case NONE:
-							itemsToDisplay = this.database.getItems();
-							break;
-						default:
-							Util.nyi(Util.getFileName(),Util.getLineNumber());
-					}
+					final ArrayList<Item> itemsToDisplay = Analytics.filter(this.filterMode,Analytics.sort(this.sortMode,this.database));//final to be used in ListChangeListener
 
 					for(Item item: itemsToDisplay){
 						itemNames.add(item.shortenName());
@@ -419,16 +413,17 @@ public class DesktopApplication extends Application{
 					itemList.setItems(FXCollections.observableArrayList(itemNames));
 
 					if(this.activeItem.isValid()){
-						itemList.scrollTo(this.activeItem.get().getSecond());
-						itemList.getFocusModel().focus(this.activeItem.get().getSecond());//note: focused object is the one object in the entire operating system that receives keyboard input
-						itemList.getSelectionModel().select(this.activeItem.get().getSecond());//note: selected object means it is marked
+						itemList.scrollTo(this.activeItem.get().getIndex());
+						itemList.getFocusModel().focus(this.activeItem.get().getIndex());//note: focused object is the one object in the entire operating system that receives keyboard input
+						itemList.getSelectionModel().select(this.activeItem.get().getIndex());//note: selected object means it is marked
 					}
 
 					itemList.getSelectionModel().getSelectedIndices().addListener(
 						(ListChangeListener.Change<? extends Integer> c) ->
 						{
 							this.rightDisplay = RightDisplay.ITEM_INFO;
-							this.activeItem.set(new Pair<>(this.database.getItems().get(itemList.getSelectionModel().getSelectedIndex()),itemList.getSelectionModel().getSelectedIndex()));
+							this.activeItem.set(new Database.PositionedItem(new Database(itemsToDisplay),itemList.getSelectionModel().getSelectedIndex()));//TODO
+							//this.activeItem.set(new Pair<>(itemsToDisplay.get(itemList.getSelectionModel().getSelectedIndex()),itemList.getSelectionModel().getSelectedIndex()));
 							updateRightPane();
 						}
 					);
@@ -609,7 +604,7 @@ public class DesktopApplication extends Application{
 		this.database.fillList();
 
 		this.rightDisplay = RightDisplay.ITEM_INFO;
-		this.activeItem = (this.database.getItems().size() > 0) ? new Maybe<>(new Pair<>(this.database.getItems().get(0),0)) : new Maybe<>();
+		this.activeItem = (this.database.getItems().size() > 0) ? new Maybe<>(new Database.PositionedItem(this.database,0)) : new Maybe<>();
 
 		this.rootPane = new HBox();
 		this.rootPane.setId(ROOT_PANE_ID);
