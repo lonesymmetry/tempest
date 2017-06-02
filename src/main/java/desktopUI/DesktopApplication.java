@@ -330,7 +330,7 @@ public class DesktopApplication extends Application{
 							}
 					);
 				}
-				ComboBox<Analytics.SortMode> sortBy = new ComboBox<>();//TODO: change out with ComboBox
+				ComboBox<Analytics.SortMode> sortBy = new ComboBox<>();
 				{
 					sortBy.setPromptText("Sort By");
 					sortBy.setItems(FXCollections.observableArrayList(Analytics.SortMode.values()));
@@ -342,24 +342,27 @@ public class DesktopApplication extends Application{
 					sortBy.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 
 					sortBy.setOnAction(
-							(ActionEvent event) -> System.out.print("")
-									//Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO: wait for ability to sort
+							(ActionEvent event) ->
+									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO: wait for ability to sort
 					);
 				}
-				Button filter = new Button("Filter By");//TODO: change out with ComboBox
+				ComboBox<Analytics.FilterMode> filterBy = new ComboBox<>();
 				{
-					filter.getStyleClass().add("filter");
+					filterBy.setPromptText("Filter By");
+					filterBy.setItems(FXCollections.observableArrayList(Analytics.FilterMode.values()));
+					//TODO: change how filtering displays FilterMode names
+					filterBy.getStyleClass().add("filterBy");
 
-					filter.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-					filter.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-					filter.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					filterBy.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					filterBy.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+					filterBy.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 
-					filter.setOnAction(
+					filterBy.setOnAction(
 							(ActionEvent event) ->
 									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO: wait for ability to filter
 					);
 				}
-				itemListMenu.getChildren().addAll(addNew,sortBy,filter);
+				itemListMenu.getChildren().addAll(addNew,sortBy,filterBy);
 			}
 			AnchorPane itemListBorder = new AnchorPane();
 			{
@@ -376,6 +379,7 @@ public class DesktopApplication extends Application{
 
 					itemList.setMinWidth(WIDTH);
 					itemList.setMaxWidth(WIDTH);
+					//TODO: limit width of ListView
 					itemList.setPrefWidth(WIDTH);
 
 					ArrayList<String> itemNames = new ArrayList<>();
@@ -441,7 +445,6 @@ public class DesktopApplication extends Application{
 				{
 					setName.getStyleClass().add("setName");
 					setName.setPromptText("Add item name");
-					//setName.setPrefColumnCount(Item.MAX_DISPLAY_NAME_LENGTH);
 					setName.setMinWidth(TEXT_INPUT_WIDTH);
 					setName.setMaxWidth(TEXT_INPUT_WIDTH);
 					setName.setPrefWidth(TEXT_INPUT_WIDTH);
@@ -481,10 +484,10 @@ public class DesktopApplication extends Application{
 			final int NUMBER_OF_BUTTONS = 2;
 			final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 					BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
+			final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 			addItemMenu.getStyleClass().add("addItemMenu");
 			Button saveNewItemButton = new Button("Save");
 			{
-				final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);//TODO: merge multiple identical final Pairs?
 				saveNewItemButton.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -505,7 +508,6 @@ public class DesktopApplication extends Application{
 			}
 			Button cancelItemAddition = new Button("Cancel");
 			{
-				final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 				cancelItemAddition.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());

@@ -12,6 +12,7 @@ import java.util.Comparator;
 
 public class Analytics {
 	public enum SortMode{NONE,PRIORITY,DATE}
+    public enum FilterMode{NONE,HIGH_PRIORITY,MEDIUM_PRIORITY,LOW_PRIORITY,FINISHED,UNFINISHED}
 
     public ArrayList<Item> sortUnfinished(Database a){
         ArrayList<Item> out = new ArrayList<Item>();
