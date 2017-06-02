@@ -29,6 +29,23 @@ public class Database {
         this.items=items;
     }
 
+    public void writeList(){
+        for(int i=0;i<items.size();i++){
+            writeItem(items.get(i));
+        }
+    }
+
+    public void clearDoc(){
+        try{
+            PrintWriter writer = new PrintWriter(FILE_NAME);
+            writer.print("");
+            writer.close();
+        }
+        catch (IOException x) {
+            System.err.println(x);
+        }
+    }
+
     public void writeItem(Item toWrite){
         String name = toWrite.getDisplayName();
         String desc = toWrite.getDescription();
@@ -160,6 +177,13 @@ public class Database {
 		}
 	}
 
+    public void editItem(int index, Item in){
+        clearDoc();
+        items.remove(index);
+        items.add(index,in);
+        writeList();
+    }
+
     public Database(){
         this.items = new ArrayList<>();
     }
@@ -173,11 +197,14 @@ public class Database {
         test.numFinished(a);
         test.numUnfinished(a);
 
+        a.editItem(3,new Item("Replaced","An edited item"));
 
+        /*
         for(int i=0;i<test.filterHIGH(a).size();i++){
             System.out.println(test.filterHIGH(a).get(i));
             System.out.println(i);
         }
+        */
 
     }
 }
