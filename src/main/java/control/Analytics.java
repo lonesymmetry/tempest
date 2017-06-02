@@ -14,7 +14,38 @@ public class Analytics {
 	public enum SortMode{NONE,PRIORITY,DATE}
     public enum FilterMode{NONE,HIGH_PRIORITY,MEDIUM_PRIORITY,LOW_PRIORITY,FINISHED,UNFINISHED}
 
-    public ArrayList<Item> sortUnfinished(Database a){
+    public ArrayList<Item> sort(SortMode mode,Database in){
+	    if(mode==SortMode.NONE)return in.getItems();
+	    else if(mode==SortMode.PRIORITY){
+	        return sortPriority(in);
+        }
+        else if(mode==SortMode.DATE){
+	        return sortDate(in);
+        }
+	    else return in.getItems();
+    }
+
+    public ArrayList<Item> filter(FilterMode mode,Database in){
+        if(mode==FilterMode.NONE)return in.getItems();
+        else if(mode==FilterMode.HIGH_PRIORITY){
+            return filterHIGH(in);
+        }
+        else if(mode==FilterMode.MEDIUM_PRIORITY){
+            return filterMEDIUM(in);
+        }
+        else if(mode==FilterMode.LOW_PRIORITY){
+            return filterLOW(in);
+        }
+        else if(mode==FilterMode.FINISHED){
+            return filterFinished(in);
+        }
+        else if(mode==FilterMode.UNFINISHED){
+            return filterUnfinished(in);
+        }
+        else return in.getItems();
+    }
+
+    public ArrayList<Item> filterUnfinished(Database a){
         ArrayList<Item> out = new ArrayList<Item>();
         ArrayList<Item> orig = a.getItems();
         int tally=0;
@@ -40,7 +71,7 @@ public class Analytics {
         return tally;
     }
 
-    public ArrayList<Item> sortFinished(Database a){
+    public ArrayList<Item> filterFinished(Database a){
         ArrayList<Item> out = new ArrayList<Item>();
         ArrayList<Item> orig = a.getItems();
         int tally=0;
