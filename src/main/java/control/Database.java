@@ -21,17 +21,21 @@ public class Database {
     private ArrayList<Item> items;
     private SimpleDateFormat formatter = new SimpleDateFormat("E MM dd y hh:mm:ss a");
 
-    public ArrayList<Item> getItems(){
+	/**
+	 * Getter for Items list
+	 * @return ArrayList<Item> List of items
+	 */
+	public ArrayList<Item> getItems(){
         return items;
     }
 
-    public Item getItem(int i){
-        return this.items.get(i);
+	public Item getItem(int i){
+    	return this.items.get(i);
     }
 
-    public Pair<Item,Integer> getItemWithIndex(int i){
-        return new Pair<>(getItem(i),i);
-    }
+	public Pair<Item,Integer> getItemWithIndex(int i){
+		return new Pair<>(getItem(i),i);
+	}
 
     public void setItems(ArrayList<Item> items){
         this.items=items;
@@ -185,15 +189,15 @@ public class Database {
 		}
 	}
 
-    public void editItem(Pair<Item,Integer> item){
-       editItem(item.getSecond(),item.getFirst());
-    }
-
     public void editItem(int index, Item in){
         clearDoc();
         items.remove(index);
         items.add(index,in);
         writeList();
+    }
+
+    public void editItem(Pair<Item,Integer> item){
+		editItem(item.getSecond(),item.getFirst());
     }
 
     public void deleteItem(int index){

@@ -9,8 +9,7 @@ TestItem#12|UNFINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #12
 TestItem#13|UNFINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #13
 TestItem#14|UNFINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #14
 TestItem#15|UNFINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #15
-TestItem#16|UNFINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #16
-TestItem#17|UNFINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #17
+TestItem#16|FINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #16
 TestItem#18|UNFINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #18
 TestItem#19|UNFINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #19
 TestItem#20|UNFINISHED|LOW|Fri 06 02 2017 11:15:34 AM|This is a test #20
