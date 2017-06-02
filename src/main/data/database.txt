@@ -1,7 +1,7 @@
 TestItem#1|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #1
 TestItem#2|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #2
 TestItem#3|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #3
-TestItem#4|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #4
+Replaced|UNFINISHED|LOW|Fri 06 02 2017 10:38:37 AM|An edited item
 TestItem#5|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #5
 TestItem#6|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #6
 TestItem#7|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #7
@@ -29,3 +29,7 @@ TestItem#28|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #28
 TestItem#29|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #29
 TestItem#30|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #30
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa|UNFINISHED|LOW|Thu 06 01 2017 05:58:22 PM|
+TestItem|UNFINISHED|LOW|Fri 06 02 2017 10:20:10 AM|This is a test
+TestItem|UNFINISHED|LOW|Fri 06 02 2017 10:21:37 AM|This is a test
+TestItem|UNFINISHED|LOW|Fri 06 02 2017 10:35:30 AM|This is a test
+TestItem|UNFINISHED|LOW|Fri 06 02 2017 10:38:37 AM|This is a test
