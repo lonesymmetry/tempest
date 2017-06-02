@@ -115,6 +115,10 @@ public class Item {
 		this.status = status;
 	}
 
+	public void toggleStatus(){
+		this.status = Status.not(this.status);
+	}
+
 	public void setPriority(Priority priority){
 		this.priority=priority;
 	}

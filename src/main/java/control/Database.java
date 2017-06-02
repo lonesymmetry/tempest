@@ -1,5 +1,7 @@
 package main.java.control;
 
+import main.java.util.Pair;
+
 import static java.nio.file.StandardOpenOption.*;
 import java.nio.file.*;
 import java.io.*;
@@ -21,6 +23,14 @@ public class Database {
 
     public ArrayList<Item> getItems(){
         return items;
+    }
+
+    public Item getItem(int i){
+        return this.items.get(i);
+    }
+
+    public Pair<Item,Integer> getItemWithIndex(int i){
+        return new Pair<>(getItem(i),i);
     }
 
     public void setItems(ArrayList<Item> items){
@@ -174,6 +184,10 @@ public class Database {
 			a.writeItem(z);
 		}
 	}
+
+    public void editItem(Pair<Item,Integer> item){
+       editItem(item.getSecond(),item.getFirst());
+    }
 
     public void editItem(int index, Item in){
         clearDoc();

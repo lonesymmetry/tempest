@@ -1,11 +1,11 @@
-TestItem#1|FINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #1
+TestItem#1|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #1
 TestItem#2|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #2
 TestItem#3|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #3
 Replaced|UNFINISHED|LOW|Fri 06 02 2017 10:38:37 AM|An edited item
-TestItem#5|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #5
+TestItem#5|FINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #5
 TestItem#6|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #6
 TestItem#7|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #7
-TestItem#8|FINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #8
+TestItem#8|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #8
 TestItem#9|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #9
 TestItem#10|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #10
 TestItem#11|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #11
@@ -33,5 +33,4 @@ TestItem|UNFINISHED|LOW|Fri 06 02 2017 10:20:10 AM|This is a test
 TestItem|UNFINISHED|LOW|Fri 06 02 2017 10:21:37 AM|This is a test
 TestItem|UNFINISHED|LOW|Fri 06 02 2017 10:35:30 AM|This is a test
 TestItem|UNFINISHED|LOW|Fri 06 02 2017 10:38:37 AM|This is a test
-Blarg|UNFINISHED|HIGH|Fri 06 02 2017 10:50:15 AM|MUST DO THIS!!!!
-New Item|UNFINISHED|MEDIUM|Fri 06 02 2017 11:05:14 AM|Logan left caps lock on, TURN IT OFF
+Bake a cake|FINISHED|HIGH|Fri 06 02 2017 10:53:56 AM|Make it chocolate

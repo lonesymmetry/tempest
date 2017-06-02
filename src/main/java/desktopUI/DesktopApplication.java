@@ -2,7 +2,6 @@ package main.java.desktopUI;
 
 import javafx.collections.ListChangeListener;
 import javafx.scene.control.Button;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Label;
@@ -252,12 +251,11 @@ public class DesktopApplication extends Application{
 							(ActionEvent event) ->
 							{
 								if(this.activeItem.isValid()){
-									this.activeItem.get().getFirst().setStatus(Item.Status.not(this.activeItem.get().getFirst().getStatus()));
-									this.database.editItem(this.activeItem.get().getSecond(),this.activeItem.get().getFirst());
-									this.activeItem.set(new Pair<>(this.database.getItems().get(this.activeItem.get().getSecond()),this.activeItem.get().getSecond()));
+									this.activeItem.get().getFirst().toggleStatus();
+									this.database.editItem(this.activeItem.get());
+									this.activeItem.set(this.database.getItemWithIndex(this.activeItem.get().getSecond()));
 									updateRightPane();
 								}
-
 							}
 					);
 				}
@@ -333,7 +331,7 @@ public class DesktopApplication extends Application{
 							}
 					);
 				}
-				ComboBox<Analytics.SortMode> sortBy = new ComboBox<>();
+				ComboBox<Analytics.SortMode> sortBy = new ComboBox<>();//TODO: replace with MenuButton?
 				{
 					sortBy.setPromptText("Sort By");
 					sortBy.setItems(FXCollections.observableArrayList(Analytics.SortMode.values()));
