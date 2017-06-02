@@ -68,5 +68,5 @@
 }
 
 .itemList .list-cell:empty{ /*When there is extra room, the ListView populates it with empty cells, which were being highlighted by other css*/
-    -fx-opacity: 0;
+    -fx-background-color: #999999;
 }

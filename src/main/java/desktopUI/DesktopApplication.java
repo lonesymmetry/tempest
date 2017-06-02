@@ -271,7 +271,7 @@ public class DesktopApplication extends Application{
 									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO must wait for ability to edit items
 					);
 				}
-				Button deleteItem = new Button("Delete");
+				Button deleteItem = new Button("Delete");//TODO: add confirmation dialogue popup
 				{
 					final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 					deleteItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -280,7 +280,10 @@ public class DesktopApplication extends Application{
 					deleteItem.getStyleClass().add("deleteItemButton");
 					deleteItem.setOnAction(
 							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO: must wait for ability to edit Items
+							{
+									this.database.deleteItem(this.activeItem.get().getSecond());
+									updateRootPane();
+							}
 					);
 				}
 				editItemMenu.getChildren().addAll(toggleFinished,editItem,deleteItem);
