@@ -64,7 +64,7 @@ public class Item {
 	}
 
 	private static final char[] DISALLOWED_CHARACTERS = {'|','\n'};
-	//public static final int MAX_DISPLAY_NAME_LENGTH = 50;
+	public static final int MAX_DISPLAY_NAME_LENGTH = 45;
 	private Status status;
 	private String displayName;
 	private String description;
@@ -87,12 +87,13 @@ public class Item {
 		return true;
 	}
 
-	/*
 	public String shortenName(){
-		if(displayName.length()>MAX_DISPLAY_NAME_LENGTH)return displayName.substring(0,MAX_DISPLAY_NAME_LENGTH+1);
+		if(displayName.length() > MAX_DISPLAY_NAME_LENGTH){
+			final String ELIPSIS = "...";
+			return displayName.substring(0,Math.max(0,(MAX_DISPLAY_NAME_LENGTH+1) - ELIPSIS.length())) + ELIPSIS;
+		}
 		return displayName;
 	}
-	*/
 
 	public void setDisplayName(String displayName){
 		boolean safe = checkIfAllowed(displayName);

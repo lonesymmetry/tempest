@@ -379,12 +379,12 @@ public class DesktopApplication extends Application{
 
 					itemList.setMinWidth(WIDTH);
 					itemList.setMaxWidth(WIDTH);
-					//TODO: limit width of ListView
 					itemList.setPrefWidth(WIDTH);
+					//itemList.setFixedCellSize(SECTION_HEIGHT);//used to set cell height
 
 					ArrayList<String> itemNames = new ArrayList<>();
 					for(Item item: this.database.getItems()){
-						itemNames.add(item.getDisplayName());
+						itemNames.add(item.shortenName());
 					}
 					itemList.setItems(FXCollections.observableArrayList(itemNames));
 					if(this.activeItem.isValid()){
@@ -401,6 +401,12 @@ public class DesktopApplication extends Application{
 							updateRightPane();
 						}
 					);
+
+					{
+						Rectangle itemListPlaceHolder = new Rectangle(WIDTH - 4 * PADDING,600);
+						itemListPlaceHolder.getStyleClass().add("itemListPlaceHolder");
+						itemList.setPlaceholder(itemListPlaceHolder);
+					}
 
 					itemListBorder.getChildren().add(itemList);
 					AnchorPane.setBottomAnchor(itemList,(double) PADDING);

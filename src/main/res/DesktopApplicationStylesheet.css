@@ -16,9 +16,8 @@
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.addItemFieldsBackground, .itemDisplayBackground, .addItemFieldsBorder,
-.itemDisplayInfoBorder{
-    -fx-fill: #999999;
+.itemListPlaceHolder, .addItemFieldsBackground, .itemDisplayBackground, .addItemFieldsBorder, .itemDisplayInfoBorder{
+     -fx-fill: #999999;
 }
 .itemDisplayInfoBorder, .addItemFieldsBorder{
     -fx-alignment: top-left;
@@ -69,5 +68,5 @@
 }
 
 .itemList .list-cell:empty{ /*When there is extra room, the ListView populates it with empty cells, which were being highlighted by other css*/
-    -fx-background-color: #999999;
+    -fx-opacity: 0;
 }
