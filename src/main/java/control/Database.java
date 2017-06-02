@@ -9,13 +9,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- *Class which deals with writing and reading from the database.
+ * Class to read and write the database.
  *
  * @author Adrian Hardt
  */
 
-//TODO create a date aspect of the database as well, look into using Java 8 Date()
-//TODO add a way to wipe the database file
 public class Database {
     private static final String FILE_NAME = "./src/main/data/database.txt";//path from root (.)
     private ArrayList<Item> items;
@@ -181,6 +179,12 @@ public class Database {
         clearDoc();
         items.remove(index);
         items.add(index,in);
+        writeList();
+    }
+
+    public void deleteItem(int index){
+        clearDoc();
+        items.remove(index);
         writeList();
     }
 
