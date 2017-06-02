@@ -5,14 +5,15 @@ package main.java.util;
  *
  * @author Logan Traffas
  */
-public class Pair<T>{
-	private T first, second;
+public class Pair<T,U>{
+	private T first;
+	private U second;
 
 	public T getFirst(){
 		return first;
 	}
 
-	public T getSecond(){
+	public U getSecond(){
 		return second;
 	}
 
@@ -20,11 +21,11 @@ public class Pair<T>{
 		this.first = first;
 	}
 
-	public void setSecond(T second){
+	public void setSecond(U second){
 		this.second = second;
 	}
 
-	public Pair(T first, T second){
+	public Pair(T first, U second){
 		this.first = first;
 		this.second = second;
 	}

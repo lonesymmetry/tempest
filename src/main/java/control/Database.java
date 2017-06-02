@@ -114,10 +114,10 @@ public class Database {
         return new Item(name,desc,status,priority,date);
     }
 
-    public ArrayList<Item> fillList(){
+    public void fillList(){
+        items.clear();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));
-            StringBuilder sb = new StringBuilder();
             String line = reader.readLine();
 
             while (line != null){
@@ -136,7 +136,6 @@ public class Database {
         catch (IOException x){
             System.err.println(x);
         }
-        return items;
     }
 
     public void test(){
@@ -153,10 +152,10 @@ public class Database {
     }
 
     public static void testWrite(){
-    	final int LENGTH = 15;
+    	final int LENGTH = 30;
 		Database a = new Database();
     	for(int i = 0; i < LENGTH; i++){
-			Item z = new Item("TestItem#" + i, "This is a test #" + i);
+			Item z = new Item("TestItem#" + (i + 1), "This is a test #" + (i + 1));
 			a.writeItem(z);
 		}
 	}

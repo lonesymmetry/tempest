@@ -2,7 +2,7 @@
     -fx-background-color: #222222;
 }
 
-/*.listPane,*/ /*.addItemFields,*/ .itemListMenu, .itemListBorder, .infoPane, .addItemPane, .itemList > .viewport{/*viewport refers to the ScrollPane which has its own background*/
+/*.listPane,*/ /*.addItemFields,*/ .itemListMenu, .itemListBorder, .infoPane, .addItemPane{
     -fx-background-color: #424242;
 }
 
@@ -10,24 +10,36 @@
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.listPane, .addItemPane, .itemDisplay, .addItemMenu, .addItemFields, .itemListMenu, .infoPane, .addItemFieldsBorder, .itemDisplayInfoBorder{
+.listPane, .addItemPane, .itemDisplay,
+.addItemMenu, .addItemFields, .itemListMenu,
+.infoPane, .addItemFieldsBorder, .itemDisplayInfoBorder{
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.addItemFieldsBackground, .itemDisplayBackground, .addItemFieldsBorder, .itemDisplayInfoBorder{
+.addItemFieldsBackground, .itemDisplayBackground, .addItemFieldsBorder,
+.itemDisplayInfoBorder{
     -fx-fill: #999999;
 }
 .itemDisplayInfoBorder, .addItemFieldsBorder{
     -fx-alignment: top-left;
 }
 
-.itemDisplayDescription, .itemDisplayPriority, .itemDisplayDate, .itemDisplayName, .priorityLabel, .prioritySelector, .setDescription, .setName{
+.itemDisplayDescription, .itemList .list-cell, .itemDisplayPriority,
+.itemDisplayDate, .itemDisplayName, .priorityLabel,
+.prioritySelector, .setDescription, .setName{
     -fx-font-size: 12pt;
+    -fx-text-fill: black;
 }
 
 .setPriority{
     -fx-alignment: center-left;
 }
+
+.itemList .list-cell {
+    -fx-background-color: #999999;
+    -fx-alignment: center;
+}
+
 /*
 .sortBy .arrow-button {
     -fx-padding: 0 0 0 -7;
@@ -38,15 +50,24 @@
 }
 */
 
-.addNewButton, .sortBy, .filter, .saveNewItemButton, .editItemButton, .cancelItemAddition, .deleteItemButton, .itemName{
+.addNewButton, .sortBy, .filter, .saveNewItemButton, .editItemButton,
+.cancelItemAddition, .deleteItemButton{
     -fx-font-size: 15pt;
     -fx-background-color: #999999;
 }
 
-.addNewButton:hover, .sortBy:hover, .filter:hover, .itemName:hover, .editItemButton:hover, .saveNewItemButton:hover, .deleteItemButton:hover, .cancelItemAddition:hover{
+.addNewButton:hover, .sortBy:hover, .filter:hover, .itemList .list-cell:hover,
+.editItemButton:hover, .saveNewItemButton:hover, .deleteItemButton:hover,
+.cancelItemAddition:hover{
     -fx-background-color: #BBBBBB;
 }
 
-.addNewButton:pressed, .sortBy:pressed, .filter:pressed, .itemName:pressed, .editItemButton:pressed, .deleteItemButton:pressed, .saveNewItemButton:pressed, .cancelItemAddition:pressed{
+.addNewButton:pressed, .sortBy:pressed, .filter:pressed, .itemList .list-cell:pressed,
+.itemList .list-cell:selected, .editItemButton:pressed, .deleteItemButton:pressed,
+.saveNewItemButton:pressed, .cancelItemAddition:pressed{
     -fx-background-color: #EEEEEE;
+}
+
+.itemList .list-cell:empty{ /*When there is extra room, the ListView populates it with empty cells, which were being highlighted by other css*/
+    -fx-background-color: #999999;
 }

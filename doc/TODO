@@ -7,6 +7,7 @@ Engine:
 
 Desktop UI:
     - Add color for priority
+    - Clean up CSS
     - Create UI document
     - Make edit functions on the info pane functional
 

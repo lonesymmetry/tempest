@@ -1,16 +1,10 @@
 package main.java.desktopUI;
 
-import main.java.control.Analytics;
-import main.java.control.Database;
-import main.java.control.Item;
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.scene.Scene;
+import javafx.collections.ListChangeListener;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ComboBox;
@@ -19,6 +13,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import main.java.control.Analytics;
+import main.java.control.Database;
+import main.java.control.Item;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -27,6 +28,7 @@ import main.java.util.Maybe;
 import main.java.util.Util;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 /**
  * Runs the desktop application that displays the Items and provides for their management
@@ -53,7 +55,7 @@ public class DesktopApplication extends Application{
 
 	private Stage mainStage;
 
-	private Maybe<Item> activeItem;
+	private Maybe<Pair<Item,Integer>> activeItem;//first stores the Item, second stores its index in database
 	private Database database;
 
 	private HBox rootPane;
@@ -199,29 +201,29 @@ public class DesktopApplication extends Application{
 						Text itemDisplayName = new Text();
 						{
 							itemDisplayName.getStyleClass().add("itemDisplayName");
-							itemDisplayName.setText(this.activeItem.get().getDisplayName());
+							itemDisplayName.setText(this.activeItem.get().getFirst().getDisplayName());
 							itemDisplayName.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayPriority = new Text();
 						{
 							itemDisplayPriority.getStyleClass().add("itemDisplayPriority");
-							itemDisplayPriority.setText("Priority: " + this.activeItem.get().getPriority().toString());
+							itemDisplayPriority.setText("Priority: " + this.activeItem.get().getFirst().getPriority().toString());
 							itemDisplayPriority.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayDescription= new Text();
 						{
 							itemDisplayDescription.getStyleClass().add("itemDisplayDescription");
-							itemDisplayDescription.setText(this.activeItem.get().getDescription());
+							itemDisplayDescription.setText(this.activeItem.get().getFirst().getDescription());
 							itemDisplayDescription.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayDate = new Text();
 						{
 							itemDisplayDate.getStyleClass().add("itemDisplayDate");
-							itemDisplayDate.setText("Created " + this.activeItem.get().getDate().toString());
+							itemDisplayDate.setText("Created " + this.activeItem.get().getFirst().getDate().toString());
 							itemDisplayDate.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						itemDisplayInfoBorder.getChildren().addAll(itemDisplayName,itemDisplayPriority);
-						if(!this.activeItem.get().getDescription().equals("")){
+						if(!this.activeItem.get().getFirst().getDescription().equals("")){
 							itemDisplayInfoBorder.getChildren().addAll(itemDisplayDescription);
 						}
 						itemDisplayInfoBorder.getChildren().addAll(itemDisplayDate);
@@ -239,9 +241,9 @@ public class DesktopApplication extends Application{
 				final int NUMBER_OF_BUTTONS = 3;
 				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 						BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
-				ToggleButton toggleFinished = new ToggleButton(this.activeItem.isValid() ? this.activeItem.get().getStatus().toString() : "Toggle Finished");
+				ToggleButton toggleFinished = new ToggleButton(this.activeItem.isValid() ? this.activeItem.get().getFirst().getStatus().toString() : "Toggle Finished");
 				{
-					final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+					final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 					toggleFinished.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					toggleFinished.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					toggleFinished.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -250,7 +252,7 @@ public class DesktopApplication extends Application{
 							(ActionEvent event) ->
 							{
 								if(this.activeItem.isValid()){
-									this.activeItem.get().setStatus(Item.Status.not(this.activeItem.get().getStatus()));
+									this.activeItem.get().getFirst().setStatus(Item.Status.not(this.activeItem.get().getFirst().getStatus()));
 								}
 								Util.nyi(Util.getFileName(), Util.getLineNumber());//TODO: must wait for ability to edit Items
 							}
@@ -258,7 +260,7 @@ public class DesktopApplication extends Application{
 				}
 				Button editItem = new Button("Edit");
 				{
-					final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+					final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 					editItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					editItem.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					editItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -270,7 +272,7 @@ public class DesktopApplication extends Application{
 				}
 				Button deleteItem = new Button("Delete");
 				{
-					final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+					final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 					deleteItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					deleteItem.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					deleteItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -309,7 +311,7 @@ public class DesktopApplication extends Application{
 				final int NUMBER_OF_BUTTONS = 3;
 				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 					BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
-				final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+				final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 				Button addNew = new Button("Add New");
 				{
 					addNew.getStyleClass().add("addNewButton");
@@ -333,7 +335,7 @@ public class DesktopApplication extends Application{
 					sortBy.setPromptText("Sort By");
 					sortBy.setItems(FXCollections.observableArrayList(Analytics.SortMode.values()));
 					sortBy.getStyleClass().add("sortBy");
-					//TODO: firuring out text cropping
+					//TODO: figure out text-cropping and alignment of "PRIORITY"
 
 					sortBy.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					sortBy.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -364,47 +366,38 @@ public class DesktopApplication extends Application{
 				itemListBorder.setMinWidth(WIDTH);
 				itemListBorder.setMaxWidth(WIDTH);
 				itemListBorder.setPrefWidth(WIDTH);
+				final int ITEM_LIST_BORDER_HEIGHT = 1000;//this is just set to something really big, it's cropped down
+				itemListBorder.setPrefHeight(ITEM_LIST_BORDER_HEIGHT);
 				itemListBorder.getStyleClass().add("itemListBorder");
 
-				{//set the content of the list of items
-					ScrollPane itemList = new ScrollPane();
-
-					final boolean PANNABLE = false;
-					itemList.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-					itemList.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-					itemList.setPannable(PANNABLE);
+				{
+					ListView<String> itemList = new ListView<>();
 					itemList.getStyleClass().add("itemList");
-					final int ITEM_LIST_VIEWPORT_HEIGHT = 1000;//this is just set to something really big, it's cropped down //TODO: figure out why Scrollpane is so large when there are no items
-					itemList.setPrefViewportHeight(ITEM_LIST_VIEWPORT_HEIGHT);
 
 					itemList.setMinWidth(WIDTH);
 					itemList.setMaxWidth(WIDTH);
 					itemList.setPrefWidth(WIDTH);
-					itemList.setPrefViewportWidth(WIDTH);
-					{
-						VBox items = new VBox(PADDING);
-						main.java.util.Pair<Integer> BUTTON_SIZE = new main.java.util.Pair<>(
-								(int)(itemList.getPrefViewportWidth() - (4 * PADDING + main.java.util.Graphics.SCROLL_BAR_WIDTH)),
-								SECTION_HEIGHT
-						);
-						for(Item item : database.getItems()){
-							Button itemName = new Button(item.getDisplayName());
-							itemName.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-							itemName.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-							itemName.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-							itemName.getStyleClass().add("itemName");
-							itemName.setOnAction(
-									(ActionEvent event) ->
-									{
-										this.rightDisplay = RightDisplay.ITEM_INFO;
-										this.activeItem.set(item);
-										updateRightPane();
-									}
-							);
-							items.getChildren().add(itemName);
-						}
-						itemList.setContent(items);
+
+					ArrayList<String> itemNames = new ArrayList<>();
+					for(Item item: this.database.getItems()){
+						itemNames.add(item.getDisplayName());
 					}
+					itemList.setItems(FXCollections.observableArrayList(itemNames));
+					if(this.activeItem.isValid()){
+						itemList.scrollTo(this.activeItem.get().getSecond());
+						itemList.getFocusModel().focus(this.activeItem.get().getSecond());//note: focused object is the one object in the entire operating system that receives keyboard input
+						itemList.getSelectionModel().select(this.activeItem.get().getSecond());//note: selected object means it is marked
+					}
+
+					itemList.getSelectionModel().getSelectedIndices().addListener(
+						(ListChangeListener.Change<? extends Integer> c) ->
+						{
+							this.rightDisplay = RightDisplay.ITEM_INFO;
+							this.activeItem.set(new Pair<>(this.database.getItems().get(itemList.getSelectionModel().getSelectedIndex()),itemList.getSelectionModel().getSelectedIndex()));
+							updateRightPane();
+						}
+					);
+
 					itemListBorder.getChildren().add(itemList);
 					AnchorPane.setBottomAnchor(itemList,(double) PADDING);
 					AnchorPane.setTopAnchor(itemList,(double) PADDING);
@@ -491,7 +484,7 @@ public class DesktopApplication extends Application{
 			addItemMenu.getStyleClass().add("addItemMenu");
 			Button saveNewItemButton = new Button("Save");
 			{
-				final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+				final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);//TODO: merge multiple identical final Pairs?
 				saveNewItemButton.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -512,7 +505,7 @@ public class DesktopApplication extends Application{
 			}
 			Button cancelItemAddition = new Button("Cancel");
 			{
-				final Pair<Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+				final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 				cancelItemAddition.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -577,7 +570,7 @@ public class DesktopApplication extends Application{
 		this.database.fillList();
 
 		this.rightDisplay = RightDisplay.ITEM_INFO;
-		this.activeItem = (this.database.getItems().size() > 0) ? new Maybe<>(this.database.getItems().get(0)) : new Maybe<>();
+		this.activeItem = (this.database.getItems().size() > 0) ? new Maybe<>(new Pair<>(this.database.getItems().get(0),0)) : new Maybe<>();
 
 		this.rootPane = new HBox();
 		this.rootPane.setId(ROOT_PANE_ID);
