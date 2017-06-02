@@ -69,7 +69,7 @@ public class Database {
     	return "Database(" + this.items.toString() + ")";
 	}
 
-    public void clearDoc(){
+    public static void clearDoc(){
         try{
             PrintWriter writer = new PrintWriter(FILE_NAME);
             writer.print("");
@@ -189,7 +189,7 @@ public class Database {
         }
     }
 
-    public void test(){
+    public void test(){//TODO: remove?
         String s = "Hello World! ";
         byte data[] = s.getBytes(); //String -> Bytes
         Path p = Paths.get("./"+FILE_NAME);
@@ -202,7 +202,8 @@ public class Database {
         }
     }
 
-    public static void testWrite(){
+    public static void convertDataToTest(){
+    	clearDoc();
     	final int LENGTH = 30;
 		Database a = new Database();
     	for(int i = 0; i < LENGTH; i++){

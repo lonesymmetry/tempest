@@ -1,33 +1,23 @@
 package main.java.desktopUI;
 
-import javafx.collections.ListChangeListener;
-import javafx.scene.control.Button;
-import javafx.scene.Node;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import main.java.control.Analytics;
-import main.java.control.Database;
-import main.java.control.Item;
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.*;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.stage.Stage;
-import main.java.util.Pair;
-import main.java.util.Maybe;
-import main.java.util.Util;
+
+import main.java.util.*;
+import main.java.control.*;
 
 import java.awt.Dimension;
+
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * Runs the desktop application that displays the Items and provides for their management
@@ -273,7 +263,7 @@ public class DesktopApplication extends Application{
 									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO must wait for ability to edit items
 					);
 				}
-				Button deleteItem = new Button("Delete");//TODO: add confirmation dialogue popup
+				Button deleteItem = new Button("Delete");
 				{
 					final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 					deleteItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -283,8 +273,33 @@ public class DesktopApplication extends Application{
 					deleteItem.setOnAction(
 							(ActionEvent event) ->
 							{
-									this.database.deleteItem(this.activeItem.get().getIndex());
-									updateRootPane();
+								{
+									Alert deleteConfirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);//TODO: make fit theme //TODO: check out more on http://code.makery.ch/blog/javafx-dialogs-official/
+
+									deleteConfirmationDialog.setTitle("Deletion Confirmation");
+									deleteConfirmationDialog.setHeaderText("Would you like to delete the Item \"" + this.activeItem.get().getItem().shortenName() + "\"? It cannot be undone.");
+									deleteConfirmationDialog.setContentText("Item description: \"" + this.activeItem.get().getItem().getDescription() + "\"");
+									{
+										ButtonType deleteButton = new ButtonType("Delete", ButtonBar.ButtonData.YES);
+										ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+										deleteConfirmationDialog.getButtonTypes().setAll(deleteButton, cancelButton);
+									}
+									{
+										Optional<ButtonType> deleteConfirmationDialogResult = deleteConfirmationDialog.showAndWait();
+										if(deleteConfirmationDialogResult.isPresent()) {
+											switch (deleteConfirmationDialogResult.get().getButtonData()) {
+												case YES:
+													this.database.deleteItem(this.activeItem.get().getIndex());
+													updateRootPane();
+													break;
+												case CANCEL_CLOSE:
+													break;
+												default:
+													Util.nyi(Util.getFileName(), Util.getLineNumber());
+											}
+										}
+									}
+								}
 							}
 					);
 				}
@@ -341,7 +356,6 @@ public class DesktopApplication extends Application{
 					sortBy.setPromptText("Sort By");
 					sortBy.setItems(FXCollections.observableArrayList(Analytics.SortMode.values()));
 					sortBy.getStyleClass().add("sortBy");
-					//TODO: figure out text-cropping and alignment of "PRIORITY"
 
 					sortBy.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					sortBy.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -363,7 +377,6 @@ public class DesktopApplication extends Application{
 				{
 					filterBy.setPromptText("Filter By");
 					filterBy.setItems(FXCollections.observableArrayList(Analytics.FilterMode.values()));
-					//TODO: change how filtering displays FilterMode names
 					filterBy.getStyleClass().add("filterBy");
 
 					filterBy.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -594,10 +607,8 @@ public class DesktopApplication extends Application{
 	 * Acts as the constructor for this class
 	 */
 	private void initialize(){
-		{
-			//TODO: for testing only
-			//Database.testWrite();
-		}
+		Database.convertDataToTest();//TODO: for testing only
+
 		this.mainStage = new Stage();
 
 		this.database = new Database();
