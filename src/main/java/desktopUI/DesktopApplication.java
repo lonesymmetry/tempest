@@ -60,6 +60,8 @@ public class DesktopApplication extends Application{
 	private HBox rootPane;
 	private static final String ROOT_PANE_ID = "rootPane";
 
+	private Analytics.SortMode sortMode;
+	private Analytics.FilterMode filterMode;
 	private VBox listPane;
 	private static final String LIST_PANE_ID = "listPane";
 
@@ -334,7 +336,7 @@ public class DesktopApplication extends Application{
 							}
 					);
 				}
-				ComboBox<Analytics.SortMode> sortBy = new ComboBox<>();//TODO: replace with MenuButton?
+				ComboBox<Analytics.SortMode> sortBy = new ComboBox<>();
 				{
 					sortBy.setPromptText("Sort By");
 					sortBy.setItems(FXCollections.observableArrayList(Analytics.SortMode.values()));
@@ -347,7 +349,10 @@ public class DesktopApplication extends Application{
 
 					sortBy.setOnAction(
 							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO: wait for ability to sort
+							{
+								this.sortMode = sortBy.getValue();
+								updateLeftPane();
+							}
 					);
 				}
 				ComboBox<Analytics.FilterMode> filterBy = new ComboBox<>();
@@ -363,7 +368,10 @@ public class DesktopApplication extends Application{
 
 					filterBy.setOnAction(
 							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(),Util.getLineNumber())//TODO: wait for ability to filter
+							{
+								this.filterMode = filterBy.getValue();
+								updateLeftPane();
+							}
 					);
 				}
 				itemListMenu.getChildren().addAll(addNew,sortBy,filterBy);
@@ -387,10 +395,29 @@ public class DesktopApplication extends Application{
 					//itemList.setFixedCellSize(SECTION_HEIGHT);//used to set cell height
 
 					ArrayList<String> itemNames = new ArrayList<>();
-					for(Item item: this.database.getItems()){
+					ArrayList<Item> itemsToDisplay = new ArrayList<>();
+					switch (this.sortMode){
+						case NONE:
+							itemsToDisplay = this.database.getItems();
+							break;
+						default:
+							Util.nyi(Util.getFileName(),Util.getLineNumber());
+					}
+
+					switch (this.filterMode){
+						case NONE:
+							itemsToDisplay = this.database.getItems();
+							break;
+						default:
+							Util.nyi(Util.getFileName(),Util.getLineNumber());
+					}
+
+					for(Item item: itemsToDisplay){
 						itemNames.add(item.shortenName());
 					}
+
 					itemList.setItems(FXCollections.observableArrayList(itemNames));
+
 					if(this.activeItem.isValid()){
 						itemList.scrollTo(this.activeItem.get().getSecond());
 						itemList.getFocusModel().focus(this.activeItem.get().getSecond());//note: focused object is the one object in the entire operating system that receives keyboard input
@@ -586,6 +613,9 @@ public class DesktopApplication extends Application{
 
 		this.rootPane = new HBox();
 		this.rootPane.setId(ROOT_PANE_ID);
+
+		this.sortMode = Analytics.SortMode.NONE;
+		this.filterMode = Analytics.FilterMode.NONE;
 
 		this.listPane = new VBox(PADDING);
 		this.listPane.setId(LIST_PANE_ID);
