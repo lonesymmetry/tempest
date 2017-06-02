@@ -49,19 +49,19 @@
 }
 */
 
-.addNewButton, .sortBy, .filterBy, .saveNewItemButton, .editItemButton,
+.addNewButton, .sortBy, .filterBy, .toggleFinishedButton, .saveNewItemButton, .editItemButton,
 .cancelItemAddition, .deleteItemButton{
     -fx-font-size: 15pt;
     -fx-background-color: #999999;
 }
 
-.addNewButton:hover, .sortBy:hover, .filterBy:hover, .itemList .list-cell:hover,
+.addNewButton:hover, .sortBy:hover, .toggleFinishedButton:hover, .filterBy:hover, .itemList .list-cell:hover,
 .editItemButton:hover, .saveNewItemButton:hover, .deleteItemButton:hover,
 .cancelItemAddition:hover{
     -fx-background-color: #BBBBBB;
 }
 
-.addNewButton:pressed, .sortBy:pressed, .filterBy:pressed, .itemList .list-cell:pressed,
+.addNewButton:pressed, .toggleFinishedButton:pressed, .sortBy:pressed, .filterBy:pressed, .itemList .list-cell:pressed,
 .itemList .list-cell:selected, .editItemButton:pressed, .deleteItemButton:pressed,
 .saveNewItemButton:pressed, .cancelItemAddition:pressed{
     -fx-background-color: #EEEEEE;

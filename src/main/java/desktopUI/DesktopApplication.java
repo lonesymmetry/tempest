@@ -241,7 +241,7 @@ public class DesktopApplication extends Application{
 				final int NUMBER_OF_BUTTONS = 3;
 				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 						BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
-				ToggleButton toggleFinished = new ToggleButton(this.activeItem.isValid() ? this.activeItem.get().getFirst().getStatus().toString() : "Toggle Finished");
+				Button toggleFinished = new Button(this.activeItem.isValid() ? this.activeItem.get().getFirst().getStatus().toString() : "Toggle Finished");
 				{
 					final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 					toggleFinished.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -253,8 +253,11 @@ public class DesktopApplication extends Application{
 							{
 								if(this.activeItem.isValid()){
 									this.activeItem.get().getFirst().setStatus(Item.Status.not(this.activeItem.get().getFirst().getStatus()));
+									this.database.editItem(this.activeItem.get().getSecond(),this.activeItem.get().getFirst());
+									this.activeItem.set(new Pair<>(this.database.getItems().get(this.activeItem.get().getSecond()),this.activeItem.get().getSecond()));
+									updateRightPane();
 								}
-								Util.nyi(Util.getFileName(), Util.getLineNumber());//TODO: must wait for ability to edit Items
+
 							}
 					);
 				}

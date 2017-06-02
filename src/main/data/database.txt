@@ -1,4 +1,4 @@
-TestItem#1|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #1
+TestItem#1|FINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #1
 TestItem#2|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #2
 TestItem#3|UNFINISHED|LOW|Thu 06 01 2017 05:42:22 PM|This is a test #3
 Replaced|UNFINISHED|LOW|Fri 06 02 2017 10:38:37 AM|An edited item
