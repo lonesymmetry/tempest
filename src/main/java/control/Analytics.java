@@ -44,7 +44,7 @@ public class Analytics {
 				case HIGH_PRIORITY:
 					return "High Priority";
 				case MEDIUM_PRIORITY:
-					return "Medium None";
+					return "Medium Priority";
 				case LOW_PRIORITY:
 					return "Low Priority";
 				case UNFINISHED:
