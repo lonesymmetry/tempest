@@ -7,9 +7,9 @@ import java.util.Collections;
 import java.util.Comparator;
 
 /**
- * Provides information and modified lists based on the database. Will be used for sorting/filtering later.
+ * Provides information and filtered/sorted lists based on the database.
  *
- * @author Adrian Hardt
+ * @author Adrian Hardt & Logan Traffas
  */
 
 public class Analytics {
@@ -223,8 +223,6 @@ public class Analytics {
         }
         return out;
     }
-
-
 
     public int itemCount(Database a){
         return a.getItems().size();
