@@ -192,29 +192,29 @@ public class DesktopApplication extends Application{
 						Text itemDisplayName = new Text();
 						{
 							itemDisplayName.getStyleClass().add("itemDisplayName");
-							itemDisplayName.setText(this.activeItem.get().getItem().getDisplayName());
+							itemDisplayName.setText(this.database.getItem(activeItem.get().getIndex()).getDisplayName());
 							itemDisplayName.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayPriority = new Text();
 						{
 							itemDisplayPriority.getStyleClass().add("itemDisplayPriority");
-							itemDisplayPriority.setText("Priority: " + this.activeItem.get().getItem().getPriority().toString());
+							itemDisplayPriority.setText("Priority: " + this.database.getItem(activeItem.get().getIndex()).getPriority().toString());
 							itemDisplayPriority.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayDescription= new Text();
 						{
 							itemDisplayDescription.getStyleClass().add("itemDisplayDescription");
-							itemDisplayDescription.setText(this.activeItem.get().getItem().getDescription());
+							itemDisplayDescription.setText(this.database.getItem(activeItem.get().getIndex()).getDescription());
 							itemDisplayDescription.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayDate = new Text();
 						{
 							itemDisplayDate.getStyleClass().add("itemDisplayDate");
-							itemDisplayDate.setText("Created " + this.activeItem.get().getItem().getDate().toString());
+							itemDisplayDate.setText("Created " + this.database.getItem(activeItem.get().getIndex()).getDate().toString());
 							itemDisplayDate.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						itemDisplayInfoBorder.getChildren().addAll(itemDisplayName,itemDisplayPriority);
-						if(!this.activeItem.get().getItem().getDescription().equals("")){
+						if(!this.database.getItem(activeItem.get().getIndex()).getDescription().equals("")){
 							itemDisplayInfoBorder.getChildren().addAll(itemDisplayDescription);
 						}
 						itemDisplayInfoBorder.getChildren().addAll(itemDisplayDate);
@@ -232,7 +232,7 @@ public class DesktopApplication extends Application{
 				final int NUMBER_OF_BUTTONS = 3;
 				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 						BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
-				Button toggleFinished = new Button(this.activeItem.isValid() ? this.activeItem.get().getItem().getStatus().toString() : "Toggle Finished");
+				Button toggleFinished = new Button(this.activeItem.isValid() ? this.database.getItem(activeItem.get().getIndex()).getStatus().toString() : "Toggle Finished");
 				{
 					final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 					toggleFinished.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -243,7 +243,7 @@ public class DesktopApplication extends Application{
 							(ActionEvent event) ->
 							{
 								if(this.activeItem.isValid()){
-									this.activeItem.get().getItem().toggleStatus();
+									this.database.getItem(activeItem.get().getIndex()).toggleStatus();
 									this.database.editItem(this.activeItem.get());
 									this.activeItem.set(this.database.getPositionedItem(this.activeItem.get().getIndex()));
 									updateRightPane();
@@ -277,8 +277,8 @@ public class DesktopApplication extends Application{
 									Alert deleteConfirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);//TODO: make fit theme //TODO: check out more on http://code.makery.ch/blog/javafx-dialogs-official/
 
 									deleteConfirmationDialog.setTitle("Deletion Confirmation");
-									deleteConfirmationDialog.setHeaderText("Would you like to delete the Item \"" + this.activeItem.get().getItem().shortenName() + "\"? It cannot be undone.");
-									deleteConfirmationDialog.setContentText("Item description: \"" + this.activeItem.get().getItem().getDescription() + "\"");
+									deleteConfirmationDialog.setHeaderText("Would you like to delete the Item \"" + this.database.getItem(activeItem.get().getIndex()).getDisplayName() + "\"? It cannot be undone.");
+									deleteConfirmationDialog.setContentText("Item description: \"" + this.database.getItem(activeItem.get().getIndex()).getDescription() + "\"");
 									{
 										ButtonType deleteButton = new ButtonType("Delete", ButtonBar.ButtonData.YES);
 										ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -417,10 +417,10 @@ public class DesktopApplication extends Application{
 
 					ArrayList<String> itemNames = new ArrayList<>();
 
-					final ArrayList<Item> itemsToDisplay = Analytics.filter(this.filterMode,Analytics.sort(this.sortMode,this.database));//final to be used in ListChangeListener
+					final ArrayList<Database.PositionedItem> itemsToDisplay = Analytics.filter(this.filterMode,Analytics.sort(this.sortMode,this.database.getPositionedItems()));//final to be used in ListChangeListener
 
-					for(Item item: itemsToDisplay){
-						itemNames.add(item.shortenName());
+					for(Database.PositionedItem positionedItem: itemsToDisplay){
+						itemNames.add(positionedItem.getItem().shortenName());
 					}
 
 					itemList.setItems(FXCollections.observableArrayList(itemNames));
@@ -435,7 +435,7 @@ public class DesktopApplication extends Application{
 						(ListChangeListener.Change<? extends Integer> c) ->
 						{
 							this.rightDisplay = RightDisplay.ITEM_INFO;
-							this.activeItem.set(new Database.PositionedItem(new Database(itemsToDisplay),itemList.getSelectionModel().getSelectedIndex()));//TODO
+							this.activeItem.set(itemsToDisplay.get(itemList.getSelectionModel().getSelectedIndex()));//TODO
 							//this.activeItem.set(new Pair<>(itemsToDisplay.get(itemList.getSelectionModel().getSelectedIndex()),itemList.getSelectionModel().getSelectedIndex()));
 							updateRightPane();
 						}

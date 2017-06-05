@@ -58,12 +58,8 @@ public class Analytics {
 		}
 	}
 
-    public static ArrayList<Item> sort(SortMode mode,ArrayList<Item> in){//TODO: return an array of PositionedItems not Items
-       return sort(mode,new Database(in));
-    }
-
-    public static ArrayList<Item> sort(SortMode mode,Database in){//TODO: return an array of PositionedItems not Items
-	    if(mode==SortMode.NONE)return in.getItems();
+	public static ArrayList<Database.PositionedItem> sort(SortMode mode, ArrayList<Database.PositionedItem> in){//TODO: return an array of PositionedItems not Items
+	    if(mode==SortMode.NONE)return in;
 	    else if(mode==SortMode.PRIORITY){
 	        return sortPriority(in);
         }
@@ -74,12 +70,8 @@ public class Analytics {
         return null;//this line will never be reached
 	}
 
-	public static ArrayList<Item> filter(FilterMode mode,ArrayList<Item> in){//TODO: return an array of PositionedItems not Items
-		return filter(mode,new Database(in));
-	}
-
-    public static ArrayList<Item> filter(FilterMode mode,Database in){//TODO: return an array of PositionedItems not Items
-        if(mode==FilterMode.NONE)return in.getItems();
+    public static ArrayList<Database.PositionedItem> filter(FilterMode mode,ArrayList<Database.PositionedItem> in){//TODO: return an array of PositionedItems not Items
+        if(mode==FilterMode.NONE)return in;
         else if(mode==FilterMode.HIGH_PRIORITY){
             return filterHIGH(in);
         }
@@ -99,17 +91,17 @@ public class Analytics {
 		return null;//this line will never be reached
     }
 
-    public static ArrayList<Item> filterUnfinished(Database a){
-        ArrayList<Item> out = new ArrayList<Item>();
-        ArrayList<Item> orig = a.getItems();
+    public static ArrayList<Database.PositionedItem> filterUnfinished(ArrayList<Database.PositionedItem> a){
+        ArrayList<Database.PositionedItem> out = new ArrayList<>();
+        ArrayList<Database.PositionedItem> orig = a;
         int tally=0;
         for(int i=0;i<orig.size();i++){
-            if(orig.get(i).getStatus()== Item.Status.UNFINISHED){
+            if(orig.get(i).getItem().getStatus()== Item.Status.UNFINISHED){
                 out.add(orig.get(i));
                 tally++;
             }
         }
-        System.out.println("Found "+tally+" UNFINISHED items.");
+        //System.out.println("Found "+tally+" UNFINISHED items.");
         return out;
     }
 
@@ -121,21 +113,21 @@ public class Analytics {
                 tally++;
             }
         }
-        System.out.println("Found "+tally+" UNFINISHED items.");
+        //System.out.println("Found "+tally+" UNFINISHED items.");
         return tally;
     }
 
-    public static ArrayList<Item> filterFinished(Database a){
-        ArrayList<Item> out = new ArrayList<Item>();
-        ArrayList<Item> orig = a.getItems();
+    public static ArrayList<Database.PositionedItem> filterFinished(ArrayList<Database.PositionedItem> a){
+		ArrayList<Database.PositionedItem> orig = a;
+        ArrayList<Database.PositionedItem> out = new ArrayList<>();
         int tally=0;
         for(int i=0;i<orig.size();i++){
-            if(orig.get(i).getStatus() == Item.Status.FINISHED){
+            if(orig.get(i).getItem().getStatus() == Item.Status.FINISHED){
                 out.add(orig.get(i));
                 tally++;
             }
         }
-        System.out.println("Found "+tally+" FINISHED items.");
+        //System.out.println("Found "+tally+" FINISHED items.");
         return out;
     }
 
@@ -147,28 +139,27 @@ public class Analytics {
                 tally++;
             }
         }
-        System.out.println("Found "+tally+" FINISHED items.");
+        //System.out.println("Found "+tally+" FINISHED items.");
         return tally;
     }
 
-    public static ArrayList<Item> sortDate(Database a){
-        ArrayList<Item> orig = a.getItems();
-        Collections.sort(orig, Comparator.comparing(Item::getDate));
-        return orig;
+    public static ArrayList<Database.PositionedItem> sortDate(ArrayList<Database.PositionedItem> in){
+        Collections.sort(in, Comparator.comparing(x -> x.getItem().getDate()));
+        return in;
     }
 
-    public static ArrayList<Item> sortPriority(Database a){
-        ArrayList<Item> orig = a.getItems();
-        ArrayList<Item> out = new ArrayList<Item>();
-        ArrayList<Item> pA = new ArrayList<Item>();
-        ArrayList<Item> pB = new ArrayList<Item>();
-        ArrayList<Item> pC = new ArrayList<Item>();
+    public static ArrayList<Database.PositionedItem> sortPriority(ArrayList<Database.PositionedItem> a){
+        ArrayList<Database.PositionedItem> orig = a;
+        ArrayList<Database.PositionedItem> out = new ArrayList<>();
+        ArrayList<Database.PositionedItem> pA = new ArrayList<>();
+        ArrayList<Database.PositionedItem> pB = new ArrayList<>();
+        ArrayList<Database.PositionedItem> pC = new ArrayList<>();
 
         for(int i = 0; i < orig.size(); i++){
-            if(orig.get(i).getPriority()== Item.Priority.HIGH){
+            if(orig.get(i).getItem().getPriority()== Item.Priority.HIGH){
                 pA.add(orig.get(i));
             }
-            else if(orig.get(i).getPriority()== Item.Priority.MEDIUM){
+            else if(orig.get(i).getItem().getPriority()== Item.Priority.MEDIUM){
                 pB.add(orig.get(i));
             }
             else{
@@ -188,36 +179,36 @@ public class Analytics {
         return out;
     }
 
-    public static ArrayList<Item> filterHIGH(Database a){
-        ArrayList<Item> orig = a.getItems();
-        ArrayList<Item> out = new ArrayList<Item>();
+    public static ArrayList<Database.PositionedItem> filterHIGH(ArrayList<Database.PositionedItem> a){
+		ArrayList<Database.PositionedItem> orig = a;
+		ArrayList<Database.PositionedItem> out = new ArrayList<>();
 
         for(int i = 0; i < orig.size(); i++){
-            if(orig.get(i).getPriority()== Item.Priority.HIGH){
+            if(orig.get(i).getItem().getPriority()== Item.Priority.HIGH){
                 out.add(orig.get(i));
             }
         }
         return out;
     }
 
-    public static ArrayList<Item> filterMEDIUM(Database a){
-        ArrayList<Item> orig = a.getItems();
-        ArrayList<Item> out = new ArrayList<Item>();
+    public static ArrayList<Database.PositionedItem> filterMEDIUM(ArrayList<Database.PositionedItem> a){
+        ArrayList<Database.PositionedItem> orig = a;
+        ArrayList<Database.PositionedItem> out = new ArrayList<>();
 
         for(int i = 0; i < orig.size(); i++){
-            if(orig.get(i).getPriority()== Item.Priority.MEDIUM){
+            if(orig.get(i).getItem().getPriority()== Item.Priority.MEDIUM){
                 out.add(orig.get(i));
             }
         }
         return out;
     }
 
-    public static ArrayList<Item> filterLOW(Database a){
-        ArrayList<Item> orig = a.getItems();
-        ArrayList<Item> out = new ArrayList<Item>();
+    public static ArrayList<Database.PositionedItem> filterLOW(ArrayList<Database.PositionedItem> a){
+        ArrayList<Database.PositionedItem> orig = a;
+        ArrayList<Database.PositionedItem> out = new ArrayList<>();
 
         for(int i = 0; i < orig.size(); i++){
-            if(orig.get(i).getPriority()== Item.Priority.LOW){
+            if(orig.get(i).getItem().getPriority()== Item.Priority.LOW){
                 out.add(orig.get(i));
             }
         }

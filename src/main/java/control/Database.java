@@ -36,7 +36,28 @@ public class Database {
     		this.item = database.getItem(index);
     		this.index = index;
 		}
+
+        public PositionedItem(Item item,int index){
+            this.item = item;
+            this.index = index;
+        }
 	}
+
+	public static ArrayList<PositionedItem> toPositionedArray(ArrayList<Item> in){
+        ArrayList<PositionedItem> out = new ArrayList<>();
+        for(int i = 0; i < in.size(); i++){
+            out.add(i,new PositionedItem(in.get(i),i));
+        }
+        return out;
+    }
+
+    public static ArrayList<Item> fromPositionedArray(ArrayList<PositionedItem> in){
+        ArrayList<Item> out = new ArrayList<>();
+        for(int i = 0; i < in.size(); i++){
+            out.add(in.get(i).getIndex(),in.get(i).getItem());
+        }
+        return out;
+    }
 
 	/**
 	 * Getter for Items list
@@ -44,6 +65,10 @@ public class Database {
 	 */
 	public ArrayList<Item> getItems(){
         return items;
+    }
+
+    public ArrayList<PositionedItem> getPositionedItems(){
+        return toPositionedArray(items);
     }
 
 	public Item getItem(int i){
