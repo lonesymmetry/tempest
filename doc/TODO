@@ -1,15 +1,13 @@
 @Authors Adrian Hardt, Logan Traffas
 
 Engine:
-    - Database:
-        - Add sorting parsers (ie sort by type, date, etc.)
-    - Be able to edit items, not just add new ones
+   - Clean up all code
 
 Desktop UI:
-    - Add color for priority
-    - Clean up CSS
     - Create UI document
-    - Make edit functions on the info pane functional
+    - Make the edit button on the info pane functional
+    - Clean up CSS
+    - Add color for priority
 
 Android UI:
     - Shift code base to Android
