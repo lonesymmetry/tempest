@@ -290,6 +290,8 @@ public class DesktopApplication extends Application{
 											switch (deleteConfirmationDialogResult.get().getButtonData()) {
 												case YES:
 													this.database.deleteItem(this.activeItem.get().getIndex());
+													this.database.fillList();
+													this.activeItem = new Maybe<>();
 													updateRootPane();
 													break;
 												case CANCEL_CLOSE:
