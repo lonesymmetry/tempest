@@ -366,10 +366,6 @@ public class DesktopApplication extends Application{
 					sortBy.setOnAction(
 							(ActionEvent event) ->
 							{
-								if(this.sortMode != sortBy.getValue()){
-									//this.activeItem = new Maybe<>();
-									//updateRightPane();//TODO: do we want to do this?
-								}
 								this.sortMode = sortBy.getValue();
 								updateLeftPane();
 							}
@@ -389,8 +385,19 @@ public class DesktopApplication extends Application{
 							(ActionEvent event) ->
 							{
 								if(this.filterMode != filterBy.getValue()){
-									//this.activeItem = new Maybe<>();
-									//updateRightPane();
+									boolean resetRightPane = true;
+									if(this.activeItem.isValid()) {
+										for (Database.PositionedItem a : Analytics.filter(filterBy.getValue(), this.database.getPositionedItems())) {
+											if(this.activeItem.get().getItem().equals(a.getItem())){
+												resetRightPane = false;
+												break;
+											}
+										}
+										if(resetRightPane){
+											this.activeItem = new Maybe<>();
+											updateRightPane();
+										}
+									}
 								}
 								this.filterMode = filterBy.getValue();
 								updateLeftPane();
@@ -437,8 +444,7 @@ public class DesktopApplication extends Application{
 						(ListChangeListener.Change<? extends Integer> c) ->
 						{
 							this.rightDisplay = RightDisplay.ITEM_INFO;
-							this.activeItem.set(itemsToDisplay.get(itemList.getSelectionModel().getSelectedIndex()));//TODO
-							//this.activeItem.set(new Pair<>(itemsToDisplay.get(itemList.getSelectionModel().getSelectedIndex()),itemList.getSelectionModel().getSelectedIndex()));
+							this.activeItem.set(itemsToDisplay.get(itemList.getSelectionModel().getSelectedIndex()));
 							updateRightPane();
 						}
 					);

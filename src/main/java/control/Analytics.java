@@ -20,7 +20,7 @@ public class Analytics {
 		public String toString(){
 			switch (this){
 				case NAME:
-					return "Name";
+					return "Name A-Z";
 				case DATE:
 					return "Date";
 				case NONE:
@@ -66,8 +66,11 @@ public class Analytics {
         else if(mode==SortMode.DATE){
 	        return sortDate(in);
         }
+        else if(mode==SortMode.NAME){
+        	return sortName(in);
+		}
 		Util.nyi(Util.getFileName(),Util.getLineNumber());
-        return null;//this line will never be reached
+        return new ArrayList<>();//this line will never be reached
 	}
 
     public static ArrayList<Database.PositionedItem> filter(FilterMode mode,ArrayList<Database.PositionedItem> in){//TODO: return an array of PositionedItems not Items
@@ -88,7 +91,7 @@ public class Analytics {
             return filterUnfinished(in);
         }
 		Util.nyi(Util.getFileName(),Util.getLineNumber());
-		return null;//this line will never be reached
+		return new ArrayList<>();//this line will never be reached
     }
 
     public static ArrayList<Database.PositionedItem> filterUnfinished(ArrayList<Database.PositionedItem> a){
@@ -147,6 +150,11 @@ public class Analytics {
         Collections.sort(in, Comparator.comparing(x -> x.getItem().getDate()));
         return in;
     }
+
+	public static ArrayList<Database.PositionedItem> sortName(ArrayList<Database.PositionedItem> in){
+		Collections.sort(in, Comparator.comparing(x -> x.getItem().getDisplayName()));
+		return in;
+	}
 
     public static ArrayList<Database.PositionedItem> sortPriority(ArrayList<Database.PositionedItem> a){
         ArrayList<Database.PositionedItem> orig = a;

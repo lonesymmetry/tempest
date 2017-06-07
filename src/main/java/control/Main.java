@@ -11,7 +11,7 @@ import javafx.application.Application;
 public class Main {
 	/**
 	 * Runs the Desktop UI with arguments
-	 * @param args
+	 * @param args the arguments used to launch the Application
 	 */
 	private void runApp(String[] args){
 		Application.launch(DesktopApplication.class,args);
