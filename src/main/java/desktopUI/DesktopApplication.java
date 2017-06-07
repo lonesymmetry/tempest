@@ -2,6 +2,7 @@ package main.java.desktopUI;
 
 import javafx.scene.control.*;
 import javafx.scene.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -36,6 +37,15 @@ public class DesktopApplication extends Application{
 
 	//style/usability constants
 	private static final String STYLESHEET_SOURCE = "/main/res/DesktopApplicationStylesheet.css";
+	private static final String[] ICON_SOURCES = {
+			"/main/res/Icon_8.png",
+			"/main/res/Icon_16.png",
+			"/main/res/Icon_32.png",
+			"/main/res/Icon_64.png",
+			"/main/res/Icon_128.png",
+			"/main/res/Icon_256.png",
+			"/main/res/Icon_512.png"
+	};
 	private static final int SECTION_HEIGHT = 75;
 	private static final boolean RESIZABLE = false;
 
@@ -604,6 +614,9 @@ public class DesktopApplication extends Application{
 		updateAddItemPane();
 		updateRootPane();
 
+		for(String iconSource: ICON_SOURCES) {
+			this.mainStage.getIcons().add(new Image(iconSource));
+		}
 		this.mainStage.setTitle("Tempest");
 		this.mainStage.setResizable(RESIZABLE);
 		this.mainStage.setScene(new Scene(this.rootPane, DEFAULT_SIZE.width, DEFAULT_SIZE.height));
@@ -617,7 +630,7 @@ public class DesktopApplication extends Application{
 	private void initialize(){
 		Database.convertDataToTest();//TODO: for testing only
 
-		this.mainStage = new Stage();
+		this.mainStage = new Stage();//note: cannot edit this until after it has been set to the primaryStage
 
 		this.database = new Database();
 		this.database.fillList();
