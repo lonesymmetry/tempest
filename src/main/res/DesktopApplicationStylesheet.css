@@ -2,35 +2,35 @@
     -fx-background-color: #222222;
 }
 
-/*.listPane,*/ /*.addItemFields,*/ .itemListMenu, .itemListBorder, .infoPane, .addItemPane{
+.itemListMenu, .itemListBorder, .infoPane, .editPane, .addItemPane{
     -fx-background-color: #424242;
 }
 
-.infoPane, .addItemPane, .itemList, .itemDisplay{
+.infoPane, .editPane, .addItemPane, .itemList, .itemDisplay{
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.listPane, .addItemPane, .itemDisplay,
-.addItemMenu, .addItemFields, .itemListMenu,
-.infoPane, .addItemFieldsBorder, .itemDisplayInfoBorder{
+.listPane, .editPane, .addItemPane, .itemDisplay,
+.addItemMenu, .editItemMenu, .editItemFields, .addItemFields, .itemListMenu,
+.infoPane, .editItemFieldsBorder, .addItemFieldsBorder, .itemDisplayInfoBorder{
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.itemListPlaceHolder, .addItemFieldsBackground, .itemDisplayBackground, .addItemFieldsBorder, .itemDisplayInfoBorder{
+.itemListPlaceHolder, .editItemFieldsBackground, .addItemFieldsBackground, .itemDisplayBackground, .editItemFieldsBorder, .addItemFieldsBorder, .itemDisplayInfoBorder{
      -fx-fill: #999999;
 }
-.itemDisplayInfoBorder, .addItemFieldsBorder{
+.itemDisplayInfoBorder, .editItemFieldsBorder, .addItemFieldsBorder{
     -fx-alignment: top-left;
 }
 
 .itemDisplayDescription, .itemList .list-cell, .itemDisplayPriority,
 .itemDisplayDate, .itemDisplayName, .priorityLabel,
-.prioritySelector, .setDescription, .setName{
+.prioritySelector, .editDescription, .setDescription, .editName, .setName{
     -fx-font-size: 12pt;
     -fx-text-fill: black;
 }
 
-.setPriority{
+.setPriority, .editPriority{
     -fx-alignment: center-left;
 }
 
@@ -49,21 +49,17 @@
 }
 */
 
-.addNewButton, .sortBy, .filterBy, .toggleFinishedButton, .saveNewItemButton, .editItemButton,
-.cancelItemAddition, .deleteItemButton{
+.bodyButton, .addNewButton, .sortBy, .filterBy{
     -fx-font-size: 15pt;
     -fx-background-color: #999999;
 }
 
-.addNewButton:hover, .sortBy:hover, .toggleFinishedButton:hover, .filterBy:hover, .itemList .list-cell:hover,
-.editItemButton:hover, .saveNewItemButton:hover, .deleteItemButton:hover,
-.cancelItemAddition:hover{
+.bodyButton:hover, .addNewButton:hover, .sortBy:hover, .filterBy:hover, .itemList .list-cell:hover{
     -fx-background-color: #BBBBBB;
 }
 
-.addNewButton:pressed, .toggleFinishedButton:pressed, .sortBy:pressed, .filterBy:pressed, .itemList .list-cell:pressed,
-.itemList .list-cell:selected, .editItemButton:pressed, .deleteItemButton:pressed,
-.saveNewItemButton:pressed, .cancelItemAddition:pressed{
+.bodyButton:pressed, .addNewButton:pressed, .sortBy:pressed, .filterBy:pressed, .itemList .list-cell:pressed,
+.itemList .list-cell:selected{
     -fx-background-color: #EEEEEE;
 }
 

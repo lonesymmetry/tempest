@@ -6,6 +6,7 @@ Engine:
 Desktop UI:
     - Create UI document
     - Make the edit button on the info pane functional
+    - Change how all panes are managed
     - Clean up CSS
     - Add color for priority
 

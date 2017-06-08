@@ -49,7 +49,7 @@ public class DesktopApplication extends Application{
 	private static final int SECTION_HEIGHT = 75;
 	private static final boolean RESIZABLE = false;
 
-	public enum RightDisplay{ITEM_INFO,ADD_NEW_ITEM}
+	public enum RightDisplay{ITEM_INFO,ADD_NEW_ITEM,EDIT_ITEM}
 	private RightDisplay rightDisplay;
 
 	private Stage mainStage;
@@ -70,6 +70,9 @@ public class DesktopApplication extends Application{
 
 	private VBox addItemPane;
 	private static final String ADD_ITEM_PANE_ID = "addItemPane";
+
+	private VBox editPane;
+	private static final String EDIT_PANE_ID = "editPane";
 
 	/**
 	 * Replaces a node with a given ID
@@ -118,13 +121,16 @@ public class DesktopApplication extends Application{
 	 * @return the active right display, null if no known right displays are in use
 	 */
 	private RightDisplay getActiveRightDisplay(){
-		for(int i = 0; i < this.rootPane.getChildren().size(); i++){
-			Node child = this.rootPane.getChildren().get(i);
-			if(child.getId().equals(INFO_PANE_ID)){
+		for(Node child: this.rootPane.getChildren()){
+			String childId = child.getId();
+			if(childId.equals(INFO_PANE_ID)){
 				return RightDisplay.ITEM_INFO;
 			}
-			if(child.getId().equals(ADD_ITEM_PANE_ID)){
+			if(childId.equals(ADD_ITEM_PANE_ID)){
 				return RightDisplay.ADD_NEW_ITEM;
+			}
+			if(childId.equals(EDIT_PANE_ID)){
+				return RightDisplay.EDIT_ITEM;
 			}
 		}
 		return null;
@@ -136,6 +142,7 @@ public class DesktopApplication extends Application{
 	private void updateRightPane(){
 		updateInfoPane();
 		updateAddItemPane();
+		updateEditPane();
 		switch(this.rightDisplay) {
 			case ITEM_INFO:
 				if(getActiveRightDisplay() == null){
@@ -147,6 +154,9 @@ public class DesktopApplication extends Application{
 							break;
 						case ADD_NEW_ITEM:
 							replaceNode(ADD_ITEM_PANE_ID, this.infoPane);
+							break;
+						case EDIT_ITEM:
+							replaceNode(EDIT_PANE_ID, this.infoPane);
 							break;
 						default:
 							Util.nyi(main.java.util.Util.getFileName(), main.java.util.Util.getLineNumber());
@@ -163,6 +173,28 @@ public class DesktopApplication extends Application{
 							break;
 						case ADD_NEW_ITEM:
 							replaceNode(ADD_ITEM_PANE_ID, this.addItemPane);
+							break;
+						case EDIT_ITEM:
+							replaceNode(EDIT_PANE_ID, this.addItemPane);
+							break;
+						default:
+							Util.nyi(main.java.util.Util.getFileName(), main.java.util.Util.getLineNumber());
+					}
+				}
+				break;
+			case EDIT_ITEM:
+				if(getActiveRightDisplay() == null){
+					this.rootPane.getChildren().add(this.editPane);
+				} else{
+					switch(getActiveRightDisplay()){
+						case ITEM_INFO:
+							replaceNode(INFO_PANE_ID, this.editPane);
+							break;
+						case ADD_NEW_ITEM:
+							replaceNode(ADD_ITEM_PANE_ID, this.editPane);
+							break;
+						case EDIT_ITEM:
+							replaceNode(EDIT_PANE_ID, this.editPane);
 							break;
 						default:
 							Util.nyi(main.java.util.Util.getFileName(), main.java.util.Util.getLineNumber());
@@ -248,7 +280,7 @@ public class DesktopApplication extends Application{
 					toggleFinished.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					toggleFinished.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					toggleFinished.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-					toggleFinished.getStyleClass().add("toggleFinishedButton");
+					toggleFinished.getStyleClass().add("bodyButton");
 					toggleFinished.setOnAction(
 							(ActionEvent event) ->
 							{
@@ -267,10 +299,13 @@ public class DesktopApplication extends Application{
 					editItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					editItem.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					editItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-					editItem.getStyleClass().add("editItemButton");
+					editItem.getStyleClass().add("bodyButton");
 					editItem.setOnAction(
-							(ActionEvent event) ->
-									Util.nyi(Util.getFileName(), Util.getLineNumber())//TODO must wait for ability to edit items
+							(ActionEvent event) -> //TODO
+							{
+								this.rightDisplay = RightDisplay.EDIT_ITEM;
+								updateRightPane();
+							}
 					);
 				}
 				Button deleteItem = new Button("Delete");
@@ -279,7 +314,7 @@ public class DesktopApplication extends Application{
 					deleteItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					deleteItem.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					deleteItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-					deleteItem.getStyleClass().add("deleteItemButton");
+					deleteItem.getStyleClass().add("bodyButton");
 					deleteItem.setOnAction(
 							(ActionEvent event) ->
 							{
@@ -554,7 +589,7 @@ public class DesktopApplication extends Application{
 				saveNewItemButton.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-				saveNewItemButton.getStyleClass().add("saveNewItemButton");
+				saveNewItemButton.getStyleClass().add("bodyButton");
 				saveNewItemButton.setOnAction(
 						(ActionEvent event) ->
 						{
@@ -574,7 +609,7 @@ public class DesktopApplication extends Application{
 				cancelItemAddition.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-				cancelItemAddition.getStyleClass().add("cancelItemAddition");
+				cancelItemAddition.getStyleClass().add("bodyButton");
 				cancelItemAddition.setOnAction(
 						(ActionEvent event) ->
 						{
@@ -586,6 +621,122 @@ public class DesktopApplication extends Application{
 			addItemMenu.getChildren().addAll(saveNewItemButton,cancelItemAddition);
 		}
 		this.addItemPane.getChildren().addAll(addItemFieldsBorder,addItemMenu);
+	}
+
+	/**
+	 * Constructs a pane which provides for the ability of users to edit existing Items in the Database
+	 */
+	private void updateEditPane(){//TODO
+		this.editPane.getChildren().clear();
+		final double WIDTH_PERCENT = .66;
+		final double WIDTH = DEFAULT_SIZE.width * WIDTH_PERCENT;
+
+		this.editPane.setMaxWidth(WIDTH);
+		this.editPane.setPrefWidth(this.editPane.getMaxWidth());
+		this.editPane.getStyleClass().add("editPane");//FIXME
+
+		StackPane editItemFieldsBorder = new StackPane();
+
+		//these three inputs are listed in this scope so that the "Add Item" button can access their values to write to the database
+		TextField editName = new TextField();
+		ComboBox<Item.Priority> prioritySelector = new ComboBox<>();
+		TextArea editDescription = new TextArea();
+		{
+			editItemFieldsBorder.getStyleClass().add("editItemFieldsBorder");
+
+			final int BACKGROUND_WIDTH = (int)(WIDTH - 2 * PADDING), BACKGROUND_HEIGHT = 605;
+			Rectangle background = new Rectangle(BACKGROUND_WIDTH,BACKGROUND_HEIGHT);
+			background.getStyleClass().add("editItemFieldsBackground");
+
+			VBox editItemFields = new VBox(PADDING);
+			{
+				final int TEXT_INPUT_WIDTH = (int)(WIDTH - 4 * PADDING);
+				editItemFields.getStyleClass().add("editItemFields");
+				{
+					editName.getStyleClass().add("editName");
+					editName.setPromptText("Add item name");
+					editName.setText(this.activeItem.isValid() ? this.activeItem.get().getItem().getDisplayName() : "");
+					editName.setMinWidth(TEXT_INPUT_WIDTH);
+					editName.setMaxWidth(TEXT_INPUT_WIDTH);
+					editName.setPrefWidth(TEXT_INPUT_WIDTH);
+				}
+				HBox editPriority = new HBox(PADDING);
+				{
+					editPriority.getStyleClass().add("editPriority");
+
+					Label priorityLabel = new Label("Priority:");
+					{
+						priorityLabel.getStyleClass().add("priorityLabel");
+					}
+					{
+						prioritySelector.getStyleClass().add("prioritySelector");
+						prioritySelector.setPromptText("Priority...");
+						prioritySelector.setValue(this.activeItem.isValid() ? this.activeItem.get().getItem().getPriority() : Item.Priority.LOW);
+						prioritySelector.setItems(FXCollections.observableArrayList(
+								Item.Priority.LOW, Item.Priority.MEDIUM, Item.Priority.HIGH
+						));
+					}
+					editPriority.getChildren().addAll(priorityLabel,prioritySelector);
+				}
+				{
+					final int EDIT_DESCRIPTION_HEIGHT = 510;//from testing on 5/25/2017
+					editDescription.getStyleClass().add("editDescription");
+					editDescription.setPromptText("Add item description");
+					editDescription.setText(this.activeItem.isValid() ? this.activeItem.get().getItem().getDescription() : "");
+					editDescription.setMinSize(TEXT_INPUT_WIDTH,EDIT_DESCRIPTION_HEIGHT);
+					editDescription.setMaxSize(TEXT_INPUT_WIDTH,EDIT_DESCRIPTION_HEIGHT);
+					editDescription.setPrefSize(TEXT_INPUT_WIDTH,EDIT_DESCRIPTION_HEIGHT);
+				}
+				editItemFields.getChildren().addAll(editName, editPriority, editDescription);
+			}
+			editItemFieldsBorder.getChildren().addAll(background,editItemFields);
+		}
+		HBox editItemMenu = new HBox(PADDING);
+		{
+			final int NUMBER_OF_BUTTONS = 2;
+			final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
+					BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
+			final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
+			editItemMenu.getStyleClass().add("editItemMenu");
+			Button saveNewItemButton = new Button("Save");
+			{
+				saveNewItemButton.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				saveNewItemButton.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				saveNewItemButton.getStyleClass().add("bodyButton");
+				saveNewItemButton.setOnAction(
+						(ActionEvent event) ->//TODO
+						{
+							String itemName = editName.getText(), itemDescription = editDescription.getText();
+							Item.Priority itemPriority = prioritySelector.getValue();
+							if(this.activeItem.isValid()){
+								this.activeItem.set(new Database.PositionedItem(new Item(itemName, itemDescription, itemPriority),this.activeItem.get().getIndex()));
+								this.database.editItem(this.activeItem.get());
+								this.activeItem.set(this.database.getPositionedItem(this.activeItem.get().getIndex()));
+								updateLeftPane();
+								this.rightDisplay = RightDisplay.ITEM_INFO;
+								updateRightPane();
+							}
+						}
+				);
+			}
+			Button cancelItemAddition = new Button("Cancel");
+			{
+				cancelItemAddition.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				cancelItemAddition.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				cancelItemAddition.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
+				cancelItemAddition.getStyleClass().add("bodyButton");
+				cancelItemAddition.setOnAction(
+						(ActionEvent event) ->
+						{
+							this.rightDisplay = RightDisplay.ITEM_INFO;
+							updateRightPane();
+						}
+				);
+			}
+			editItemMenu.getChildren().addAll(saveNewItemButton,cancelItemAddition);
+		}
+		this.editPane.getChildren().addAll(editItemFieldsBorder,editItemMenu);
 	}
 
 	/**
@@ -652,6 +803,9 @@ public class DesktopApplication extends Application{
 
 		this.addItemPane = new VBox();
 		this.addItemPane.setId(ADD_ITEM_PANE_ID);
+
+		this.editPane = new VBox();
+		this.editPane.setId(EDIT_PANE_ID);
 	}
 
 	/**
