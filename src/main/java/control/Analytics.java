@@ -13,9 +13,16 @@ import java.util.Comparator;
  */
 
 public class Analytics {
+	/**
+	 * Enumerator to store which sort mode is active
+	 */
 	public enum SortMode{
 		NONE,NAME,PRIORITY,DATE;
 
+		/**
+		 * Displays a SortMode as a String
+		 * @return String of SortMode
+		 */
 		@Override
 		public String toString(){
 			switch (this){
@@ -33,9 +40,17 @@ public class Analytics {
 			}
 		}
 	}
+
+	/**
+	 * Enumerator to store which filtermode is active
+	 */
     public enum FilterMode{
 		NONE,HIGH_PRIORITY,MEDIUM_PRIORITY,LOW_PRIORITY,FINISHED,UNFINISHED;
 
+		/**
+		 * Shows the FilterMode as a String
+		 * @return FilterMode String
+		 */
 		@Override
 		public String toString(){
 			switch (this){
@@ -58,7 +73,13 @@ public class Analytics {
 		}
 	}
 
-	public static ArrayList<Database.PositionedItem> sort(SortMode mode, ArrayList<Database.PositionedItem> in){//TODO: return an array of PositionedItems not Items
+	/**
+	 * Sorts the Database by a specified sortmode
+	 * @param mode Desired SortMode
+	 * @param in Database input
+	 * @return Sorted ArrayList<PositionedItem>
+	 */
+	public static ArrayList<Database.PositionedItem> sort(SortMode mode, ArrayList<Database.PositionedItem> in){
 	    if(mode==SortMode.NONE)return in;
 	    else if(mode==SortMode.PRIORITY){
 	        return sortPriority(in);

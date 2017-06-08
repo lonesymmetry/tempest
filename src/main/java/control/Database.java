@@ -24,25 +24,48 @@ public class Database {
 		private Item item;
     	private int index;
 
+        /**
+         * Gets the item from the positioneditem
+         * @return item
+         */
     	public Item getItem(){
     		return this.item;
 		}
 
+        /**
+         * Gets index of the positioneditem
+         * @return index
+         */
 		public int getIndex(){
     		return this.index;
 		}
 
+        /**
+         * Constructs Positioned item based on a database and an index
+         * @param database Database where the item is
+         * @param index index of the item in the database
+         */
     	public PositionedItem(Database database,int index){
     		this.item = database.getItem(index);
     		this.index = index;
 		}
 
+        /**
+         * Constructs a positioned item based on an item and an index
+         * @param item item to add index to
+         * @param index index of the item
+         */
         public PositionedItem(Item item,int index){
             this.item = item;
             this.index = index;
         }
 	}
 
+    /**
+     * Converts arraylist of items to an arraylist of PositionedItems
+     * @param in input ArrayList<Item>
+     * @return ArrayList<PositionedItem>
+     */
 	public static ArrayList<PositionedItem> toPositionedArray(ArrayList<Item> in){
         ArrayList<PositionedItem> out = new ArrayList<>();
         for(int i = 0; i < in.size(); i++){
@@ -51,6 +74,11 @@ public class Database {
         return out;
     }
 
+    /**
+     * Converts an arraylist of positioneditems to an arraylist of items
+     * @param in input ArrayList<PositionedItem>
+     * @return output ArrayList<Item>
+     */
     public static ArrayList<Item> fromPositionedArray(ArrayList<PositionedItem> in){
         ArrayList<Item> out = new ArrayList<>();
         for(int i = 0; i < in.size(); i++){
@@ -67,33 +95,61 @@ public class Database {
         return items;
     }
 
+    /**
+     * Getter for ArrayList<PositionedItem>
+     * @return output ArrayList
+     */
     public ArrayList<PositionedItem> getPositionedItems(){
         return toPositionedArray(items);
     }
 
+    /**
+     * Getter of an item based on its index
+     * @param i Index of Item
+     * @return Item at index
+     */
 	public Item getItem(int i){
     	return this.items.get(i);
     }
 
+    /**
+     * Gets positioned item based on an index
+     * @param i index of the positioneditem in the arraylist
+     * @return the positioneditem at the index
+     */
 	public PositionedItem getPositionedItem(int i){
 		return new PositionedItem(this,i);
 	}
 
+    /**
+     * Sets items as an input arraylist
+     * @param items arraylist to set
+     */
     public void setItems(ArrayList<Item> items){
         this.items=items;
     }
 
+    /**
+     * Writes the local ArrayList<Item> to the database
+     */
     public void writeList(){
         for(int i=0;i<items.size();i++){
             writeItem(items.get(i));
         }
     }
 
+    /**
+     * Converts local Items into a string
+     * @return String of Items
+     */
     @Override
 	public String toString(){
     	return "Database(" + this.items.toString() + ")";
 	}
 
+    /**
+     * Clears all data from the database
+     */
     public static void clearDoc(){
         try{
             PrintWriter writer = new PrintWriter(FILE_NAME);
@@ -105,6 +161,10 @@ public class Database {
         }
     }
 
+    /**
+     * Adds an item to the database
+     * @param toWrite Item to write
+     */
     public void writeItem(Item toWrite){
         String name = toWrite.getDisplayName();
         String desc = toWrite.getDescription();
@@ -128,11 +188,23 @@ public class Database {
         }
     }
 
+    /**
+     * Parses a date from a string
+     * @param in String to parse
+     * @return Date parsed
+     * @throws ParseException Failure
+     */
     public Date parseDate(String in) throws ParseException{
         //System.out.println("A");
         return formatter.parse(in);
     }
 
+    /**
+     * Parses a whole line from the database
+     * @param input String of the whole line
+     * @return An item parsed from the line
+     * @throws ParseException Failure
+     */
     public Item parseLine(String input) throws ParseException{
         int length=input.length();
 
@@ -190,6 +262,9 @@ public class Database {
         return new Item(name,desc,status,priority,date);
     }
 
+    /**
+     * Fills Items with data from the database
+     */
     public void fillList(){
         items.clear();
         try {
@@ -214,19 +289,9 @@ public class Database {
         }
     }
 
-    public void test(){//TODO: remove?
-        String s = "Hello World! ";
-        byte data[] = s.getBytes(); //String -> Bytes
-        Path p = Paths.get("./"+FILE_NAME);
-
-        try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(p, CREATE, APPEND))) {
-            out.write(data, 0, data.length);
-        }
-        catch (IOException x) {
-            System.err.println(x);
-        }
-    }
-
+    /**
+     * Replaces the database with test items
+     */
     public static void convertDataToTest(){
     	clearDoc();
     	final int LENGTH = 30;
@@ -237,6 +302,11 @@ public class Database {
 		}
 	}
 
+    /**
+     * Edits items based on their index and the item to replace it with
+     * @param index index of the item
+     * @param in edited item
+     */
     public void editItem(int index, Item in){
         clearDoc();
         items.remove(index);
@@ -244,20 +314,35 @@ public class Database {
         writeList();
     }
 
+    /**
+     * Edits an item in the database
+     * @param item Replacement PositionedItem
+     */
     public void editItem(PositionedItem item){
 		editItem(item.getIndex(),item.getItem());
     }
 
+    /**
+     * Deletes the item specified at the index
+     * @param index index of the item to delete
+     */
     public void deleteItem(int index){
         clearDoc();
         items.remove(index);
         writeList();
     }
 
+    /**
+     * Constructs new Database
+     */
     public Database(){
         this(new ArrayList<>());
     }
 
+    /**
+     * Constructs new database based on an ArrayList<Item>
+     * @param items ArrayList of items for the new Database
+     */
     public Database(ArrayList<Item> items){
         this.items = items;
     }
