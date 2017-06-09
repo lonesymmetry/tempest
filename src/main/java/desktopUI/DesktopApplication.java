@@ -451,7 +451,7 @@ public class DesktopApplication extends Application{
 				}
 				itemListMenu.getChildren().addAll(addNew,sortBy,filterBy);
 			}
-			AnchorPane itemListBorder = new AnchorPane();
+			StackPane itemListBorder = new StackPane();
 			{
 				itemListBorder.setMinWidth(WIDTH);
 				itemListBorder.setMaxWidth(WIDTH);
@@ -464,9 +464,9 @@ public class DesktopApplication extends Application{
 					ListView<String> itemList = new ListView<>();
 					itemList.getStyleClass().add("itemList");
 
-					itemList.setMinWidth(WIDTH);
-					itemList.setMaxWidth(WIDTH);
-					itemList.setPrefWidth(WIDTH);
+					itemList.setMinWidth(WIDTH - 2 * PADDING);
+					itemList.setMaxWidth(WIDTH - 2 * PADDING);
+					itemList.setPrefWidth(WIDTH - 2 * PADDING);
 					//itemList.setFixedCellSize(SECTION_HEIGHT);//used to set cell height
 
 					ArrayList<String> itemNames = new ArrayList<>();
@@ -501,10 +501,6 @@ public class DesktopApplication extends Application{
 					}
 
 					itemListBorder.getChildren().add(itemList);
-					AnchorPane.setBottomAnchor(itemList,(double) PADDING);
-					AnchorPane.setTopAnchor(itemList,(double) PADDING);
-					AnchorPane.setRightAnchor(itemList,(double) PADDING);
-					AnchorPane.setLeftAnchor(itemList,(double) PADDING);
 				}
 			}
 			this.listPane.getChildren().addAll(itemListMenu, itemListBorder);//order matters

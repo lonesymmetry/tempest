@@ -12,13 +12,14 @@
 
 .listPane, .editPane, .addItemPane, .itemDisplay,
 .addItemMenu, .editItemMenu, .editItemFields, .addItemFields, .itemListMenu,
-.infoPane, .editItemFieldsBorder, .addItemFieldsBorder, .itemDisplayInfoBorder{
+.infoPane, .editItemFieldsBorder, .itemListBorder, .addItemFieldsBorder, .itemDisplayInfoBorder{
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.itemListPlaceHolder, .editItemFieldsBackground, .addItemFieldsBackground, .itemDisplayBackground, .editItemFieldsBorder, .addItemFieldsBorder, .itemDisplayInfoBorder{
+.itemListPlaceHolder, .editItemFieldsBackground, .addItemFieldsBackground, .itemDisplayBackground, .itemListBorder, .addItemFieldsBorder, .itemDisplayInfoBorder{
      -fx-fill: #999999;
 }
+
 .itemDisplayInfoBorder, .editItemFieldsBorder, .addItemFieldsBorder{
     -fx-alignment: top-left;
 }
