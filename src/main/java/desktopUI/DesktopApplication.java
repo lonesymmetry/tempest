@@ -291,8 +291,10 @@ public class DesktopApplication extends Application{
 					editItem.setOnAction(
 							(ActionEvent event) ->
 							{
-								this.rightDisplay = RightDisplay.EDIT_ITEM;
-								updateRightPane();
+								if(this.activeItem.isValid()) {
+									this.rightDisplay = RightDisplay.EDIT_ITEM;
+									updateRightPane();
+								}
 							}
 					);
 				}
@@ -307,30 +309,32 @@ public class DesktopApplication extends Application{
 							(ActionEvent event) ->
 							{
 								{
-									Alert deleteConfirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);//TODO: make fit theme //TODO: check out more on http://code.makery.ch/blog/javafx-dialogs-official/
+									if(this.activeItem.isValid()) {
+										Alert deleteConfirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);//TODO: make fit theme //TODO: check out more on http://code.makery.ch/blog/javafx-dialogs-official/
 
-									deleteConfirmationDialog.setTitle("Deletion Confirmation");
-									deleteConfirmationDialog.setHeaderText("Would you like to delete the Item \"" + this.database.getItem(activeItem.get().getIndex()).getDisplayName() + "\"? It cannot be undone.");
-									deleteConfirmationDialog.setContentText("Item description: \"" + this.database.getItem(activeItem.get().getIndex()).getDescription() + "\"");
-									{
-										ButtonType deleteButton = new ButtonType("Delete", ButtonBar.ButtonData.YES);
-										ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-										deleteConfirmationDialog.getButtonTypes().setAll(deleteButton, cancelButton);
-									}
-									{
-										Optional<ButtonType> deleteConfirmationDialogResult = deleteConfirmationDialog.showAndWait();
-										if(deleteConfirmationDialogResult.isPresent()) {
-											switch (deleteConfirmationDialogResult.get().getButtonData()) {
-												case YES:
-													this.database.deleteItem(this.activeItem.get().getIndex());
-													this.database.fillList();
-													this.activeItem = new Maybe<>();
-													updateRootPane();
-													break;
-												case CANCEL_CLOSE:
-													break;
-												default:
-													Util.nyi(Util.getFileName(), Util.getLineNumber());
+										deleteConfirmationDialog.setTitle("Deletion Confirmation");
+										deleteConfirmationDialog.setHeaderText("Would you like to delete the Item \"" + this.database.getItem(activeItem.get().getIndex()).getDisplayName() + "\"? It cannot be undone.");
+										deleteConfirmationDialog.setContentText("Item description: \"" + this.database.getItem(activeItem.get().getIndex()).getDescription() + "\"");
+										{
+											ButtonType deleteButton = new ButtonType("Delete", ButtonBar.ButtonData.YES);
+											ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+											deleteConfirmationDialog.getButtonTypes().setAll(deleteButton, cancelButton);
+										}
+										{
+											Optional<ButtonType> deleteConfirmationDialogResult = deleteConfirmationDialog.showAndWait();
+											if (deleteConfirmationDialogResult.isPresent()) {
+												switch (deleteConfirmationDialogResult.get().getButtonData()) {
+													case YES:
+														this.database.deleteItem(this.activeItem.get().getIndex());
+														this.database.fillList();
+														this.activeItem = new Maybe<>();
+														updateRootPane();
+														break;
+													case CANCEL_CLOSE:
+														break;
+													default:
+														Util.nyi(Util.getFileName(), Util.getLineNumber());
+												}
 											}
 										}
 									}

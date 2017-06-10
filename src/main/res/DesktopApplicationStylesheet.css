@@ -51,8 +51,12 @@
 */
 
 .button, .comboBoxMenu{
-    -fx-font-size: 15pt;
     -fx-background-color: #999999;
+}
+
+.button, .comboBoxMenu, .comboBoxMenu .cell{
+    -fx-font-size: 15pt;
+    -fx-text-fill: black;
 }
 
 .button:hover, .comboBoxMenu:hover, .itemList .list-cell:hover{
