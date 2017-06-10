@@ -1,4 +1,4 @@
-.root{
+.root, .deleteConfirmationDialog{
     -fx-background-color: #222222;
 }
 
@@ -54,9 +54,14 @@
     -fx-background-color: #999999;
 }
 
-.button, .comboBoxMenu, .comboBoxMenu .cell{
+.button, .comboBoxMenu, .deleteConfirmationDialog *.header-panel, .comboBoxMenu .cell{
     -fx-font-size: 15pt;
     -fx-text-fill: black;
+}
+
+.deleteConfirmationDialog > *.label.content{
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
 }
 
 .button:hover, .comboBoxMenu:hover, .itemList .list-cell:hover{

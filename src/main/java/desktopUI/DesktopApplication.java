@@ -310,11 +310,18 @@ public class DesktopApplication extends Application{
 							{
 								{
 									if(this.activeItem.isValid()) {
-										Alert deleteConfirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);//TODO: make fit theme //TODO: check out more on http://code.makery.ch/blog/javafx-dialogs-official/
+										Alert deleteConfirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+										deleteConfirmationDialog.initOwner(this.mainStage);
+										deleteConfirmationDialog.getDialogPane().getStyleClass().add("deleteConfirmationDialog");
 
 										deleteConfirmationDialog.setTitle("Deletion Confirmation");
+
 										deleteConfirmationDialog.setHeaderText("Would you like to delete the Item \"" + this.database.getItem(activeItem.get().getIndex()).getDisplayName() + "\"? It cannot be undone.");
-										deleteConfirmationDialog.setContentText("Item description: \"" + this.database.getItem(activeItem.get().getIndex()).getDescription() + "\"");
+
+										if(!this.activeItem.get().getItem().getDescription().isEmpty()){
+											deleteConfirmationDialog.setContentText("Item description: \"" + this.database.getItem(activeItem.get().getIndex()).getDescription() + "\"");
+										}
+
 										{
 											ButtonType deleteButton = new ButtonType("Delete", ButtonBar.ButtonData.YES);
 											ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -583,6 +590,7 @@ public class DesktopApplication extends Application{
 							if(!itemName.equals("")){
 								this.database.writeItem(new Item(itemName, itemDescription, itemPriority));
 								updateLeftPane();
+								this.activeItem.set(this.database.getPositionedItem(this.database.getItems().size() - 1));
 								this.rightDisplay = RightDisplay.ITEM_INFO;
 								updateRightPane();
 							}
