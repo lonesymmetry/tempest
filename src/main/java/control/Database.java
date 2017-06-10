@@ -175,7 +175,14 @@ public class Database {
     private static void createDatabaseFile(){
         if(!fileExists) {
             File source = new File(FILE_NAME);
-            source.getParentFile().mkdirs();
+            while(!source.exists()) {
+				source.getParentFile().mkdirs();
+				try{
+					source.createNewFile();
+				} catch (IOException x){
+					x.printStackTrace(new PrintStream(System.out));
+				}
+			}
             fileExists = true;
         }
     }
@@ -287,6 +294,9 @@ public class Database {
      * Fills Items with data from the database
      */
     public void fillList(){
+        if(!fileExists){
+            createDatabaseFile();
+        }
         items.clear();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));

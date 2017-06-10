@@ -366,7 +366,7 @@ public class DesktopApplication extends Application{
 
 		this.listPane.setMaxWidth(WIDTH);
 		this.listPane.setPrefWidth(this.listPane.getMaxWidth());
-		this.listPane.getStyleClass().add("listPane");
+		this.listPane.getStyleClass().add("pane");
 		{//the display for the list of items
 			HBox itemListMenu = new HBox(PADDING);
 			{//set the content of the item list menu
@@ -388,7 +388,7 @@ public class DesktopApplication extends Application{
 					addNew.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 
 					addNew.setOnAction(
-							(ActionEvent event) ->
+						(ActionEvent event) ->
 							{
 								if(getActiveRightDisplay() != RightDisplay.ADD_NEW_ITEM){
 									this.rightDisplay = RightDisplay.ADD_NEW_ITEM;
@@ -517,7 +517,7 @@ public class DesktopApplication extends Application{
 
 		this.addItemPane.setMaxWidth(WIDTH);
 		this.addItemPane.setPrefWidth(this.addItemPane.getMaxWidth());
-		this.addItemPane.getStyleClass().add("addItemPane");
+		this.addItemPane.getStyleClass().add("pane");
 
 		StackPane addItemFieldsBorder = new StackPane();
 
@@ -626,7 +626,7 @@ public class DesktopApplication extends Application{
 
 		this.editPane.setMaxWidth(WIDTH);
 		this.editPane.setPrefWidth(this.editPane.getMaxWidth());
-		this.editPane.getStyleClass().add("editPane");
+		this.editPane.getStyleClass().add("pane");
 
 		StackPane editItemFieldsBorder = new StackPane();
 

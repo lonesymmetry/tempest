@@ -2,17 +2,16 @@
     -fx-background-color: #222222;
 }
 
-.paneBorder, .infoPane, .editPane, .addItemPane{
+.paneBorder, .pane{
     -fx-background-color: #424242;
 }
 
-.infoPane, .editPane, .addItemPane, .itemList, .itemDisplay, .contentBorder{
+.pane, .itemList, .itemDisplay, .contentBorder{
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.listPane, .editPane, .addItemPane, .itemDisplay,
-.editItemFields, .addItemFields,
-.infoPane, .paneBorder, .contentBorder, .itemDisplayInfoBorder{
+.pane, .itemDisplay, .editItemFields, .addItemFields,
+.paneBorder, .contentBorder, .itemDisplayInfoBorder{
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
