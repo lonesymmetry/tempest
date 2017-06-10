@@ -2,17 +2,17 @@
     -fx-background-color: #222222;
 }
 
-.itemListMenu, .itemListBorder, .infoPane, .editPane, .addItemPane{
+.paneBorder, .infoPane, .editPane, .addItemPane{
     -fx-background-color: #424242;
 }
 
-.infoPane, .editPane, .addItemPane, .itemList, .itemDisplay, .addItemFieldsBorder, .editItemFieldsBorder{
+.infoPane, .editPane, .addItemPane, .itemList, .itemDisplay, .contentBorder{
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
 .listPane, .editPane, .addItemPane, .itemDisplay,
-.addItemMenu, .editItemMenu, .editItemFields, .addItemFields, .itemListMenu,
-.infoPane, .editItemFieldsBorder, .itemListBorder, .addItemFieldsBorder, .itemDisplayInfoBorder{
+.editItemFields, .addItemFields,
+.infoPane, .paneBorder, .contentBorder, .itemDisplayInfoBorder{
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
@@ -20,19 +20,18 @@
      -fx-fill: #999999;
 }
 
-.itemDisplayInfoBorder, .editItemFieldsBorder, .addItemFieldsBorder{
+.itemDisplayInfoBorder, .contentBorder{
     -fx-alignment: top-left;
     -fx-background-color: #999999;
 }
 
-.itemDisplayDescription, .itemList .list-cell, .itemDisplayPriority,
-.itemDisplayDate, .itemDisplayName, .priorityLabel,
-.prioritySelector, .editDescription, .setDescription, .editName, .setName{
+.itemList .list-cell, .bodyText{
     -fx-font-size: 12pt;
     -fx-text-fill: black;
+    -fx-fill: black;
 }
 
-.setPriority, .editPriority{
+.centerPriorityLabel{
     -fx-alignment: center-left;
 }
 
@@ -42,26 +41,25 @@
 }
 
 /*
-.sortBy .arrow-button {
+.comboBoxMenu .arrow-button {
     -fx-padding: 0 0 0 -7;
 }
 
-.sortBy .arrow, .sortBy .arrow-button{
+.comboBoxMenu .arrow, .comboBoxMenu .arrow-button{
     -fx-background-color: transparent;
 }
 */
 
-.bodyButton, .addNewButton, .sortBy, .filterBy{
+.button, .comboBoxMenu{
     -fx-font-size: 15pt;
     -fx-background-color: #999999;
 }
 
-.bodyButton:hover, .addNewButton:hover, .sortBy:hover, .filterBy:hover, .itemList .list-cell:hover{
+.button:hover, .comboBoxMenu:hover, .itemList .list-cell:hover{
     -fx-background-color: #BBBBBB;
 }
 
-.bodyButton:pressed, .addNewButton:pressed, .sortBy:pressed, .filterBy:pressed, .itemList .list-cell:pressed,
-.itemList .list-cell:selected{
+.button:pressed, .comboBoxMenu:pressed, .itemList .list-cell:pressed, .itemList .list-cell:selected{
     -fx-background-color: #EEEEEE;
 }
 

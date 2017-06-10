@@ -233,25 +233,25 @@ public class DesktopApplication extends Application{
 						final double WRAPPING_WIDTH = WIDTH - 4 * PADDING;
 						Text itemDisplayName = new Text();
 						{
-							itemDisplayName.getStyleClass().add("itemDisplayName");
+							itemDisplayName.getStyleClass().add("bodyText");
 							itemDisplayName.setText(this.database.getItem(activeItem.get().getIndex()).getDisplayName());
 							itemDisplayName.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayPriority = new Text();
 						{
-							itemDisplayPriority.getStyleClass().add("itemDisplayPriority");
+							itemDisplayPriority.getStyleClass().add("bodyText");
 							itemDisplayPriority.setText("Priority: " + this.database.getItem(activeItem.get().getIndex()).getPriority().toString());
 							itemDisplayPriority.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayDescription= new Text();
 						{
-							itemDisplayDescription.getStyleClass().add("itemDisplayDescription");
+							itemDisplayDescription.getStyleClass().add("bodyText");
 							itemDisplayDescription.setText(this.database.getItem(activeItem.get().getIndex()).getDescription());
 							itemDisplayDescription.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						Text itemDisplayDate = new Text();
 						{
-							itemDisplayDate.getStyleClass().add("itemDisplayDate");
+							itemDisplayDate.getStyleClass().add("bodyText");
 							itemDisplayDate.setText("Created " + this.database.getItem(activeItem.get().getIndex()).getDate().toString());
 							itemDisplayDate.setWrappingWidth(WRAPPING_WIDTH);
 						}
@@ -269,7 +269,7 @@ public class DesktopApplication extends Application{
 				editItemMenu.setMinSize(WIDTH, SECTION_HEIGHT);
 				editItemMenu.setMaxSize(WIDTH, SECTION_HEIGHT);
 				editItemMenu.setPrefSize(WIDTH, SECTION_HEIGHT);
-				editItemMenu.getStyleClass().add("itemListMenu");
+				editItemMenu.getStyleClass().add("paneBorder");
 
 				final int NUMBER_OF_BUTTONS = 3;
 				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
@@ -280,7 +280,7 @@ public class DesktopApplication extends Application{
 					toggleFinished.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					toggleFinished.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					toggleFinished.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-					toggleFinished.getStyleClass().add("bodyButton");
+					toggleFinished.getStyleClass().add("button");
 					toggleFinished.setOnAction(
 							(ActionEvent event) ->
 							{
@@ -299,7 +299,7 @@ public class DesktopApplication extends Application{
 					editItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					editItem.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					editItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-					editItem.getStyleClass().add("bodyButton");
+					editItem.getStyleClass().add("button");
 					editItem.setOnAction(
 							(ActionEvent event) -> //TODO
 							{
@@ -314,7 +314,7 @@ public class DesktopApplication extends Application{
 					deleteItem.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					deleteItem.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					deleteItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-					deleteItem.getStyleClass().add("bodyButton");
+					deleteItem.getStyleClass().add("button");
 					deleteItem.setOnAction(
 							(ActionEvent event) ->
 							{
@@ -374,7 +374,7 @@ public class DesktopApplication extends Application{
 				itemListMenu.setMinSize(WIDTH, SECTION_HEIGHT);
 				itemListMenu.setMaxSize(WIDTH, SECTION_HEIGHT);
 				itemListMenu.setPrefSize(WIDTH, SECTION_HEIGHT);
-				itemListMenu.getStyleClass().add("itemListMenu");
+				itemListMenu.getStyleClass().add("paneBorder");
 
 				final int NUMBER_OF_BUTTONS = 3;
 				final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
@@ -382,7 +382,7 @@ public class DesktopApplication extends Application{
 				final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
 				Button addNew = new Button("Add New");
 				{
-					addNew.getStyleClass().add("addNewButton");
+					addNew.getStyleClass().add("button");
 
 					addNew.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					addNew.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -402,7 +402,7 @@ public class DesktopApplication extends Application{
 				{
 					sortBy.setPromptText("Sort By");
 					sortBy.setItems(FXCollections.observableArrayList(Analytics.SortMode.values()));
-					sortBy.getStyleClass().add("sortBy");
+					sortBy.getStyleClass().add("comboBoxMenu");
 
 					sortBy.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					sortBy.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -420,7 +420,7 @@ public class DesktopApplication extends Application{
 				{
 					filterBy.setPromptText("Filter By");
 					filterBy.setItems(FXCollections.observableArrayList(Analytics.FilterMode.values()));
-					filterBy.getStyleClass().add("filterBy");
+					filterBy.getStyleClass().add("comboBoxMenu");
 
 					filterBy.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					filterBy.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
@@ -458,7 +458,7 @@ public class DesktopApplication extends Application{
 				itemListBorder.setPrefWidth(WIDTH);
 				final int ITEM_LIST_BORDER_HEIGHT = 1000;//this is just set to something really big, it's cropped down
 				itemListBorder.setPrefHeight(ITEM_LIST_BORDER_HEIGHT);
-				itemListBorder.getStyleClass().add("itemListBorder");
+				itemListBorder.getStyleClass().add("paneBorder");
 
 				{
 					ListView<String> itemList = new ListView<>();
@@ -526,14 +526,14 @@ public class DesktopApplication extends Application{
 		ComboBox<Item.Priority> prioritySelector = new ComboBox<>();
 		TextArea setDescription = new TextArea();
 		{
-			addItemFieldsBorder.getStyleClass().add("addItemFieldsBorder");
+			addItemFieldsBorder.getStyleClass().add("contentBorder");
 
 			VBox addItemFields = new VBox(PADDING);
 			{
 				final int TEXT_INPUT_WIDTH = (int)(WIDTH - 4 * PADDING);
 				addItemFields.getStyleClass().add("addItemFields");
 				{
-					setName.getStyleClass().add("setName");
+					setName.getStyleClass().add("bodyText");
 					setName.setPromptText("Add item name");
 					setName.setMinWidth(TEXT_INPUT_WIDTH);
 					setName.setMaxWidth(TEXT_INPUT_WIDTH);
@@ -541,14 +541,14 @@ public class DesktopApplication extends Application{
 				}
 				HBox setPriority = new HBox(PADDING);
 				{
-					setPriority.getStyleClass().add("setPriority");
+					setPriority.getStyleClass().add("centerPriorityLabel");
 
 					Label priorityLabel = new Label("Priority:");
 					{
-						priorityLabel.getStyleClass().add("priorityLabel");
+						priorityLabel.getStyleClass().add("bodyText");
 					}
 					{
-						prioritySelector.getStyleClass().add("prioritySelector");
+						prioritySelector.getStyleClass().add("bodyText");
 						prioritySelector.setPromptText("Priority...");
 						prioritySelector.setValue(Item.Priority.LOW);
 						prioritySelector.setItems(FXCollections.observableArrayList(
@@ -559,7 +559,7 @@ public class DesktopApplication extends Application{
 				}
 				{
 					final int SET_DESCRIPTION_HEIGHT = 510;//from testing on 5/25/2017
-					setDescription.getStyleClass().add("setDescription");
+					setDescription.getStyleClass().add("bodyText");
 					setDescription.setPromptText("Add item description");
 					setDescription.setMinSize(TEXT_INPUT_WIDTH,SET_DESCRIPTION_HEIGHT);
 					setDescription.setMaxSize(TEXT_INPUT_WIDTH,SET_DESCRIPTION_HEIGHT);
@@ -575,13 +575,13 @@ public class DesktopApplication extends Application{
 			final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 					BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
 			final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
-			addItemMenu.getStyleClass().add("addItemMenu");
+			addItemMenu.getStyleClass().add("paneBorder");
 			Button saveNewItemButton = new Button("Save");
 			{
 				saveNewItemButton.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-				saveNewItemButton.getStyleClass().add("bodyButton");
+				saveNewItemButton.getStyleClass().add("button");
 				saveNewItemButton.setOnAction(
 						(ActionEvent event) ->
 						{
@@ -601,7 +601,7 @@ public class DesktopApplication extends Application{
 				cancelItemAddition.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-				cancelItemAddition.getStyleClass().add("bodyButton");
+				cancelItemAddition.getStyleClass().add("button");
 				cancelItemAddition.setOnAction(
 						(ActionEvent event) ->
 						{
@@ -634,14 +634,14 @@ public class DesktopApplication extends Application{
 		ComboBox<Item.Priority> prioritySelector = new ComboBox<>();
 		TextArea editDescription = new TextArea();
 		{
-			editItemFieldsBorder.getStyleClass().add("editItemFieldsBorder");
+			editItemFieldsBorder.getStyleClass().add("contentBorder");
 
 			VBox editItemFields = new VBox(PADDING);
 			{
 				final int TEXT_INPUT_WIDTH = (int)(WIDTH - 4 * PADDING);
 				editItemFields.getStyleClass().add("editItemFields");
 				{
-					editName.getStyleClass().add("editName");
+					editName.getStyleClass().add("bodyText");
 					editName.setPromptText("Add item name");
 					editName.setText(this.activeItem.isValid() ? this.activeItem.get().getItem().getDisplayName() : "");
 					editName.setMinWidth(TEXT_INPUT_WIDTH);
@@ -650,14 +650,14 @@ public class DesktopApplication extends Application{
 				}
 				HBox editPriority = new HBox(PADDING);
 				{
-					editPriority.getStyleClass().add("editPriority");
+					editPriority.getStyleClass().add("centerPriorityLabel");
 
 					Label priorityLabel = new Label("Priority:");
 					{
-						priorityLabel.getStyleClass().add("priorityLabel");
+						priorityLabel.getStyleClass().add("bodyText");
 					}
 					{
-						prioritySelector.getStyleClass().add("prioritySelector");
+						prioritySelector.getStyleClass().add("bodyText");
 						prioritySelector.setPromptText("Priority...");
 						prioritySelector.setValue(this.activeItem.isValid() ? this.activeItem.get().getItem().getPriority() : Item.Priority.LOW);
 						prioritySelector.setItems(FXCollections.observableArrayList(
@@ -668,7 +668,7 @@ public class DesktopApplication extends Application{
 				}
 				{
 					final int EDIT_DESCRIPTION_HEIGHT = 510;//from testing on 5/25/2017
-					editDescription.getStyleClass().add("editDescription");
+					editDescription.getStyleClass().add("bodyText");
 					editDescription.setPromptText("Add item description");
 					editDescription.setText(this.activeItem.isValid() ? this.activeItem.get().getItem().getDescription() : "");
 					editDescription.setMinSize(TEXT_INPUT_WIDTH,EDIT_DESCRIPTION_HEIGHT);
@@ -685,13 +685,13 @@ public class DesktopApplication extends Application{
 			final int BUTTON_WIDTH = (int)((WIDTH - (NUMBER_OF_BUTTONS + 1) * PADDING) * (1.0 / NUMBER_OF_BUTTONS)),
 					BUTTON_HEIGHT = SECTION_HEIGHT - 2 * PADDING;
 			final Pair<Integer,Integer> BUTTON_SIZE = new Pair<>(BUTTON_WIDTH,BUTTON_HEIGHT);
-			editItemMenu.getStyleClass().add("editItemMenu");
+			editItemMenu.getStyleClass().add("paneBorder");
 			Button saveNewItemButton = new Button("Save");
 			{
 				saveNewItemButton.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-				saveNewItemButton.getStyleClass().add("bodyButton");
+				saveNewItemButton.getStyleClass().add("button");
 				saveNewItemButton.setOnAction(
 						(ActionEvent event) ->//TODO
 						{
@@ -713,7 +713,7 @@ public class DesktopApplication extends Application{
 				cancelItemAddition.setMinSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setMaxSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
-				cancelItemAddition.getStyleClass().add("bodyButton");
+				cancelItemAddition.getStyleClass().add("button");
 				cancelItemAddition.setOnAction(
 						(ActionEvent event) ->
 						{
