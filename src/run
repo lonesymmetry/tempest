@@ -1,0 +1,4 @@
+cd ../
+make Main.class -C src/
+java -cp src main.java.control.Main
+
