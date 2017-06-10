@@ -81,11 +81,11 @@ public class DesktopApplication extends Application{
 	 * @return true if it was successful
 	 */
 	private boolean replaceNode(String ID,Node newNode){
-		if(this.rootPane.getChildren().size() == 0){
+		if(this.rootPane.getChildren().size() == 0){//if there are no nodes in the rootPane, then just add the given node
 			this.rootPane.getChildren().add(newNode);
 			return true;
 		}
-		for(int i = 0; i < this.rootPane.getChildren().size(); i++){
+		for(int i = 0; i < this.rootPane.getChildren().size(); i++){//search for the node with the ID to replace and replace it
 			Node child = this.rootPane.getChildren().get(i);
 			if(child.getId().equals(ID)){
 				this.rootPane.getChildren().remove(i);
@@ -133,10 +133,10 @@ public class DesktopApplication extends Application{
 		updateEditPane();
 		switch(this.rightDisplay) {
 			case ITEM_INFO:
-				if(getActiveRightDisplay() == null){
+				if(getActiveRightDisplay() == null){//if there is no active right display, then just add it
 					this.rootPane.getChildren().add(this.infoPane);
 				} else{
-					switch(getActiveRightDisplay()){
+					switch(getActiveRightDisplay()){//replace whatever right display is active
 						case ITEM_INFO:
 							replaceNode(INFO_PANE_ID, this.infoPane);
 							break;
@@ -246,7 +246,7 @@ public class DesktopApplication extends Application{
 							itemDisplayDate.setWrappingWidth(WRAPPING_WIDTH);
 						}
 						itemDisplayInfoFields.getChildren().addAll(itemDisplayName,itemDisplayPriority);
-						if(!this.database.getItem(activeItem.get().getIndex()).getDescription().equals("")){
+						if(!this.database.getItem(activeItem.get().getIndex()).getDescription().equals("")){//if the Item indeed has a description, then display it (Item's don't have to have descriptions)
 							itemDisplayInfoFields.getChildren().addAll(itemDisplayDescription);
 						}
 						itemDisplayInfoFields.getChildren().addAll(itemDisplayDate);
@@ -272,13 +272,14 @@ public class DesktopApplication extends Application{
 					toggleFinished.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					toggleFinished.getStyleClass().add("button");
 					toggleFinished.setOnAction(
-							(ActionEvent event) ->
+						(ActionEvent event) ->
 							{
 								if(this.activeItem.isValid()){
-									this.database.getItem(activeItem.get().getIndex()).toggleStatus();
+									activeItem.get().getItem().toggleStatus();
 									this.database.editItem(this.activeItem.get());
 									this.activeItem.set(this.database.getPositionedItem(this.activeItem.get().getIndex()));
 									updateRightPane();
+									updateLeftPane();//update the left pane since changing the status may affect the sorting or filtering
 								}
 							}
 					);
@@ -296,6 +297,7 @@ public class DesktopApplication extends Application{
 								if(this.activeItem.isValid()) {
 									this.rightDisplay = RightDisplay.EDIT_ITEM;
 									updateRightPane();
+									updateLeftPane();//update the left pane since editing the Item may affect the sorting or filtering
 								}
 							}
 					);
@@ -310,45 +312,42 @@ public class DesktopApplication extends Application{
 					deleteItem.setOnAction(
 						(ActionEvent event) ->
 							{
-								{
-									if(this.activeItem.isValid()) {
-										Alert deleteConfirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
-										deleteConfirmationDialog.initOwner(this.mainStage);
-										deleteConfirmationDialog.getDialogPane().getStyleClass().add("deleteConfirmationDialog");
+								if(this.activeItem.isValid()) {
+									Alert deleteConfirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+									deleteConfirmationDialog.initOwner(this.mainStage);
+									deleteConfirmationDialog.getDialogPane().getStyleClass().add("deleteConfirmationDialog");
 
-										deleteConfirmationDialog.setTitle("Deletion Confirmation");
+									deleteConfirmationDialog.setTitle("Deletion Confirmation");
+									deleteConfirmationDialog.setHeaderText("Would you like to delete the Item \"" + this.database.getItem(activeItem.get().getIndex()).getDisplayName() + "\"? It cannot be undone.");
 
-										deleteConfirmationDialog.setHeaderText("Would you like to delete the Item \"" + this.database.getItem(activeItem.get().getIndex()).getDisplayName() + "\"? It cannot be undone.");
-
-										if(!this.activeItem.get().getItem().getDescription().isEmpty()){
-											deleteConfirmationDialog.setContentText("Item description: \"" + this.database.getItem(activeItem.get().getIndex()).getDescription() + "\"");
-										}
-
-										{
-											ButtonType deleteButton = new ButtonType("Delete", ButtonBar.ButtonData.YES);
-											ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-											deleteConfirmationDialog.getButtonTypes().setAll(deleteButton, cancelButton);
-										}
-										{
-											Optional<ButtonType> deleteConfirmationDialogResult = deleteConfirmationDialog.showAndWait();
-											if (deleteConfirmationDialogResult.isPresent()) {
-												switch (deleteConfirmationDialogResult.get().getButtonData()) {
-													case YES:
-														this.database.deleteItem(this.activeItem.get().getIndex());
-														this.database.fillList();
-														this.activeItem = new Maybe<>();
-														updateRootPane();
-														break;
-													case CANCEL_CLOSE:
-														break;
-													default:
-														Util.nyi(Util.getFileName(), Util.getLineNumber());
-												}
+									if(!this.activeItem.get().getItem().getDescription().isEmpty()){
+										deleteConfirmationDialog.setContentText("Item description: \"" + this.database.getItem(activeItem.get().getIndex()).getDescription() + "\"");
+									}
+									{
+										ButtonType deleteButton = new ButtonType("Delete", ButtonBar.ButtonData.YES);
+										ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+										deleteConfirmationDialog.getButtonTypes().setAll(deleteButton, cancelButton);
+									}
+									{
+										Optional<ButtonType> deleteConfirmationDialogResult = deleteConfirmationDialog.showAndWait();
+										if (deleteConfirmationDialogResult.isPresent()) {
+											switch (deleteConfirmationDialogResult.get().getButtonData()) {
+												case YES:
+													this.database.deleteItem(this.activeItem.get().getIndex());
+													this.database.fillList();
+													this.activeItem = new Maybe<>();
+													updateRootPane();
+													break;
+												case CANCEL_CLOSE:
+													break;
+												default:
+													Util.nyi(Util.getFileName(), Util.getLineNumber());
 											}
 										}
 									}
 								}
 							}
+
 					);
 				}
 				editItemMenu.getChildren().addAll(toggleFinished,editItem,deleteItem);
@@ -369,9 +368,9 @@ public class DesktopApplication extends Application{
 		this.listPane.setMaxWidth(WIDTH);
 		this.listPane.setPrefWidth(this.listPane.getMaxWidth());
 		this.listPane.getStyleClass().add("pane");
-		{//the display for the list of items
+		{
 			HBox itemListMenu = new HBox(PADDING);
-			{//set the content of the item list menu
+			{
 				itemListMenu.setMinSize(WIDTH, SECTION_HEIGHT);
 				itemListMenu.setMaxSize(WIDTH, SECTION_HEIGHT);
 				itemListMenu.setPrefSize(WIDTH, SECTION_HEIGHT);
@@ -392,7 +391,7 @@ public class DesktopApplication extends Application{
 					addNew.setOnAction(
 						(ActionEvent event) ->
 							{
-								if(getActiveRightDisplay() != RightDisplay.ADD_NEW_ITEM){
+								if(getActiveRightDisplay() != RightDisplay.ADD_NEW_ITEM){//since the user can always press the Add New button, we only want to update the right pane if it's not already the addItemPane
 									this.rightDisplay = RightDisplay.ADD_NEW_ITEM;
 									updateRightPane();
 								}
@@ -410,7 +409,7 @@ public class DesktopApplication extends Application{
 					sortBy.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 
 					sortBy.setOnAction(
-							(ActionEvent event) ->
+						(ActionEvent event) ->
 							{
 								this.sortMode = sortBy.getValue();
 								updateLeftPane();
@@ -428,7 +427,7 @@ public class DesktopApplication extends Application{
 					filterBy.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 
 					filterBy.setOnAction(
-							(ActionEvent event) ->
+						(ActionEvent event) ->
 							{
 								if(this.filterMode != filterBy.getValue()){//if the filter excludes the active Item, then clear the active Item from the screen
 									boolean resetRightPane = true;
@@ -461,8 +460,8 @@ public class DesktopApplication extends Application{
 				itemListBorder.setPrefHeight(ITEM_LIST_BORDER_HEIGHT);
 				itemListBorder.getStyleClass().add("paneBorder");
 
+				ListView<String> itemList = new ListView<>();
 				{
-					ListView<String> itemList = new ListView<>();
 					itemList.getStyleClass().add("itemList");
 
 					final int LIST_WIDTH = (int)(WIDTH - 2 * PADDING);
@@ -482,7 +481,7 @@ public class DesktopApplication extends Application{
 					itemList.setItems(FXCollections.observableArrayList(itemNames));
 
 					/*
-					itemList.setCellFactory(lv -> new ListCell<Integer>(){
+					itemList.setCellFactory(lv -> new ListCell<Integer>(){//attempt at coloring Item names by priority (Not Yet Implemented)
 						@Override
 						protected void updateItem(Integer name, boolean empty){
 							super.updateItem(name, empty);
@@ -518,13 +517,13 @@ public class DesktopApplication extends Application{
 						}
 					});
 					*/
-					if(this.activeItem.isValid()){
+					if(this.activeItem.isValid()){//scrolls to and selects the currently active Item (this is used to make sure that the user's selection isn't undone when the left pane is updated)
 						itemList.scrollTo(this.activeItem.get().getIndex());
 						itemList.getFocusModel().focus(this.activeItem.get().getIndex());//note: focused object is the one object in the entire operating system that receives keyboard input
 						itemList.getSelectionModel().select(this.activeItem.get().getIndex());//note: selected object means it is marked
 					}
 
-					itemList.getSelectionModel().getSelectedIndices().addListener(
+					itemList.getSelectionModel().getSelectedIndices().addListener(//updates the infoPane when a new Item is selected
 						(ListChangeListener.Change<? extends Integer> c) ->
 						{
 							this.rightDisplay = RightDisplay.ITEM_INFO;
@@ -538,9 +537,8 @@ public class DesktopApplication extends Application{
 						itemListPlaceHolder.getStyleClass().add("itemListPlaceHolder");
 						itemList.setPlaceholder(itemListPlaceHolder);
 					}
-
-					itemListBorder.getChildren().add(itemList);
 				}
+				itemListBorder.getChildren().add(itemList);
 			}
 			this.listPane.getChildren().addAll(itemListMenu, itemListBorder);//order matters
 		}
@@ -590,9 +588,7 @@ public class DesktopApplication extends Application{
 						prioritySelector.getStyleClass().add("bodyText");
 						prioritySelector.setPromptText("Priority...");
 						prioritySelector.setValue(Item.Priority.LOW);
-						prioritySelector.setItems(FXCollections.observableArrayList(
-								Item.Priority.LOW, Item.Priority.MEDIUM, Item.Priority.HIGH
-						));
+						prioritySelector.setItems(FXCollections.observableArrayList(Item.Priority.values()));
 					}
 					setPriority.getChildren().addAll(priorityLabel,prioritySelector);
 				}
@@ -622,11 +618,11 @@ public class DesktopApplication extends Application{
 				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.getStyleClass().add("button");
 				saveNewItemButton.setOnAction(
-						(ActionEvent event) ->
+					(ActionEvent event) ->
 						{
 							String itemName = setName.getText(), itemDescription = setDescription.getText();
 							Item.Priority itemPriority = prioritySelector.getValue();
-							if(!itemName.equals("")){
+							if(!itemName.equals("")){//only save the new Item if it has a name (since it's required)
 								this.database.writeItem(new Item(itemName, itemDescription, itemPriority));
 								updateLeftPane();
 								this.activeItem.set(this.database.getPositionedItem(this.database.getItems().size() - 1));
@@ -643,7 +639,7 @@ public class DesktopApplication extends Application{
 				cancelItemAddition.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.getStyleClass().add("button");
 				cancelItemAddition.setOnAction(
-						(ActionEvent event) ->
+					(ActionEvent event) ->
 						{
 							this.rightDisplay = RightDisplay.ITEM_INFO;
 							updateRightPane();
@@ -700,9 +696,7 @@ public class DesktopApplication extends Application{
 						prioritySelector.getStyleClass().add("bodyText");
 						prioritySelector.setPromptText("Priority...");
 						prioritySelector.setValue(this.activeItem.isValid() ? this.activeItem.get().getItem().getPriority() : Item.Priority.LOW);
-						prioritySelector.setItems(FXCollections.observableArrayList(
-								Item.Priority.LOW, Item.Priority.MEDIUM, Item.Priority.HIGH
-						));
+						prioritySelector.setItems(FXCollections.observableArrayList(Item.Priority.values()));
 					}
 					editPriority.getChildren().addAll(priorityLabel,prioritySelector);
 				}
@@ -733,17 +727,20 @@ public class DesktopApplication extends Application{
 				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.getStyleClass().add("button");
 				saveNewItemButton.setOnAction(
-						(ActionEvent event) ->
+					(ActionEvent event) ->
 						{
-							String itemName = editName.getText(), itemDescription = editDescription.getText();
-							Item.Priority itemPriority = prioritySelector.getValue();
-							if(this.activeItem.isValid()){
-								this.activeItem.set(new Database.PositionedItem(new Item(itemName, itemDescription, itemPriority),this.activeItem.get().getIndex()));
-								this.database.editItem(this.activeItem.get());
-								this.activeItem.set(this.database.getPositionedItem(this.activeItem.get().getIndex()));
-								updateLeftPane();
-								this.rightDisplay = RightDisplay.ITEM_INFO;
-								updateRightPane();
+							String itemName = editName.getText();
+							if(!itemName.equals("")) {//don't let the user remove the name completely
+								String itemDescription = editDescription.getText();
+								Item.Priority itemPriority = prioritySelector.getValue();
+								if (this.activeItem.isValid()) {
+									this.activeItem.set(new Database.PositionedItem(new Item(itemName, itemDescription, itemPriority), this.activeItem.get().getIndex()));
+									this.database.editItem(this.activeItem.get());
+									this.activeItem.set(this.database.getPositionedItem(this.activeItem.get().getIndex()));
+									updateLeftPane();
+									this.rightDisplay = RightDisplay.ITEM_INFO;
+									updateRightPane();
+								}
 							}
 						}
 				);
@@ -755,7 +752,7 @@ public class DesktopApplication extends Application{
 				cancelItemAddition.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				cancelItemAddition.getStyleClass().add("button");
 				cancelItemAddition.setOnAction(
-						(ActionEvent event) ->
+					(ActionEvent event) ->
 						{
 							this.rightDisplay = RightDisplay.ITEM_INFO;
 							updateRightPane();
@@ -793,9 +790,10 @@ public class DesktopApplication extends Application{
 		updateAddItemPane();
 		updateRootPane();
 
-		for(String iconSource: ICON_SOURCES) {
+		for(String iconSource: ICON_SOURCES) {//add the Tempest icon to the application
 			this.mainStage.getIcons().add(new Image(iconSource));
 		}
+
 		this.mainStage.setTitle("Tempest");
 		this.mainStage.setResizable(RESIZABLE);
 		this.mainStage.setScene(new Scene(this.rootPane, DEFAULT_SIZE.width, DEFAULT_SIZE.height));
