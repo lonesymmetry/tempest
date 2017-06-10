@@ -7,6 +7,7 @@ Desktop UI:
     - Create UI document
     - Clean up CSS
     - Add color for priority
+    - Fix window sizing
     - Change right pane to blank if no item is selected (meaning ditch the edit item menu)
 
 Android UI:
