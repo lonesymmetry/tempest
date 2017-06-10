@@ -203,20 +203,22 @@ public class DesktopApplication extends Application{
 		final double WIDTH = DEFAULT_SIZE.width * WIDTH_PERCENT;
 		this.infoPane.setMaxWidth(WIDTH);
 		this.infoPane.setPrefWidth(this.infoPane.getMaxWidth());
-		this.infoPane.getStyleClass().add("infoPane");
+		this.infoPane.getStyleClass().add("pane");
+
 		{
-			StackPane itemDisplay = new StackPane();
+			StackPane itemDisplayInfoBorder = new StackPane();
 			{
-				itemDisplay.getStyleClass().add("itemDisplay");
+				itemDisplayInfoBorder.getStyleClass().add("contentBorder");
 
-				final int BACKGROUND_HEIGHT = 605;//from testing on 5/25/17
-				final int BACKGROUND_WIDTH = (int) (WIDTH - (2 * PADDING));
-				Rectangle background = new Rectangle(BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
-				background.getStyleClass().add("itemDisplayBackground");
-
-				VBox itemDisplayInfoBorder = new VBox(PADDING);//used to align text in the upper left-hand corner with some padding
+				VBox itemDisplayInfoFields = new VBox(PADDING);
 				{
-					itemDisplayInfoBorder.getStyleClass().add("itemDisplayInfoBorder");
+					itemDisplayInfoFields.getStyleClass().add("itemFields");
+
+					final int INFO_FIELDS_HEIGHT = 605;//from testing on 5/25/17
+					final double INFO_FIELDS_WIDTH = WIDTH - 2 * PADDING;
+					itemDisplayInfoFields.setMaxSize(INFO_FIELDS_WIDTH,INFO_FIELDS_HEIGHT);
+					itemDisplayInfoFields.setMinSize(INFO_FIELDS_WIDTH,INFO_FIELDS_HEIGHT);
+					itemDisplayInfoFields.setPrefSize(INFO_FIELDS_WIDTH,INFO_FIELDS_HEIGHT);
 					if(this.activeItem.isValid()){
 						final double WRAPPING_WIDTH = WIDTH - 4 * PADDING;
 						Text itemDisplayName = new Text();
@@ -243,14 +245,14 @@ public class DesktopApplication extends Application{
 							itemDisplayDate.setText("Created " + this.database.getItem(activeItem.get().getIndex()).getDate().toString());
 							itemDisplayDate.setWrappingWidth(WRAPPING_WIDTH);
 						}
-						itemDisplayInfoBorder.getChildren().addAll(itemDisplayName,itemDisplayPriority);
+						itemDisplayInfoFields.getChildren().addAll(itemDisplayName,itemDisplayPriority);
 						if(!this.database.getItem(activeItem.get().getIndex()).getDescription().equals("")){
-							itemDisplayInfoBorder.getChildren().addAll(itemDisplayDescription);
+							itemDisplayInfoFields.getChildren().addAll(itemDisplayDescription);
 						}
-						itemDisplayInfoBorder.getChildren().addAll(itemDisplayDate);
+						itemDisplayInfoFields.getChildren().addAll(itemDisplayDate);
 					}
+					itemDisplayInfoBorder.getChildren().add(itemDisplayInfoFields);
 				}
-				itemDisplay.getChildren().addAll(background,itemDisplayInfoBorder);
 			}
 			HBox editItemMenu = new HBox(PADDING);
 			{//set the content of the item list menu
@@ -289,7 +291,7 @@ public class DesktopApplication extends Application{
 					editItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					editItem.getStyleClass().add("button");
 					editItem.setOnAction(
-							(ActionEvent event) ->
+						(ActionEvent event) ->
 							{
 								if(this.activeItem.isValid()) {
 									this.rightDisplay = RightDisplay.EDIT_ITEM;
@@ -306,7 +308,7 @@ public class DesktopApplication extends Application{
 					deleteItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					deleteItem.getStyleClass().add("button");
 					deleteItem.setOnAction(
-							(ActionEvent event) ->
+						(ActionEvent event) ->
 							{
 								{
 									if(this.activeItem.isValid()) {
@@ -351,7 +353,7 @@ public class DesktopApplication extends Application{
 				}
 				editItemMenu.getChildren().addAll(toggleFinished,editItem,deleteItem);
 			}
-			this.infoPane.getChildren().addAll(itemDisplay,editItemMenu);
+			this.infoPane.getChildren().addAll(itemDisplayInfoBorder,editItemMenu);
 		}
 	}
 
@@ -568,7 +570,7 @@ public class DesktopApplication extends Application{
 			VBox addItemFields = new VBox(PADDING);
 			{
 				final int TEXT_INPUT_WIDTH = (int)(WIDTH - 4 * PADDING);
-				addItemFields.getStyleClass().add("addItemFields");
+				addItemFields.getStyleClass().add("itemFields");
 				{
 					setName.getStyleClass().add("bodyText");
 					setName.setPromptText("Add item name");
@@ -677,7 +679,7 @@ public class DesktopApplication extends Application{
 			VBox editItemFields = new VBox(PADDING);
 			{
 				final int TEXT_INPUT_WIDTH = (int)(WIDTH - 4 * PADDING);
-				editItemFields.getStyleClass().add("editItemFields");
+				editItemFields.getStyleClass().add("itemFields");
 				{
 					editName.getStyleClass().add("bodyText");
 					editName.setPromptText("Add item name");
@@ -816,7 +818,7 @@ public class DesktopApplication extends Application{
 		this.rootPane = new HBox();
 		this.rootPane.setId(ROOT_PANE_ID);
 
-		this.sortMode = Analytics.SortMode.NONE;
+		this.sortMode = Analytics.SortMode.DATE;
 		this.filterMode = Analytics.FilterMode.NONE;
 
 		this.listPane = new VBox(PADDING);

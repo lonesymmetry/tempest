@@ -49,6 +49,15 @@ public class AlphanumComparator implements Comparator<String>
 
 	public int compare(String s1, String s2)
 	{
+		/**
+		 * Addiction: ignore capitalization when sorting
+		 *
+		 * @author Logan Traffas
+		 */
+		{
+			s1 = Util.stringToLowerCase(s1);
+			s2 = Util.stringToLowerCase(s2);
+		}
 		int thisMarker = 0;
 		int thatMarker = 0;
 		int s1Length = s1.length();

@@ -6,20 +6,19 @@
     -fx-background-color: #424242;
 }
 
-.pane, .itemList, .itemDisplay, .contentBorder{
+.pane, .itemList, .contentBorder{
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.pane, .itemDisplay, .editItemFields, .addItemFields,
-.paneBorder, .contentBorder, .itemDisplayInfoBorder{
+.pane, .itemFields, .paneBorder, .contentBorder{
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.itemListPlaceHolder, .itemDisplayBackground{
+.itemListPlaceHolder{
      -fx-fill: #999999;
 }
 
-.itemDisplayInfoBorder, .contentBorder{
+.contentBorder, .itemDisplayInfoBorder{
     -fx-alignment: top-left;
     -fx-background-color: #999999;
 }

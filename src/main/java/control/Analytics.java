@@ -17,7 +17,7 @@ public class Analytics {
 	 * Enumerator to store which sort mode is active
 	 */
 	public enum SortMode{
-		NONE,NAMEAZ, NAMEZA,PRIORITY,DATE;
+		NAMEAZ, NAMEZA,PRIORITY,DATE;
 
 		/**
 		 * Displays a SortMode as a String
@@ -32,8 +32,6 @@ public class Analytics {
 					return "Name Z-A";
 				case DATE:
 					return "Date";
-				case NONE:
-					return "None";
 				case PRIORITY:
 					return "Priority";
 				default:
@@ -82,8 +80,7 @@ public class Analytics {
 	 * @return Sorted ArrayList<PositionedItem>
 	 */
 	public static ArrayList<Database.PositionedItem> sort(SortMode mode, ArrayList<Database.PositionedItem> in){
-	    if(mode==SortMode.NONE)return in;
-	    else if(mode==SortMode.PRIORITY){
+	   if(mode==SortMode.PRIORITY){
 	        return sortPriority(in);
         }
         else if(mode==SortMode.DATE){
