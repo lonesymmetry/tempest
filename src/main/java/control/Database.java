@@ -15,39 +15,45 @@ import java.util.Date;
  */
 
 public class Database {
-    private static final String FILE_NAME = "./src/main/data/database.txt";//path from root (.)
+    private static final String DEV_DATABASE_FILE_NAME = "./src/main/data/database.txt";//path from root (.)
+    private static final String RELEASE_DATABASE_FILE_NAME = "./data/database.txt";
+
+    private static final String FILE_NAME = DEV_DATABASE_FILE_NAME;//set this to either dev or release
+
+    static boolean fileExists = false;
+
     private ArrayList<Item> items;
     private static final SimpleDateFormat formatter = new SimpleDateFormat("E MM dd y hh:mm:ss a");
 
     public static class PositionedItem{
-		private Item item;
-    	private int index;
+        private Item item;
+        private int index;
 
         /**
          * Gets the item from the positioneditem
          * @return item
          */
-    	public Item getItem(){
-    		return this.item;
-		}
+        public Item getItem(){
+            return this.item;
+        }
 
         /**
          * Gets index of the positioneditem
          * @return index
          */
-		public int getIndex(){
-    		return this.index;
-		}
+        public int getIndex(){
+            return this.index;
+        }
 
         /**
          * Constructs Positioned item based on a database and an index
          * @param database Database where the item is
          * @param index index of the item in the database
          */
-    	public PositionedItem(Database database,int index){
-    		this.item = database.getItem(index);
-    		this.index = index;
-		}
+        public PositionedItem(Database database,int index){
+            this.item = database.getItem(index);
+            this.index = index;
+        }
 
         /**
          * Constructs a positioned item based on an item and an index
@@ -58,14 +64,14 @@ public class Database {
             this.item = item;
             this.index = index;
         }
-	}
+    }
 
     /**
      * Converts arraylist of items to an arraylist of PositionedItems
      * @param in input ArrayList<Item>
      * @return ArrayList<PositionedItem>
      */
-	public static ArrayList<PositionedItem> toPositionedArray(ArrayList<Item> in){
+    public static ArrayList<PositionedItem> toPositionedArray(ArrayList<Item> in){
         ArrayList<PositionedItem> out = new ArrayList<>();
         for(int i = 0; i < in.size(); i++){
             out.add(i,new PositionedItem(in.get(i),i));
@@ -86,11 +92,11 @@ public class Database {
         return out;
     }
 
-	/**
-	 * Getter for Items list
-	 * @return ArrayList<Item> List of items
-	 */
-	public ArrayList<Item> getItems(){
+    /**
+     * Getter for Items list
+     * @return ArrayList<Item> List of items
+     */
+    public ArrayList<Item> getItems(){
         return items;
     }
 
@@ -107,8 +113,8 @@ public class Database {
      * @param i Index of Item
      * @return Item at index
      */
-	public Item getItem(int i){
-    	return this.items.get(i);
+    public Item getItem(int i){
+        return this.items.get(i);
     }
 
     /**
@@ -116,9 +122,9 @@ public class Database {
      * @param i index of the positioneditem in the arraylist
      * @return the positioneditem at the index
      */
-	public PositionedItem getPositionedItem(int i){
-		return new PositionedItem(this,i);
-	}
+    public PositionedItem getPositionedItem(int i){
+        return new PositionedItem(this,i);
+    }
 
     /**
      * Sets items as an input arraylist
@@ -142,14 +148,17 @@ public class Database {
      * @return String of Items
      */
     @Override
-	public String toString(){
-    	return "Database(" + this.items.toString() + ")";
-	}
+    public String toString(){
+        return "Database(" + this.items.toString() + ")";
+    }
 
     /**
      * Clears all data from the database
      */
     public static void clearDoc(){
+        if(!fileExists){
+            createDatabaseFile();
+        }
         try{
             PrintWriter writer = new PrintWriter(FILE_NAME);
             writer.print("");
@@ -161,16 +170,29 @@ public class Database {
     }
 
     /**
+     * Creates the database file if it doesn't already exist
+     */
+    private static void createDatabaseFile(){
+        if(!fileExists) {
+            File source = new File(FILE_NAME);
+            source.getParentFile().mkdirs();
+            fileExists = true;
+        }
+    }
+
+    /**
      * Adds an item to the database
      * @param toWrite Item to write
      */
     public void writeItem(Item toWrite){
+        if(!fileExists){
+            createDatabaseFile();
+        }
         String name = toWrite.getDisplayName();
         String desc = toWrite.getDescription();
         Item.Status status = toWrite.getStatus();
         Item.Priority priority = toWrite.getPriority();
         Date date = toWrite.getDate();
-
 
         String dateString = formatter.format(date);
 
@@ -181,6 +203,7 @@ public class Database {
 
         try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(p, CREATE, APPEND))) {
             out.write(data, 0, data.length);
+            out.close();
         }
         catch (IOException x) {
             x.printStackTrace(new PrintStream(System.out));
@@ -291,14 +314,14 @@ public class Database {
      * Replaces the database with test items
      */
     public static void convertDataToTest(){
-    	clearDoc();
-    	final int LENGTH = 30;
-		Database a = new Database();
-    	for(int i = 0; i < LENGTH; i++){
-			Item z = new Item("TestItem#" + (i + 1), "This is a test #" + (i + 1));
-			a.writeItem(z);
-		}
-	}
+        clearDoc();
+        final int LENGTH = 30;
+        Database a = new Database();
+        for(int i = 0; i < LENGTH; i++){
+            Item z = new Item("TestItem#" + (i + 1), "This is a test #" + (i + 1));
+            a.writeItem(z);
+        }
+    }
 
     /**
      * Edits items based on their index and the item to replace it with
@@ -317,7 +340,7 @@ public class Database {
      * @param item Replacement PositionedItem
      */
     public void editItem(PositionedItem item){
-		editItem(item.getIndex(),item.getItem());
+        editItem(item.getIndex(),item.getItem());
     }
 
     /**

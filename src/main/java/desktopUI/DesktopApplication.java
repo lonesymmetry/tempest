@@ -97,18 +97,6 @@ public class DesktopApplication extends Application{
 	}
 
 	/**
-	 * Removes a node with a given ID
-	 * @param ID the ID of the node to remove
-	 */
-	private void removeNode(String ID){
-		ID = "#" + ID;
-		Node toRemove = this.rootPane.lookup(ID);
-		if(toRemove != null) {
-			this.rootPane.getChildren().remove(toRemove);
-		}
-	}
-
-	/**
 	 * Builds the left side of the display
 	 */
 	private void updateLeftPane(){
@@ -768,8 +756,6 @@ public class DesktopApplication extends Application{
 	 * Acts as the constructor for this class
 	 */
 	private void initialize(){
-		Database.convertDataToTest();//TODO: for testing only
-
 		this.mainStage = new Stage();//note: cannot edit this until after it has been set to the primaryStage
 
 		this.database = new Database();
