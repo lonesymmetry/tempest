@@ -484,7 +484,7 @@ public class DesktopApplication extends Application{
 					);
 
 					{
-						Rectangle itemListPlaceHolder = new Rectangle(WIDTH - 4 * PADDING,600);
+						Rectangle itemListPlaceHolder = new Rectangle(WIDTH - 2 * PADDING,610);
 						itemListPlaceHolder.getStyleClass().add("itemListPlaceHolder");
 						itemList.setPlaceholder(itemListPlaceHolder);
 					}
