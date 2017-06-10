@@ -528,10 +528,6 @@ public class DesktopApplication extends Application{
 		{
 			addItemFieldsBorder.getStyleClass().add("addItemFieldsBorder");
 
-			final int BACKGROUND_WIDTH = (int)(WIDTH - 2 * PADDING), BACKGROUND_HEIGHT = 605;
-			Rectangle background = new Rectangle(BACKGROUND_WIDTH,BACKGROUND_HEIGHT);
-			background.getStyleClass().add("addItemFieldsBackground");
-
 			VBox addItemFields = new VBox(PADDING);
 			{
 				final int TEXT_INPUT_WIDTH = (int)(WIDTH - 4 * PADDING);
@@ -571,7 +567,7 @@ public class DesktopApplication extends Application{
 				}
 				addItemFields.getChildren().addAll(setName, setPriority, setDescription);
 			}
-			addItemFieldsBorder.getChildren().addAll(background,addItemFields);
+			addItemFieldsBorder.getChildren().addAll(addItemFields);
 		}
 		HBox addItemMenu = new HBox(PADDING);
 		{
@@ -640,10 +636,6 @@ public class DesktopApplication extends Application{
 		{
 			editItemFieldsBorder.getStyleClass().add("editItemFieldsBorder");
 
-			final int BACKGROUND_WIDTH = (int)(WIDTH - 2 * PADDING), BACKGROUND_HEIGHT = 605;
-			Rectangle background = new Rectangle(BACKGROUND_WIDTH,BACKGROUND_HEIGHT);
-			background.getStyleClass().add("editItemFieldsBackground");
-
 			VBox editItemFields = new VBox(PADDING);
 			{
 				final int TEXT_INPUT_WIDTH = (int)(WIDTH - 4 * PADDING);
@@ -685,7 +677,7 @@ public class DesktopApplication extends Application{
 				}
 				editItemFields.getChildren().addAll(editName, editPriority, editDescription);
 			}
-			editItemFieldsBorder.getChildren().addAll(background,editItemFields);
+			editItemFieldsBorder.getChildren().addAll(editItemFields);
 		}
 		HBox editItemMenu = new HBox(PADDING);
 		{

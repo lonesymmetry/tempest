@@ -6,7 +6,7 @@
     -fx-background-color: #424242;
 }
 
-.infoPane, .editPane, .addItemPane, .itemList, .itemDisplay{
+.infoPane, .editPane, .addItemPane, .itemList, .itemDisplay, .addItemFieldsBorder, .editItemFieldsBorder{
     -fx-background-insets: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
@@ -16,12 +16,13 @@
     -fx-padding: 5px 5px 5px 5px;/*top right bottom left*/
 }
 
-.itemListPlaceHolder, .editItemFieldsBackground, .addItemFieldsBackground, .itemDisplayBackground, .itemListBorder, .addItemFieldsBorder, .itemDisplayInfoBorder{
+.itemListPlaceHolder, .itemDisplayBackground{
      -fx-fill: #999999;
 }
 
 .itemDisplayInfoBorder, .editItemFieldsBorder, .addItemFieldsBorder{
     -fx-alignment: top-left;
+    -fx-background-color: #999999;
 }
 
 .itemDisplayDescription, .itemList .list-cell, .itemDisplayPriority,
