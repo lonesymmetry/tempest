@@ -1,6 +1,5 @@
 package main.java.control;
 
-
 import static java.nio.file.StandardOpenOption.*;
 import java.nio.file.*;
 import java.io.*;
@@ -81,8 +80,8 @@ public class Database {
      */
     public static ArrayList<Item> fromPositionedArray(ArrayList<PositionedItem> in){
         ArrayList<Item> out = new ArrayList<>();
-        for(int i = 0; i < in.size(); i++){
-            out.add(in.get(i).getIndex(),in.get(i).getItem());
+        for(PositionedItem a: in){
+            out.add(a.getIndex(),a.getItem());
         }
         return out;
     }
@@ -133,8 +132,8 @@ public class Database {
      * Writes the local ArrayList<Item> to the database
      */
     public void writeList(){
-        for(int i=0;i<items.size();i++){
-            writeItem(items.get(i));
+        for(Item a: items){
+            writeItem(a);
         }
     }
 
@@ -157,7 +156,7 @@ public class Database {
             writer.close();
         }
         catch (IOException x) {
-            System.err.println(x);
+            x.printStackTrace(new PrintStream(System.out));
         }
     }
 
@@ -184,7 +183,7 @@ public class Database {
             out.write(data, 0, data.length);
         }
         catch (IOException x) {
-            System.err.println(x);
+            x.printStackTrace(new PrintStream(System.out));
         }
     }
 
@@ -195,7 +194,6 @@ public class Database {
      * @throws ParseException Failure
      */
     public Date parseDate(String in) throws ParseException{
-        //System.out.println("A");
         return formatter.parse(in);
     }
 
@@ -208,7 +206,7 @@ public class Database {
     public Item parseLine(String input) throws ParseException{
         int length=input.length();
 
-        String name="INIT";
+        String name="";
         int bar1=0;
         for(int i=0;i<length;i++){
             if(input.substring(i,i+1).equals("|")){
@@ -276,7 +274,7 @@ public class Database {
                     items.add(parseLine(line));
                 }
                 catch (ParseException a){
-                    System.err.println(a);
+                    a.printStackTrace(new PrintStream(System.out));
                 }
                 finally {
                     line = reader.readLine();
@@ -285,7 +283,7 @@ public class Database {
             reader.close();
         }
         catch (IOException x){
-            System.err.println(x);
+            x.printStackTrace(new PrintStream(System.out));
         }
     }
 

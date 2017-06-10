@@ -1,9 +1,7 @@
 package main.java.util;
 
-import java.util.Iterator;
-import java.util.Random;
-import java.util.TreeSet;
-import java.util.Vector;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * A series of useful methods I've defined to use in other projects
@@ -17,7 +15,7 @@ public class Util{
 	 * @param <T> the type of the array elements
 	 * @return the array in string form
 	 */
-	public static <T extends Object> String arrayToString(T[] array){
+	public static <T> String arrayToString(T[] array){
 		String s = "[";
 		for(int i = 0; i < array.length; i++){
 			s += array[i].toString();
@@ -27,7 +25,7 @@ public class Util{
 		return s;
 	}
 
-	public static <T extends Object> T getRandomTreeSetElement(TreeSet<T> a){
+	public static <T> T getRandomTreeSetElement(TreeSet<T> a){
 		Iterator<T> aIterator = a.iterator();
 		Random rand = new Random();
 		int r = rand.nextInt(a.size()), i = 0;
@@ -71,7 +69,7 @@ public class Util{
 		return s.equals(true1) || s.equals(true2);
 	}
 
-	public static <T extends Object> boolean treeSetEquals(TreeSet<T> a, TreeSet<T> b){
+	public static <T> boolean treeSetEquals(TreeSet<T> a, TreeSet<T> b){
 		if(a.size() != b.size()) return false;
 		Iterator<T> aIterator = a.iterator();
 		Iterator<T> bIterator = b.iterator();
@@ -81,14 +79,14 @@ public class Util{
 		return true;
 	}
 
-	public static <T extends Object> boolean contains(TreeSet<T> all, T a){//TODO: remove?
+	public static <T> boolean contains(TreeSet<T> all, T a){//TODO: remove?
 		for(T b: all){
 			if(a.equals(b)) return true;
 		}
 		return false;
 	}
 
-	public static <T extends Object> boolean contains(Vector<T> all, T a){//TODO: remove?
+	public static <T> boolean contains(Vector<T> all, T a){//TODO: remove?
 		for(T b: all){
 			if(a.equals(b)) return true;
 		}
@@ -180,5 +178,24 @@ public class Util{
 	public static void nyi(String fileName,int lineNumber){
 		System.err.println("NYI " + fileName + ":" + lineNumber);
 		System.exit(1);
+	}
+
+	/**
+	 * Calls a given function on each element of an ArrayList
+	 *
+	 * ex: ArrayList<String> a = Util.callOnAll(in, (Database.PositionedItem positionedItem) ->  positionedItem.getItem().getDisplayName());
+	 *
+	 * @param arr the given ArrayList
+	 * @param f the function to call
+	 * @param <T> the type stored in the given ArrayList and the type of argument the function takes
+	 * @param <R> the resulting type of the function and the type of the ArrayList that will be returned
+	 * @return an ArrayList containing the results of the function
+	 */
+	public static <T, R> ArrayList<R> callOnAll(ArrayList<T> arr, Function<T,R> f){
+		ArrayList<R> out = new ArrayList<>();
+		for(T a: arr){
+			out.add(f.apply(a));
+		}
+		return out;
 	}
 }

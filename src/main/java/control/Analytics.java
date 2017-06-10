@@ -1,9 +1,9 @@
 package main.java.control;
 
+import main.java.util.AlphanumComparator;
 import main.java.util.Util;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -17,7 +17,7 @@ public class Analytics {
 	 * Enumerator to store which sort mode is active
 	 */
 	public enum SortMode{
-		NONE,NAME,PRIORITY,DATE;
+		NONE,NAMEAZ, NAMEZA,PRIORITY,DATE;
 
 		/**
 		 * Displays a SortMode as a String
@@ -26,8 +26,10 @@ public class Analytics {
 		@Override
 		public String toString(){
 			switch (this){
-				case NAME:
+				case NAMEAZ:
 					return "Name A-Z";
+				case NAMEZA:
+					return "Name Z-A";
 				case DATE:
 					return "Date";
 				case NONE:
@@ -42,7 +44,7 @@ public class Analytics {
 	}
 
 	/**
-	 * Enumerator to store which filtermode is active
+	 * Enumerator to store which filterMode is active
 	 */
     public enum FilterMode{
 		NONE,HIGH_PRIORITY,MEDIUM_PRIORITY,LOW_PRIORITY,FINISHED,UNFINISHED;
@@ -87,14 +89,17 @@ public class Analytics {
         else if(mode==SortMode.DATE){
 	        return sortDate(in);
         }
-        else if(mode==SortMode.NAME){
-        	return sortName(in);
+        else if(mode==SortMode.NAMEAZ){
+        	return sortNameAZ(in);
+		}
+		else if(mode==SortMode.NAMEZA){
+			return sortNameZA(in);
 		}
 		Util.nyi(Util.getFileName(),Util.getLineNumber());
         return new ArrayList<>();//this line will never be reached
 	}
 
-    public static ArrayList<Database.PositionedItem> filter(FilterMode mode,ArrayList<Database.PositionedItem> in){//TODO: return an array of PositionedItems not Items
+    public static ArrayList<Database.PositionedItem> filter(FilterMode mode,ArrayList<Database.PositionedItem> in){
         if(mode==FilterMode.NONE)return in;
         else if(mode==FilterMode.HIGH_PRIORITY){
             return filterHIGH(in);
@@ -115,9 +120,8 @@ public class Analytics {
 		return new ArrayList<>();//this line will never be reached
     }
 
-    public static ArrayList<Database.PositionedItem> filterUnfinished(ArrayList<Database.PositionedItem> a){
+    public static ArrayList<Database.PositionedItem> filterUnfinished(ArrayList<Database.PositionedItem> orig){
         ArrayList<Database.PositionedItem> out = new ArrayList<>();
-        ArrayList<Database.PositionedItem> orig = a;
         int tally=0;
         for(int i=0;i<orig.size();i++){
             if(orig.get(i).getItem().getStatus()== Item.Status.UNFINISHED){
@@ -125,7 +129,6 @@ public class Analytics {
                 tally++;
             }
         }
-        //System.out.println("Found "+tally+" UNFINISHED items.");
         return out;
     }
 
@@ -137,12 +140,10 @@ public class Analytics {
                 tally++;
             }
         }
-        //System.out.println("Found "+tally+" UNFINISHED items.");
         return tally;
     }
 
-    public static ArrayList<Database.PositionedItem> filterFinished(ArrayList<Database.PositionedItem> a){
-		ArrayList<Database.PositionedItem> orig = a;
+    public static ArrayList<Database.PositionedItem> filterFinished(ArrayList<Database.PositionedItem> orig){
         ArrayList<Database.PositionedItem> out = new ArrayList<>();
         int tally=0;
         for(int i=0;i<orig.size();i++){
@@ -151,7 +152,6 @@ public class Analytics {
                 tally++;
             }
         }
-        //System.out.println("Found "+tally+" FINISHED items.");
         return out;
     }
 
@@ -163,22 +163,29 @@ public class Analytics {
                 tally++;
             }
         }
-        //System.out.println("Found "+tally+" FINISHED items.");
         return tally;
     }
 
     public static ArrayList<Database.PositionedItem> sortDate(ArrayList<Database.PositionedItem> in){
-        Collections.sort(in, Comparator.comparing(x -> x.getItem().getDate()));
+        in.sort(Comparator.comparing(x -> x.getItem().getDate()));
         return in;
     }
 
-	public static ArrayList<Database.PositionedItem> sortName(ArrayList<Database.PositionedItem> in){
-		Collections.sort(in, Comparator.comparing(x -> x.getItem().getDisplayName()));
+	public static ArrayList<Database.PositionedItem> sortNameAZ(ArrayList<Database.PositionedItem> in){
+		in.sort((Database.PositionedItem o1, Database.PositionedItem o2) ->
+				(new AlphanumComparator()).compare(o1.getItem().getDisplayName(),o2.getItem().getDisplayName())
+		);
 		return in;
 	}
 
-    public static ArrayList<Database.PositionedItem> sortPriority(ArrayList<Database.PositionedItem> a){
-        ArrayList<Database.PositionedItem> orig = a;
+	public static ArrayList<Database.PositionedItem> sortNameZA(ArrayList<Database.PositionedItem> in){
+		in.sort((Database.PositionedItem o1, Database.PositionedItem o2) ->
+				(new AlphanumComparator()).reversed().compare(o1.getItem().getDisplayName(),o2.getItem().getDisplayName())
+		);
+		return in;
+	}
+
+    public static ArrayList<Database.PositionedItem> sortPriority(ArrayList<Database.PositionedItem> orig){
         ArrayList<Database.PositionedItem> out = new ArrayList<>();
         ArrayList<Database.PositionedItem> pA = new ArrayList<>();
         ArrayList<Database.PositionedItem> pB = new ArrayList<>();
@@ -208,8 +215,7 @@ public class Analytics {
         return out;
     }
 
-    public static ArrayList<Database.PositionedItem> filterHIGH(ArrayList<Database.PositionedItem> a){
-		ArrayList<Database.PositionedItem> orig = a;
+    public static ArrayList<Database.PositionedItem> filterHIGH(ArrayList<Database.PositionedItem> orig){
 		ArrayList<Database.PositionedItem> out = new ArrayList<>();
 
         for(int i = 0; i < orig.size(); i++){
@@ -220,8 +226,7 @@ public class Analytics {
         return out;
     }
 
-    public static ArrayList<Database.PositionedItem> filterMEDIUM(ArrayList<Database.PositionedItem> a){
-        ArrayList<Database.PositionedItem> orig = a;
+    public static ArrayList<Database.PositionedItem> filterMEDIUM(ArrayList<Database.PositionedItem> orig){
         ArrayList<Database.PositionedItem> out = new ArrayList<>();
 
         for(int i = 0; i < orig.size(); i++){
@@ -232,8 +237,7 @@ public class Analytics {
         return out;
     }
 
-    public static ArrayList<Database.PositionedItem> filterLOW(ArrayList<Database.PositionedItem> a){
-        ArrayList<Database.PositionedItem> orig = a;
+    public static ArrayList<Database.PositionedItem> filterLOW(ArrayList<Database.PositionedItem> orig){
         ArrayList<Database.PositionedItem> out = new ArrayList<>();
 
         for(int i = 0; i < orig.size(); i++){

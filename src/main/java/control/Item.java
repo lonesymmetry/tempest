@@ -5,15 +5,15 @@ import main.java.util.Util;
 import java.util.Date;
 
 /**
- * Stores Item class
+ * Represents a to-do item
  *
- * @author Logan Traffas, Adrian Hardt
+ * @author Adrian Hardt & Logan Traffas
  */
 public class Item {
 	/**
 	 * Represents the status of an Item (finished or unfinished)
 	 */
-	public enum Status{//TODO: add toString() ?
+	public enum Status{
 		UNFINISHED,FINISHED;
 
 		/**
@@ -33,6 +33,19 @@ public class Item {
 			return null;//will never reach this line
 		}
 
+		@Override
+		public String toString(){
+			switch (this){
+				case FINISHED:
+					return "Finished";
+				case UNFINISHED:
+					return "Unfinished";
+				default:
+					Util.nyi(Util.getFileName(),Util.getLineNumber());
+			}
+			return "";//will never reach this line
+		}
+
 		/**
 		 * Determines if a String can be parsed into a Status
 		 * @param s the String to check
@@ -49,10 +62,10 @@ public class Item {
 		 * @return the Status if it can be parsed, null otherwise
 		 */
 		public static Status parse(String s){
-			if(s.equals("UNFINISHED")){
+			if(s.equals("UNFINISHED") || s.equals("Unfinished")){
 				return UNFINISHED;
 			}
-			if(s.equals("FINISHED")){
+			if(s.equals("FINISHED") || s.equals("Finished")){
 				return FINISHED;
 			}
 			return null;
@@ -62,7 +75,7 @@ public class Item {
 	/**
 	 * Represents the priority of the Item (high, medium, or low priority)
 	 */
-	public enum Priority{//TODO: add toString() ?
+	public enum Priority{
 		HIGH,MEDIUM,LOW;
 
 		/**
@@ -75,19 +88,34 @@ public class Item {
 			return a != null;
 		}
 
+		@Override
+		public String toString(){
+			switch (this){
+				case LOW:
+					return "Low";
+				case MEDIUM:
+					return "Medium";
+				case HIGH:
+					return "High";
+				default:
+					Util.nyi(Util.getFileName(),Util.getLineNumber());
+			}
+			return "";//will never reach this line
+		}
+
 		/**
 		 * Parses a String and returns a Priority
 		 * @param s the String to parse
 		 * @return the Priority if it can be parsed, null otherwise
 		 */
 		public static Priority parse(String s){
-			if(s.equals("HIGH")){
+			if(s.equals("HIGH") || s.equals("High")){
 				return HIGH;
 			}
-			if(s.equals("MEDIUM")){
+			if(s.equals("MEDIUM") || s.equals("Medium")){
 				return MEDIUM;
 			}
-			if(s.equals("LOW")){
+			if(s.equals("LOW") || s.equals("Low")){
 				return LOW;
 			}
 			return null;

@@ -54,7 +54,7 @@ public class DesktopApplication extends Application{
 
 	private Stage mainStage;
 
-	private Maybe<Database.PositionedItem> activeItem;//first stores the Item, second stores its index in database
+	private Maybe<Database.PositionedItem> activeItem;
 	private Database database;
 
 	private HBox rootPane;
@@ -301,7 +301,7 @@ public class DesktopApplication extends Application{
 					editItem.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 					editItem.getStyleClass().add("button");
 					editItem.setOnAction(
-							(ActionEvent event) -> //TODO
+							(ActionEvent event) ->
 							{
 								this.rightDisplay = RightDisplay.EDIT_ITEM;
 								updateRightPane();
@@ -429,7 +429,7 @@ public class DesktopApplication extends Application{
 					filterBy.setOnAction(
 							(ActionEvent event) ->
 							{
-								if(this.filterMode != filterBy.getValue()){
+								if(this.filterMode != filterBy.getValue()){//if the filter excludes the active Item, then clear the active Item from the screen
 									boolean resetRightPane = true;
 									if(this.activeItem.isValid()) {
 										for (Database.PositionedItem a : Analytics.filter(filterBy.getValue(), this.database.getPositionedItems())) {
@@ -464,9 +464,10 @@ public class DesktopApplication extends Application{
 					ListView<String> itemList = new ListView<>();
 					itemList.getStyleClass().add("itemList");
 
-					itemList.setMinWidth(WIDTH - 2 * PADDING);
-					itemList.setMaxWidth(WIDTH - 2 * PADDING);
-					itemList.setPrefWidth(WIDTH - 2 * PADDING);
+					final int LIST_WIDTH = (int)(WIDTH - 2 * PADDING);
+					itemList.setMinWidth(LIST_WIDTH);
+					itemList.setMaxWidth(LIST_WIDTH);
+					itemList.setPrefWidth(LIST_WIDTH);
 					//itemList.setFixedCellSize(SECTION_HEIGHT);//used to set cell height
 
 					ArrayList<String> itemNames = new ArrayList<>();
@@ -618,14 +619,14 @@ public class DesktopApplication extends Application{
 	/**
 	 * Constructs a pane which provides for the ability of users to edit existing Items in the Database
 	 */
-	private void updateEditPane(){//TODO
+	private void updateEditPane(){
 		this.editPane.getChildren().clear();
 		final double WIDTH_PERCENT = .66;
 		final double WIDTH = DEFAULT_SIZE.width * WIDTH_PERCENT;
 
 		this.editPane.setMaxWidth(WIDTH);
 		this.editPane.setPrefWidth(this.editPane.getMaxWidth());
-		this.editPane.getStyleClass().add("editPane");//FIXME
+		this.editPane.getStyleClass().add("editPane");
 
 		StackPane editItemFieldsBorder = new StackPane();
 
@@ -693,7 +694,7 @@ public class DesktopApplication extends Application{
 				saveNewItemButton.setPrefSize(BUTTON_SIZE.getFirst(), BUTTON_SIZE.getSecond());
 				saveNewItemButton.getStyleClass().add("button");
 				saveNewItemButton.setOnAction(
-						(ActionEvent event) ->//TODO
+						(ActionEvent event) ->
 						{
 							String itemName = editName.getText(), itemDescription = editDescription.getText();
 							Item.Priority itemPriority = prioritySelector.getValue();
