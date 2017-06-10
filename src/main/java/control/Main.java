@@ -33,8 +33,8 @@ public class Main {
 	public static void main(String[] args){
 		Main main = new Main();
 
-		main.testApp(args);
+		//main.testApp(args);
 
-		//main.runApp(args);
+		main.runApp(args);
 	}
 }

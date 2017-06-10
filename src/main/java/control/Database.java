@@ -18,7 +18,7 @@ public class Database {
     private static final String DEV_DATABASE_FILE_NAME = "./src/main/data/database.txt";//path from root (.)
     private static final String RELEASE_DATABASE_FILE_NAME = "./data/database.txt";
 
-    private static final String FILE_NAME = DEV_DATABASE_FILE_NAME;//set this to either dev or release
+    private static final String FILE_NAME = RELEASE_DATABASE_FILE_NAME;//set this to either dev or release
 
     static boolean fileExists = false;
 
