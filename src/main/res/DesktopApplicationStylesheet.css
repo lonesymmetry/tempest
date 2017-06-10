@@ -71,6 +71,24 @@
     -fx-background-color: #EEEEEE;
 }
 
+/*
+.lowPriorityItemCell{
+    -fx-background-color: #ADAD7A;
+}
+
+.mediumPriorityItemCell{
+    -fx-background-color: #AD8F7A;
+}
+
+.highPriorityItemCell{
+    -fx-background-color: #AD7A7A;
+}
+
+.finishedItemCell{
+    -fx-background-color: #7AAD7A;
+}
+*/
+
 .itemList .list-cell:empty{ /*When there is extra room, the ListView populates it with empty cells, which were being highlighted by other css*/
     -fx-background-color: #999999;
 }

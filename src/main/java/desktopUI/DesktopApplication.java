@@ -479,6 +479,43 @@ public class DesktopApplication extends Application{
 
 					itemList.setItems(FXCollections.observableArrayList(itemNames));
 
+					/*
+					itemList.setCellFactory(lv -> new ListCell<Integer>(){
+						@Override
+						protected void updateItem(Integer name, boolean empty){
+							super.updateItem(name, empty);
+							if (empty) {
+								setText(null);
+								setGraphic(null);
+							} else {
+								setText(database.getItem(name).shortenName());
+								setGraphic(null);
+								switch (database.getItem(name).getStatus()){
+									case FINISHED:
+										getStyleClass().add("finishedItemCell");
+										break;
+									case UNFINISHED:
+										switch (database.getItem(name).getPriority()){
+											case LOW:
+												getStyleClass().add("lowPriorityItemCell");
+												break;
+											case MEDIUM:
+												getStyleClass().add("mediumPriorityItemCell");
+												break;
+											case HIGH:
+												getStyleClass().add("highPriorityItemCell");
+												break;
+											default:
+												Util.nyi(Util.getFileName(),Util.getLineNumber());
+										}
+										break;
+									default:
+										Util.nyi(Util.getFileName(),Util.getLineNumber());
+								}
+							}
+						}
+					});
+					*/
 					if(this.activeItem.isValid()){
 						itemList.scrollTo(this.activeItem.get().getIndex());
 						itemList.getFocusModel().focus(this.activeItem.get().getIndex());//note: focused object is the one object in the entire operating system that receives keyboard input
