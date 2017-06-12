@@ -135,7 +135,7 @@ public class Item {
 	 * @param TEST the string to test
 	 * @return false if the string contains a disallowed character, true otherwise
 	 */
-	private boolean checkIfAllowed(String TEST){
+	public static boolean checkIfAllowed(String TEST){
 		for(char disallowed: DISALLOWED_CHARACTERS){
 			for(char c: TEST.toCharArray()){
 				if(c == disallowed){
@@ -148,7 +148,7 @@ public class Item {
 
 	/**
 	 * Returns a shorter version of the Item name that will fit in the display list of the Desktop Application
-	 * @return
+	 * @return the name of the Item shortened to a character limit
 	 */
 	public String shortenName(){
 		if(displayName.length() > MAX_DISPLAY_NAME_LENGTH){
@@ -326,8 +326,10 @@ public class Item {
 	 * @param date the initial date
 	 */
 	public Item(String displayName, String description, Status status, Priority priority, Date date){
-		this.displayName = displayName;
-		this.description = description;
+		this.displayName = "";
+		setDisplayName(displayName);
+		this.description = "";
+		setDescription(description);
 		this.status = status;
 		this.priority = priority;
 		this.date = date;

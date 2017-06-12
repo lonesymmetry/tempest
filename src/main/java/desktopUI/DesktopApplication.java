@@ -315,7 +315,7 @@ public class DesktopApplication extends Application{
 								if(this.activeItem.isValid()) {
 									Alert deleteConfirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
 									deleteConfirmationDialog.initOwner(this.mainStage);
-									deleteConfirmationDialog.getDialogPane().getStyleClass().add("deleteConfirmationDialog");
+									deleteConfirmationDialog.getDialogPane().getStyleClass().add("alert");
 
 									deleteConfirmationDialog.setTitle("Deletion Confirmation");
 									deleteConfirmationDialog.setHeaderText("Would you like to delete the Item \"" + this.database.getItem(activeItem.get().getIndex()).getDisplayName() + "\"? It cannot be undone.");
@@ -622,7 +622,29 @@ public class DesktopApplication extends Application{
 						{
 							String itemName = setName.getText(), itemDescription = setDescription.getText();
 							Item.Priority itemPriority = prioritySelector.getValue();
-							if(!itemName.equals("")){//only save the new Item if it has a name (since it's required)
+							if(!Item.checkIfAllowed(itemName) || !Item.checkIfAllowed(itemDescription)) {
+								Alert disallowedFieldAlert = new Alert(Alert.AlertType.WARNING);
+								disallowedFieldAlert.initOwner(this.mainStage);
+								disallowedFieldAlert.getDialogPane().getStyleClass().add("alert");
+
+								disallowedFieldAlert.setTitle("Input Field Unaccepted");
+								disallowedFieldAlert.setHeaderText("You cannot use a \"|\" (a pipe character) in your name or description. Please remove it before saving.");
+								{
+									ButtonType okButton = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+									disallowedFieldAlert.getButtonTypes().setAll(okButton);
+								}
+								{
+									Optional<ButtonType> deleteConfirmationDialogResult = disallowedFieldAlert.showAndWait();
+									if (deleteConfirmationDialogResult.isPresent()) {
+										switch (deleteConfirmationDialogResult.get().getButtonData()) {
+											case OK_DONE:
+												break;
+											default:
+												Util.nyi(Util.getFileName(), Util.getLineNumber());
+										}
+									}
+								}
+							} else if(!itemName.equals("")){//only save the new Item if it has a name (since it's required)
 								this.database.writeItem(new Item(itemName, itemDescription, itemPriority));
 								updateLeftPane();
 								this.activeItem.set(this.database.getPositionedItem(this.database.getItems().size() - 1));
