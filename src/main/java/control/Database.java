@@ -20,7 +20,7 @@ public class Database {
 
     private static final String FILE_NAME = RELEASE_DATABASE_FILE_NAME;//set this to either dev or release
 
-    static boolean fileExists = false;
+    private static boolean fileExists = false;
 
     private ArrayList<Item> items;
     private static final SimpleDateFormat formatter = new SimpleDateFormat("E MM dd y hh:mm:ss a");
@@ -176,9 +176,14 @@ public class Database {
         if(!fileExists) {
             File source = new File(FILE_NAME);
             while(!source.exists()) {
-				source.getParentFile().mkdirs();
+                {
+                    boolean success = source.getParentFile().mkdirs();
+                    if (!success) {
+                        continue;
+                    }
+                }
 				try{
-					source.createNewFile();
+                    source.createNewFile();
 				} catch (IOException x){
 					x.printStackTrace(new PrintStream(System.out));
 				}
@@ -223,7 +228,7 @@ public class Database {
      * @return Date parsed
      * @throws ParseException Failure
      */
-    public Date parseDate(String in) throws ParseException{
+    public Date parseDate(String in) throws ParseException{//TODO: handle exception here?
         return formatter.parse(in);
     }
 
@@ -307,7 +312,7 @@ public class Database {
                     items.add(parseLine(line));
                 }
                 catch (ParseException a){
-                    a.printStackTrace(new PrintStream(System.out));
+                    a.printStackTrace(System.out);
                 }
                 finally {
                     line = reader.readLine();

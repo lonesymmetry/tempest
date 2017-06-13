@@ -33,6 +33,10 @@ public class Item {
 			return null;//will never reach this line
 		}
 
+		/**
+		 * Assembles a String to display the Status in a more-readable manner
+		 * @return that String
+		 */
 		@Override
 		public String toString(){
 			switch (this){
@@ -88,6 +92,10 @@ public class Item {
 			return a != null;
 		}
 
+		/**
+		 * Assembles a String to display the Priority in a more-readable manner
+		 * @return that String
+		 */
 		@Override
 		public String toString(){
 			switch (this){
